@@ -68,8 +68,16 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -90,7 +98,7 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 		flag: float32(p.Flag),
 		h:    p.H,
 	}
-	C.cblas_srotm(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), (*C.float)(unsafe.Pointer(&pi)))
+	C.cblas_srotm(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), (*C.float)(unsafe.Pointer(&pi)))
 }
 func (Implementation) Drotg(a float64, b float64) (c float64, s float64, r float64, z float64) {
 	C.cblas_drotg((*C.double)(&a), (*C.double)(&b), (*C.double)(&c), (*C.double)(&s))
@@ -105,8 +113,16 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -127,14 +143,22 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 		flag: float64(p.Flag),
 		h:    p.H,
 	}
-	C.cblas_drotm(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), (*C.double)(unsafe.Pointer(&pi)))
+	C.cblas_drotm(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), (*C.double)(unsafe.Pointer(&pi)))
 }
 func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY int) (dotu complex64) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -148,15 +172,23 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	C.cblas_cdotu_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotu))
+	C.cblas_cdotu_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotu))
 	return dotu
 }
 func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY int) (dotc complex64) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -170,15 +202,23 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	C.cblas_cdotc_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotc))
+	C.cblas_cdotc_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotc))
 	return dotc
 }
 func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, incY int) (dotu complex128) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -192,15 +232,23 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	C.cblas_zdotu_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotu))
+	C.cblas_zdotu_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotu))
 	return dotu
 }
 func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, incY int) (dotc complex128) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -214,7 +262,7 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	C.cblas_zdotc_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotc))
+	C.cblas_zdotc_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotc))
 	return dotc
 }
 
@@ -228,8 +276,16 @@ func (Implementation) Sdsdot(n int, alpha float32, x []float32, incX int, y []fl
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -243,7 +299,7 @@ func (Implementation) Sdsdot(n int, alpha float32, x []float32, incX int, y []fl
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_sdsdot(C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY)))
+	return float32(C.cblas_sdsdot(C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY)))
 }
 
 // Dsdot computes the dot product of the two vectors
@@ -254,8 +310,16 @@ func (Implementation) Dsdot(n int, x []float32, incX int, y []float32, incY int)
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -269,7 +333,7 @@ func (Implementation) Dsdot(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_dsdot(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY)))
+	return float64(C.cblas_dsdot(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY)))
 }
 
 // Sdot computes the dot product of the two vectors
@@ -280,8 +344,16 @@ func (Implementation) Sdot(n int, x []float32, incX int, y []float32, incY int) 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -295,7 +367,7 @@ func (Implementation) Sdot(n int, x []float32, incX int, y []float32, incY int) 
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_sdot(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY)))
+	return float32(C.cblas_sdot(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY)))
 }
 
 // Ddot computes the dot product of the two vectors
@@ -306,8 +378,16 @@ func (Implementation) Ddot(n int, x []float64, incX int, y []float64, incY int) 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -321,7 +401,7 @@ func (Implementation) Ddot(n int, x []float64, incX int, y []float64, incY int) 
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_ddot(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY)))
+	return float64(C.cblas_ddot(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY)))
 }
 
 // Snrm2 computes the Euclidean norm of a vector,
@@ -333,6 +413,10 @@ func (Implementation) Snrm2(n int, x []float32, incX int) float32 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -345,7 +429,7 @@ func (Implementation) Snrm2(n int, x []float32, incX int) float32 {
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_snrm2(C.int(n), (*C.float)(&x[0]), C.int(incX)))
+	return float32(C.cblas_snrm2(C.int(n), (*C.float)(_x), C.int(incX)))
 }
 
 // Sasum computes the sum of the absolute values of the elements of x.
@@ -357,6 +441,10 @@ func (Implementation) Sasum(n int, x []float32, incX int) float32 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -369,7 +457,7 @@ func (Implementation) Sasum(n int, x []float32, incX int) float32 {
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_sasum(C.int(n), (*C.float)(&x[0]), C.int(incX)))
+	return float32(C.cblas_sasum(C.int(n), (*C.float)(_x), C.int(incX)))
 }
 
 // Dnrm2 computes the Euclidean norm of a vector,
@@ -381,6 +469,10 @@ func (Implementation) Dnrm2(n int, x []float64, incX int) float64 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -393,7 +485,7 @@ func (Implementation) Dnrm2(n int, x []float64, incX int) float64 {
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_dnrm2(C.int(n), (*C.double)(&x[0]), C.int(incX)))
+	return float64(C.cblas_dnrm2(C.int(n), (*C.double)(_x), C.int(incX)))
 }
 
 // Dasum computes the sum of the absolute values of the elements of x.
@@ -405,6 +497,10 @@ func (Implementation) Dasum(n int, x []float64, incX int) float64 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -417,7 +513,7 @@ func (Implementation) Dasum(n int, x []float64, incX int) float64 {
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_dasum(C.int(n), (*C.double)(&x[0]), C.int(incX)))
+	return float64(C.cblas_dasum(C.int(n), (*C.double)(_x), C.int(incX)))
 }
 
 func (Implementation) Scnrm2(n int, x []complex64, incX int) float32 {
@@ -426,6 +522,10 @@ func (Implementation) Scnrm2(n int, x []complex64, incX int) float32 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -438,7 +538,7 @@ func (Implementation) Scnrm2(n int, x []complex64, incX int) float32 {
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_scnrm2(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return float32(C.cblas_scnrm2(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 func (Implementation) Scasum(n int, x []complex64, incX int) float32 {
@@ -447,6 +547,10 @@ func (Implementation) Scasum(n int, x []complex64, incX int) float32 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -459,7 +563,7 @@ func (Implementation) Scasum(n int, x []complex64, incX int) float32 {
 	if n == 0 {
 		return 0
 	}
-	return float32(C.cblas_scasum(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return float32(C.cblas_scasum(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
@@ -468,6 +572,10 @@ func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -480,7 +588,7 @@ func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_dznrm2(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return float64(C.cblas_dznrm2(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 func (Implementation) Dzasum(n int, x []complex128, incX int) float64 {
@@ -489,6 +597,10 @@ func (Implementation) Dzasum(n int, x []complex128, incX int) float64 {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -501,7 +613,7 @@ func (Implementation) Dzasum(n int, x []complex128, incX int) float64 {
 	if n == 0 {
 		return 0
 	}
-	return float64(C.cblas_dzasum(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return float64(C.cblas_dzasum(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 // Isamax returns the index of an element of x with the largest absolute value.
@@ -513,6 +625,10 @@ func (Implementation) Isamax(n int, x []float32, incX int) int {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -525,7 +641,7 @@ func (Implementation) Isamax(n int, x []float32, incX int) int {
 	if n == 0 {
 		return -1
 	}
-	return int(C.cblas_isamax(C.int(n), (*C.float)(&x[0]), C.int(incX)))
+	return int(C.cblas_isamax(C.int(n), (*C.float)(_x), C.int(incX)))
 }
 
 // Idamax returns the index of an element of x with the largest absolute value.
@@ -537,6 +653,10 @@ func (Implementation) Idamax(n int, x []float64, incX int) int {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -549,7 +669,7 @@ func (Implementation) Idamax(n int, x []float64, incX int) int {
 	if n == 0 {
 		return -1
 	}
-	return int(C.cblas_idamax(C.int(n), (*C.double)(&x[0]), C.int(incX)))
+	return int(C.cblas_idamax(C.int(n), (*C.double)(_x), C.int(incX)))
 }
 
 func (Implementation) Icamax(n int, x []complex64, incX int) int {
@@ -558,6 +678,10 @@ func (Implementation) Icamax(n int, x []complex64, incX int) int {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -570,7 +694,7 @@ func (Implementation) Icamax(n int, x []complex64, incX int) int {
 	if n == 0 {
 		return -1
 	}
-	return int(C.cblas_icamax(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return int(C.cblas_icamax(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 func (Implementation) Izamax(n int, x []complex128, incX int) int {
@@ -579,6 +703,10 @@ func (Implementation) Izamax(n int, x []complex128, incX int) int {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -591,7 +719,7 @@ func (Implementation) Izamax(n int, x []complex128, incX int) int {
 	if n == 0 {
 		return -1
 	}
-	return int(C.cblas_izamax(C.int(n), unsafe.Pointer(&x[0]), C.int(incX)))
+	return int(C.cblas_izamax(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
 // Sswap exchanges the elements of two vectors.
@@ -602,8 +730,16 @@ func (Implementation) Sswap(n int, x []float32, incX int, y []float32, incY int)
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -617,7 +753,7 @@ func (Implementation) Sswap(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return
 	}
-	C.cblas_sswap(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_sswap(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY))
 }
 
 // Scopy copies the elements of x into the elements of y.
@@ -628,8 +764,16 @@ func (Implementation) Scopy(n int, x []float32, incX int, y []float32, incY int)
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -643,7 +787,7 @@ func (Implementation) Scopy(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return
 	}
-	C.cblas_scopy(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_scopy(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY))
 }
 
 // Saxpy adds alpha times x to y
@@ -654,8 +798,16 @@ func (Implementation) Saxpy(n int, alpha float32, x []float32, incX int, y []flo
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -669,7 +821,7 @@ func (Implementation) Saxpy(n int, alpha float32, x []float32, incX int, y []flo
 	if n == 0 {
 		return
 	}
-	C.cblas_saxpy(C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_saxpy(C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY))
 }
 
 // Dswap exchanges the elements of two vectors.
@@ -680,8 +832,16 @@ func (Implementation) Dswap(n int, x []float64, incX int, y []float64, incY int)
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -695,7 +855,7 @@ func (Implementation) Dswap(n int, x []float64, incX int, y []float64, incY int)
 	if n == 0 {
 		return
 	}
-	C.cblas_dswap(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dswap(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY))
 }
 
 // Dcopy copies the elements of x into the elements of y.
@@ -706,8 +866,16 @@ func (Implementation) Dcopy(n int, x []float64, incX int, y []float64, incY int)
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -721,7 +889,7 @@ func (Implementation) Dcopy(n int, x []float64, incX int, y []float64, incY int)
 	if n == 0 {
 		return
 	}
-	C.cblas_dcopy(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dcopy(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY))
 }
 
 // Daxpy adds alpha times x to y
@@ -732,8 +900,16 @@ func (Implementation) Daxpy(n int, alpha float64, x []float64, incX int, y []flo
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -747,7 +923,7 @@ func (Implementation) Daxpy(n int, alpha float64, x []float64, incX int, y []flo
 	if n == 0 {
 		return
 	}
-	C.cblas_daxpy(C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_daxpy(C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY))
 }
 
 func (Implementation) Cswap(n int, x []complex64, incX int, y []complex64, incY int) {
@@ -756,8 +932,16 @@ func (Implementation) Cswap(n int, x []complex64, incX int, y []complex64, incY 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -771,7 +955,7 @@ func (Implementation) Cswap(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return
 	}
-	C.cblas_cswap(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_cswap(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Ccopy(n int, x []complex64, incX int, y []complex64, incY int) {
@@ -780,8 +964,16 @@ func (Implementation) Ccopy(n int, x []complex64, incX int, y []complex64, incY 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -795,7 +987,7 @@ func (Implementation) Ccopy(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return
 	}
-	C.cblas_ccopy(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_ccopy(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Caxpy(n int, alpha complex64, x []complex64, incX int, y []complex64, incY int) {
@@ -804,8 +996,16 @@ func (Implementation) Caxpy(n int, alpha complex64, x []complex64, incX int, y [
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -819,7 +1019,7 @@ func (Implementation) Caxpy(n int, alpha complex64, x []complex64, incX int, y [
 	if n == 0 {
 		return
 	}
-	C.cblas_caxpy(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_caxpy(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, incY int) {
@@ -828,8 +1028,16 @@ func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -843,7 +1051,7 @@ func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return
 	}
-	C.cblas_zswap(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zswap(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, incY int) {
@@ -852,8 +1060,16 @@ func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -867,7 +1083,7 @@ func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return
 	}
-	C.cblas_zcopy(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zcopy(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zaxpy(n int, alpha complex128, x []complex128, incX int, y []complex128, incY int) {
@@ -876,8 +1092,16 @@ func (Implementation) Zaxpy(n int, alpha complex128, x []complex128, incX int, y
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -891,7 +1115,7 @@ func (Implementation) Zaxpy(n int, alpha complex128, x []complex128, incX int, y
 	if n == 0 {
 		return
 	}
-	C.cblas_zaxpy(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zaxpy(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
 // Srot applies a plane transformation.
@@ -903,8 +1127,16 @@ func (Implementation) Srot(n int, x []float32, incX int, y []float32, incY int, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -918,7 +1150,7 @@ func (Implementation) Srot(n int, x []float32, incX int, y []float32, incY int, 
 	if n == 0 {
 		return
 	}
-	C.cblas_srot(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), C.float(c), C.float(s))
+	C.cblas_srot(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), C.float(c), C.float(s))
 }
 
 // Drot applies a plane transformation.
@@ -930,8 +1162,16 @@ func (Implementation) Drot(n int, x []float64, incX int, y []float64, incY int, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -945,7 +1185,7 @@ func (Implementation) Drot(n int, x []float64, incX int, y []float64, incY int, 
 	if n == 0 {
 		return
 	}
-	C.cblas_drot(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), C.double(c), C.double(s))
+	C.cblas_drot(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), C.double(c), C.double(s))
 }
 
 // Sscal scales x by alpha.
@@ -957,6 +1197,10 @@ func (Implementation) Sscal(n int, alpha float32, x []float32, incX int) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -969,7 +1213,7 @@ func (Implementation) Sscal(n int, alpha float32, x []float32, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_sscal(C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_sscal(C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX))
 }
 
 // Dscal scales x by alpha.
@@ -981,6 +1225,10 @@ func (Implementation) Dscal(n int, alpha float64, x []float64, incX int) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -993,7 +1241,7 @@ func (Implementation) Dscal(n int, alpha float64, x []float64, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_dscal(C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dscal(C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX))
 }
 
 func (Implementation) Cscal(n int, alpha complex64, x []complex64, incX int) {
@@ -1002,6 +1250,10 @@ func (Implementation) Cscal(n int, alpha complex64, x []complex64, incX int) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1014,7 +1266,7 @@ func (Implementation) Cscal(n int, alpha complex64, x []complex64, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_cscal(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_cscal(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Zscal(n int, alpha complex128, x []complex128, incX int) {
@@ -1023,6 +1275,10 @@ func (Implementation) Zscal(n int, alpha complex128, x []complex128, incX int) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1035,7 +1291,7 @@ func (Implementation) Zscal(n int, alpha complex128, x []complex128, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_zscal(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_zscal(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Csscal(n int, alpha float32, x []complex64, incX int) {
@@ -1044,6 +1300,10 @@ func (Implementation) Csscal(n int, alpha float32, x []complex64, incX int) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1056,7 +1316,7 @@ func (Implementation) Csscal(n int, alpha float32, x []complex64, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_csscal(C.int(n), C.float(alpha), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_csscal(C.int(n), C.float(alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
@@ -1064,6 +1324,10 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 
 	if n < 0 {
 		panic("blas: n < 0")
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
 	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
@@ -1074,7 +1338,7 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 	if n == 0 {
 		return
 	}
-	C.cblas_zdscal(C.int(n), C.double(alpha), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_zdscal(C.int(n), C.double(alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
 // Sgemv computes
@@ -1093,8 +1357,20 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1114,7 +1390,7 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_sgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX), C.float(beta), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_sgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX), C.float(beta), (*C.float)(_y), C.int(incY))
 }
 
 // Sgbmv computes
@@ -1141,8 +1417,20 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 	if kU < 0 {
 		panic("blas: kU < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1162,7 +1450,7 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 	if lda*(m-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_sgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX), C.float(beta), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_sgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX), C.float(beta), (*C.float)(_y), C.int(incY))
 }
 
 // Strmv computes
@@ -1184,6 +1472,14 @@ func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1193,7 +1489,7 @@ func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_strmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_strmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX))
 }
 
 // Stbmv computes
@@ -1218,6 +1514,14 @@ func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1227,7 +1531,7 @@ func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_stbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_stbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX))
 }
 
 // Stpmv computes
@@ -1252,6 +1556,14 @@ func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float32
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1261,7 +1573,7 @@ func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_stpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(&ap[0]), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_stpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(_ap), (*C.float)(_x), C.int(incX))
 }
 
 // Strsv solves
@@ -1288,6 +1600,14 @@ func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1297,7 +1617,7 @@ func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_strsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_strsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX))
 }
 
 // Stbsv solves
@@ -1327,6 +1647,14 @@ func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1336,7 +1664,7 @@ func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_stbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_stbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX))
 }
 
 // Stpsv solves
@@ -1366,6 +1694,14 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float32
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1375,7 +1711,7 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_stpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(&ap[0]), (*C.float)(&x[0]), C.int(incX))
+	C.cblas_stpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.float)(_ap), (*C.float)(_x), C.int(incX))
 }
 
 // Dgemv computes
@@ -1394,8 +1730,20 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1415,7 +1763,7 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX), C.double(beta), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX), C.double(beta), (*C.double)(_y), C.int(incY))
 }
 
 // Dgbmv computes
@@ -1442,8 +1790,20 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 	if kU < 0 {
 		panic("blas: kU < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1463,7 +1823,7 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 	if lda*(m-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX), C.double(beta), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX), C.double(beta), (*C.double)(_y), C.int(incY))
 }
 
 // Dtrmv computes
@@ -1485,6 +1845,14 @@ func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1494,7 +1862,7 @@ func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dtrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX))
 }
 
 // Dtbmv computes
@@ -1519,6 +1887,14 @@ func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1528,7 +1904,7 @@ func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dtbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX))
 }
 
 // Dtpmv computes
@@ -1553,6 +1929,14 @@ func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1562,7 +1946,7 @@ func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_dtpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(&ap[0]), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(_ap), (*C.double)(_x), C.int(incX))
 }
 
 // Dtrsv solves
@@ -1589,6 +1973,14 @@ func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1598,7 +1990,7 @@ func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dtrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX))
 }
 
 // Dtbsv solves
@@ -1628,6 +2020,14 @@ func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1637,7 +2037,7 @@ func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dtbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX))
 }
 
 // Dtpsv solves
@@ -1667,6 +2067,14 @@ func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1676,7 +2084,7 @@ func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_dtpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(&ap[0]), (*C.double)(&x[0]), C.int(incX))
+	C.cblas_dtpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), (*C.double)(_ap), (*C.double)(_x), C.int(incX))
 }
 
 func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
@@ -1691,8 +2099,20 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1712,7 +2132,7 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_cgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
@@ -1733,8 +2153,20 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 	if kU < 0 {
 		panic("blas: kU < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1754,7 +2186,7 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 	if lda*(m-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_cgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex64, lda int, x []complex64, incX int) {
@@ -1772,6 +2204,14 @@ func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1781,7 +2221,7 @@ func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ctrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex64, lda int, x []complex64, incX int) {
@@ -1802,6 +2242,14 @@ func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1811,7 +2259,7 @@ func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ctbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex64, incX int) {
@@ -1832,6 +2280,14 @@ func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1841,7 +2297,7 @@ func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_ctpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex64, lda int, x []complex64, incX int) {
@@ -1859,6 +2315,14 @@ func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1868,7 +2332,7 @@ func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ctrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex64, lda int, x []complex64, incX int) {
@@ -1889,6 +2353,14 @@ func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1898,7 +2370,7 @@ func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ctbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex64, incX int) {
@@ -1919,6 +2391,14 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -1928,7 +2408,7 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_ctpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ctpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -1943,8 +2423,20 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -1964,7 +2456,7 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -1985,8 +2477,20 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 	if kU < 0 {
 		panic("blas: kU < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2006,7 +2510,7 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 	if lda*(m-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zgbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), C.int(kL), C.int(kU), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex128, lda int, x []complex128, incX int) {
@@ -2024,6 +2528,14 @@ func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2033,7 +2545,7 @@ func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ztrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztrmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex128, lda int, x []complex128, incX int) {
@@ -2054,6 +2566,14 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2063,7 +2583,7 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ztbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
@@ -2084,6 +2604,14 @@ func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex128
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2093,7 +2621,7 @@ func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_ztpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex128, lda int, x []complex128, incX int) {
@@ -2111,6 +2639,14 @@ func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2120,7 +2656,7 @@ func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ztrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztrsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex128, lda int, x []complex128, incX int) {
@@ -2141,6 +2677,14 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2150,7 +2694,7 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ztbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
 func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
@@ -2171,6 +2715,14 @@ func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex128
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2180,7 +2732,7 @@ func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	C.cblas_ztpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX))
+	C.cblas_ztpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX))
 }
 
 // Ssymv computes
@@ -2196,8 +2748,20 @@ func (Implementation) Ssymv(ul blas.Uplo, n int, alpha float32, a []float32, lda
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2211,7 +2775,7 @@ func (Implementation) Ssymv(ul blas.Uplo, n int, alpha float32, a []float32, lda
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ssymv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX), C.float(beta), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_ssymv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX), C.float(beta), (*C.float)(_y), C.int(incY))
 }
 
 // Ssbmv performs
@@ -2230,8 +2794,20 @@ func (Implementation) Ssbmv(ul blas.Uplo, n, k int, alpha float32, a []float32, 
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2245,7 +2821,7 @@ func (Implementation) Ssbmv(ul blas.Uplo, n, k int, alpha float32, a []float32, 
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ssbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&x[0]), C.int(incX), C.float(beta), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_ssbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_x), C.int(incX), C.float(beta), (*C.float)(_y), C.int(incY))
 }
 
 // Sspmv performs
@@ -2264,8 +2840,20 @@ func (Implementation) Sspmv(ul blas.Uplo, n int, alpha float32, ap, x []float32,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float32
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2279,7 +2867,7 @@ func (Implementation) Sspmv(ul blas.Uplo, n int, alpha float32, ap, x []float32,
 	if n == 0 {
 		return
 	}
-	C.cblas_sspmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&ap[0]), (*C.float)(&x[0]), C.int(incX), C.float(beta), (*C.float)(&y[0]), C.int(incY))
+	C.cblas_sspmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_ap), (*C.float)(_x), C.int(incX), C.float(beta), (*C.float)(_y), C.int(incY))
 }
 
 // Sger performs the rank-one operation
@@ -2294,11 +2882,23 @@ func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []f
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2309,7 +2909,7 @@ func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []f
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_sger(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), (*C.float)(&a[0]), C.int(lda))
+	C.cblas_sger(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), (*C.float)(_a), C.int(lda))
 }
 
 // Ssyr performs the rank-one update
@@ -2324,8 +2924,16 @@ func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2333,7 +2941,7 @@ func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ssyr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&a[0]), C.int(lda))
+	C.cblas_ssyr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_a), C.int(lda))
 }
 
 // Sspr computes the rank-one operation
@@ -2349,6 +2957,10 @@ func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2358,10 +2970,14 @@ func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
 	}
+	var _ap *float32
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_sspr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&ap[0]))
+	C.cblas_sspr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_ap))
 }
 
 // Ssyr2 performs the symmetric rank-two update
@@ -2376,11 +2992,23 @@ func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2391,7 +3019,7 @@ func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_ssyr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), (*C.float)(&a[0]), C.int(lda))
+	C.cblas_ssyr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), (*C.float)(_a), C.int(lda))
 }
 
 // Sspr2 performs the symmetric rank-2 update
@@ -2407,8 +3035,16 @@ func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2422,10 +3058,14 @@ func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
 		panic("blas: y index out of range")
 	}
+	var _ap *float32
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_sspr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), (*C.float)(&ap[0]))
+	C.cblas_sspr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), (*C.float)(_ap))
 }
 
 // Dsymv computes
@@ -2441,8 +3081,20 @@ func (Implementation) Dsymv(ul blas.Uplo, n int, alpha float64, a []float64, lda
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2456,7 +3108,7 @@ func (Implementation) Dsymv(ul blas.Uplo, n int, alpha float64, a []float64, lda
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dsymv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX), C.double(beta), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dsymv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX), C.double(beta), (*C.double)(_y), C.int(incY))
 }
 
 // Dsbmv performs
@@ -2475,8 +3127,20 @@ func (Implementation) Dsbmv(ul blas.Uplo, n, k int, alpha float64, a []float64, 
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2490,7 +3154,7 @@ func (Implementation) Dsbmv(ul blas.Uplo, n, k int, alpha float64, a []float64, 
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dsbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&x[0]), C.int(incX), C.double(beta), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dsbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_x), C.int(incX), C.double(beta), (*C.double)(_y), C.int(incY))
 }
 
 // Dspmv performs
@@ -2509,8 +3173,20 @@ func (Implementation) Dspmv(ul blas.Uplo, n int, alpha float64, ap, x []float64,
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *float64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2524,7 +3200,7 @@ func (Implementation) Dspmv(ul blas.Uplo, n int, alpha float64, ap, x []float64,
 	if n == 0 {
 		return
 	}
-	C.cblas_dspmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&ap[0]), (*C.double)(&x[0]), C.int(incX), C.double(beta), (*C.double)(&y[0]), C.int(incY))
+	C.cblas_dspmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_ap), (*C.double)(_x), C.int(incX), C.double(beta), (*C.double)(_y), C.int(incY))
 }
 
 // Dger performs the rank-one operation
@@ -2539,11 +3215,23 @@ func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []f
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2554,7 +3242,7 @@ func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []f
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dger(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), (*C.double)(&a[0]), C.int(lda))
+	C.cblas_dger(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), (*C.double)(_a), C.int(lda))
 }
 
 // Dsyr performs the rank-one update
@@ -2569,8 +3257,16 @@ func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2578,7 +3274,7 @@ func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dsyr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&a[0]), C.int(lda))
+	C.cblas_dsyr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_a), C.int(lda))
 }
 
 // Dspr computes the rank-one operation
@@ -2594,6 +3290,10 @@ func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2603,10 +3303,14 @@ func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
 	}
+	var _ap *float64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_dspr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&ap[0]))
+	C.cblas_dspr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_ap))
 }
 
 // Dsyr2 performs the symmetric rank-two update
@@ -2621,11 +3325,23 @@ func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2636,7 +3352,7 @@ func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_dsyr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), (*C.double)(&a[0]), C.int(lda))
+	C.cblas_dsyr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), (*C.double)(_a), C.int(lda))
 }
 
 // Dspr2 performs the symmetric rank-2 update
@@ -2652,8 +3368,16 @@ func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2667,10 +3391,14 @@ func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
 		panic("blas: y index out of range")
 	}
+	var _ap *float64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_dspr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), (*C.double)(&ap[0]))
+	C.cblas_dspr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), (*C.double)(_ap))
 }
 
 func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
@@ -2682,8 +3410,20 @@ func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2697,7 +3437,7 @@ func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_chemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_chemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
@@ -2712,8 +3452,20 @@ func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2727,7 +3479,7 @@ func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_chbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_chbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []complex64, incX int, beta complex64, y []complex64, incY int) {
@@ -2742,8 +3494,20 @@ func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []comple
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2757,7 +3521,7 @@ func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []comple
 	if n == 0 {
 		return
 	}
-	C.cblas_chpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_chpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Cgeru(m, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, a []complex64, lda int) {
@@ -2769,11 +3533,23 @@ func (Implementation) Cgeru(m, n int, alpha complex64, x []complex64, incX int, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2784,7 +3560,7 @@ func (Implementation) Cgeru(m, n int, alpha complex64, x []complex64, incX int, 
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cgeru(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_cgeru(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, a []complex64, lda int) {
@@ -2796,11 +3572,23 @@ func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2811,7 +3599,7 @@ func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, 
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cgerc(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_cgerc(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, incX int, a []complex64, lda int) {
@@ -2823,8 +3611,16 @@ func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2832,7 +3628,7 @@ func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cher(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_cher(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, incX int, ap []complex64) {
@@ -2844,6 +3640,10 @@ func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -2853,10 +3653,14 @@ func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
 	}
+	var _ap *complex64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_chpr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&ap[0]))
+	C.cblas_chpr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.float(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_ap))
 }
 
 func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, a []complex64, lda int) {
@@ -2868,11 +3672,23 @@ func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -2883,7 +3699,7 @@ func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_cher2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_cher2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, ap []complex64) {
@@ -2895,8 +3711,16 @@ func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2910,10 +3734,14 @@ func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
 		panic("blas: y index out of range")
 	}
+	var _ap *complex64
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_chpr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&ap[0]))
+	C.cblas_chpr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_ap))
 }
 
 func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -2925,8 +3753,20 @@ func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex12
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2940,7 +3780,7 @@ func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex12
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zhemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zhemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -2955,8 +3795,20 @@ func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []comple
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -2970,7 +3822,7 @@ func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []comple
 	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zhbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zhbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -2985,8 +3837,20 @@ func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []compl
 	if n*(n+1)/2 > len(ap) {
 		panic("blas: index of ap out of range")
 	}
+	var _ap *complex128
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -3000,7 +3864,7 @@ func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []compl
 	if n == 0 {
 		return
 	}
-	C.cblas_zhpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.int(incY))
+	C.cblas_zhpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
 func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
@@ -3012,11 +3876,23 @@ func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -3027,7 +3903,7 @@ func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zgeru(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_zgeru(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
@@ -3039,11 +3915,23 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -3054,7 +3942,7 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 	if lda*(m-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zgerc(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_zgerc(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, a []complex128, lda int) {
@@ -3066,8 +3954,16 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -3075,7 +3971,7 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zher(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_zher(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, ap []complex128) {
@@ -3087,6 +3983,10 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
@@ -3096,10 +3996,14 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
 	}
+	var _ap *complex128
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_zhpr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&ap[0]))
+	C.cblas_zhpr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_ap))
 }
 
 func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
@@ -3111,11 +4015,23 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
+	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
+	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
 	}
 	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
 		panic("blas: x index out of range")
@@ -3126,7 +4042,7 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if lda*(n-1)+n > len(a) || lda < max(1, n) {
 		panic("blas: index of a out of range")
 	}
-	C.cblas_zher2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&a[0]), C.int(lda))
+	C.cblas_zher2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
 func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, ap []complex128) {
@@ -3138,8 +4054,16 @@ func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+	var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -3153,10 +4077,14 @@ func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
 		panic("blas: y index out of range")
 	}
+	var _ap *complex128
+	if len(ap) > 0 {
+		_ap = &ap[0]
+	}
 	if n == 0 {
 		return
 	}
-	C.cblas_zhpr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&ap[0]))
+	C.cblas_zhpr2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_ap))
 }
 
 // Sgemm computes
@@ -3181,6 +4109,18 @@ func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float32
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float32
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var rowA, colA, rowB, colB int
 	if tA == blas.NoTrans {
 		rowA, colA = m, k
@@ -3201,7 +4141,7 @@ func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_sgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&b[0]), C.int(ldb), C.float(beta), (*C.float)(&c[0]), C.int(ldc))
+	C.cblas_sgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_b), C.int(ldb), C.float(beta), (*C.float)(_c), C.int(ldc))
 }
 
 // Ssymm performs one of
@@ -3224,6 +4164,18 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float32
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float32
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3239,7 +4191,7 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_ssymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&b[0]), C.int(ldb), C.float(beta), (*C.float)(&c[0]), C.int(ldc))
+	C.cblas_ssymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_b), C.int(ldb), C.float(beta), (*C.float)(_c), C.int(ldc))
 }
 
 // Ssyrk performs the symmetric rank-k operation
@@ -3261,6 +4213,14 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *float32
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3273,7 +4233,7 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_ssyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), (*C.float)(&a[0]), C.int(lda), C.float(beta), (*C.float)(&c[0]), C.int(ldc))
+	C.cblas_ssyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), (*C.float)(_a), C.int(lda), C.float(beta), (*C.float)(_c), C.int(ldc))
 }
 
 // Ssyr2k performs the symmetric rank 2k operation
@@ -3295,6 +4255,18 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float32
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float32
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3310,7 +4282,7 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_ssyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&b[0]), C.int(ldb), C.float(beta), (*C.float)(&c[0]), C.int(ldc))
+	C.cblas_ssyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_b), C.int(ldb), C.float(beta), (*C.float)(_c), C.int(ldc))
 }
 
 // Strmm performs
@@ -3340,6 +4312,14 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float32
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3352,7 +4332,7 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_strmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&b[0]), C.int(ldb))
+	C.cblas_strmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_b), C.int(ldb))
 }
 
 // Strsm solves
@@ -3388,6 +4368,14 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float32
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float32
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3400,7 +4388,7 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_strsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.float(alpha), (*C.float)(&a[0]), C.int(lda), (*C.float)(&b[0]), C.int(ldb))
+	C.cblas_strsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.float(alpha), (*C.float)(_a), C.int(lda), (*C.float)(_b), C.int(ldb))
 }
 
 // Dgemm computes
@@ -3425,6 +4413,18 @@ func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var rowA, colA, rowB, colB int
 	if tA == blas.NoTrans {
 		rowA, colA = m, k
@@ -3445,7 +4445,7 @@ func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_dgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb), C.double(beta), (*C.double)(&c[0]), C.int(ldc))
+	C.cblas_dgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_b), C.int(ldb), C.double(beta), (*C.double)(_c), C.int(ldc))
 }
 
 // Dsymm performs one of
@@ -3468,6 +4468,18 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3483,7 +4495,7 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_dsymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb), C.double(beta), (*C.double)(&c[0]), C.int(ldc))
+	C.cblas_dsymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_b), C.int(ldb), C.double(beta), (*C.double)(_c), C.int(ldc))
 }
 
 // Dsyrk performs the symmetric rank-k operation
@@ -3505,6 +4517,14 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *float64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3517,7 +4537,7 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_dsyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), (*C.double)(&a[0]), C.int(lda), C.double(beta), (*C.double)(&c[0]), C.int(ldc))
+	C.cblas_dsyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), (*C.double)(_a), C.int(lda), C.double(beta), (*C.double)(_c), C.int(ldc))
 }
 
 // Dsyr2k performs the symmetric rank 2k operation
@@ -3539,6 +4559,18 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *float64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3554,7 +4586,7 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_dsyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb), C.double(beta), (*C.double)(&c[0]), C.int(ldc))
+	C.cblas_dsyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_b), C.int(ldb), C.double(beta), (*C.double)(_c), C.int(ldc))
 }
 
 // Dtrmm performs
@@ -3584,6 +4616,14 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3596,7 +4636,7 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_dtrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb))
+	C.cblas_dtrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_b), C.int(ldb))
 }
 
 // Dtrsm solves
@@ -3632,6 +4672,14 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *float64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *float64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3644,7 +4692,7 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_dtrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb))
+	C.cblas_dtrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), C.double(alpha), (*C.double)(_a), C.int(lda), (*C.double)(_b), C.int(ldb))
 }
 
 func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
@@ -3664,6 +4712,18 @@ func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64,
 	}
 	if k < 0 {
 		panic("blas: k < 0")
+	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
 	if tA == blas.NoTrans {
@@ -3685,7 +4745,7 @@ func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64,
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_cgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_cgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
@@ -3703,6 +4763,18 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3718,7 +4790,7 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_csymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_csymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, beta complex64, c []complex64, ldc int) {
@@ -3736,6 +4808,14 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3748,7 +4828,7 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_csyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_csyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
@@ -3766,6 +4846,18 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3781,7 +4873,7 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_csyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_csyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
@@ -3805,6 +4897,14 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3817,7 +4917,7 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_ctrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb))
+	C.cblas_ctrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
 func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
@@ -3841,6 +4941,14 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3853,7 +4961,7 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_ctrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb))
+	C.cblas_ctrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
 func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -3873,6 +4981,18 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 	}
 	if k < 0 {
 		panic("blas: k < 0")
+	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
 	if tA == blas.NoTrans {
@@ -3894,7 +5014,7 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -3912,6 +5032,18 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -3927,7 +5059,7 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zsymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zsymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
@@ -3945,6 +5077,14 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3957,7 +5097,7 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zsyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zsyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -3975,6 +5115,18 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -3990,7 +5142,7 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zsyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zsyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
@@ -4014,6 +5166,14 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -4026,7 +5186,7 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_ztrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb))
+	C.cblas_ztrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
 func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
@@ -4050,6 +5210,14 @@ func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -4062,7 +5230,7 @@ func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
 		panic("blas: index of b out of range")
 	}
-	C.cblas_ztrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb))
+	C.cblas_ztrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
 func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
@@ -4080,6 +5248,18 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -4095,7 +5275,7 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_chemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_chemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []complex64, lda int, beta float32, c []complex64, ldc int) {
@@ -4113,6 +5293,14 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -4125,7 +5313,7 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_cherk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), unsafe.Pointer(&a[0]), C.int(lda), C.float(beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_cherk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.float(alpha), unsafe.Pointer(_a), C.int(lda), C.float(beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta float32, c []complex64, ldc int) {
@@ -4143,6 +5331,18 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex64
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex64
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex64
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -4158,7 +5358,7 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_cher2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), C.float(beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_cher2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), C.float(beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -4176,6 +5376,18 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var k int
 	if s == blas.Left {
 		k = m
@@ -4191,7 +5403,7 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zhemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zhemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128, ldc int) {
@@ -4209,6 +5421,14 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -4221,7 +5441,7 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zherk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), unsafe.Pointer(&a[0]), C.int(lda), C.double(beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zherk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), unsafe.Pointer(_a), C.int(lda), C.double(beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
 func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta float64, c []complex128, ldc int) {
@@ -4239,6 +5459,18 @@ func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if k < 0 {
 		panic("blas: k < 0")
 	}
+	var _a *complex128
+	if len(a) > 0 {
+		_a = &a[0]
+	}
+	var _b *complex128
+	if len(b) > 0 {
+		_b = &b[0]
+	}
+	var _c *complex128
+	if len(c) > 0 {
+		_c = &c[0]
+	}
 	var row, col int
 	if t == blas.NoTrans {
 		row, col = n, k
@@ -4254,5 +5486,5 @@ func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
 		panic("blas: index of c out of range")
 	}
-	C.cblas_zher2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.int(lda), unsafe.Pointer(&b[0]), C.int(ldb), C.double(beta), unsafe.Pointer(&c[0]), C.int(ldc))
+	C.cblas_zher2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), C.double(beta), unsafe.Pointer(_c), C.int(ldc))
 }

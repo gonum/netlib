@@ -85,8 +85,14 @@ var cgoEnums = map[string]*template.Template{
 }
 
 var cgoTypes = map[binding.TypeKey]*template.Template{
+	{Kind: cc.Float, IsPointer: true}: template.Must(template.New("float*").Parse(
+		`(*C.float)({{if eq . "alpha" "beta"}}&{{else}}_{{end}}{{.}})`,
+	)),
+	{Kind: cc.Double, IsPointer: true}: template.Must(template.New("double*").Parse(
+		`(*C.double)({{if eq . "alpha" "beta"}}&{{else}}_{{end}}{{.}})`,
+	)),
 	{Kind: cc.Void, IsPointer: true}: template.Must(template.New("void*").Parse(
-		`unsafe.Pointer(&{{.}}{{if eq . "alpha" "beta"}}{{else}}[0]{{end}})`,
+		`unsafe.Pointer({{if eq . "alpha" "beta"}}&{{else}}_{{end}}{{.}})`,
 	)),
 }
 
@@ -296,6 +302,8 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	nrmSumShape,
 	vectorShape,
 	othersShape,
+
+	address,
 
 	noWork,
 }
@@ -753,6 +761,40 @@ func othersShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	return true
 }
 
+var addrTypes = map[string]string{
+	"char":   "byte",
+	"int":    "int32",
+	"float":  "float32",
+	"double": "float64",
+}
+
+func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+	n := shorten(binding.LowerCaseFirst(p.Name()))
+	blasName := strings.TrimPrefix(d.Name, prefix)
+	switch n {
+	case "a", "b", "c", "ap", "x", "y":
+	default:
+		return false
+	}
+	if p.Type().Kind() == cc.Ptr {
+		t := addrTypes[strings.TrimPrefix(p.Type().Element().String(), "const ")]
+		if t == "" {
+			switch {
+			case blasName[0] == 'c', blasName[1] == 'c' && blasName[0] != 'z':
+				t = "complex64"
+			case blasName[0] == 'z', blasName[1] == 'z':
+				t = "complex128"
+			}
+		}
+		fmt.Fprintf(buf, `	var _%[1]s *%[2]s
+        if len(%[1]s) > 0 {
+                _%[1]s = &%[1]s[0]
+        }
+`, n, t)
+	}
+	return false
+}
+
 const handwritten = `// Do not manually edit this file. It was created by the generate_blas.go from {{.}}.
 
 // Copyright ©2014 The Gonum Authors. All rights reserved.
@@ -823,8 +865,16 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *float32
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *float32
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -845,7 +895,7 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 		flag: float32(p.Flag),
 		h:    p.H,
 	}
-	C.cblas_srotm(C.int(n), (*C.float)(&x[0]), C.int(incX), (*C.float)(&y[0]), C.int(incY), (*C.float)(unsafe.Pointer(&pi)))
+	C.cblas_srotm(C.int(n), (*C.float)(_x), C.int(incX), (*C.float)(_y), C.int(incY), (*C.float)(unsafe.Pointer(&pi)))
 }
 func (Implementation) Drotg(a float64, b float64) (c float64, s float64, r float64, z float64) {
 	C.cblas_drotg((*C.double)(&a), (*C.double)(&b), (*C.double)(&c), (*C.double)(&s))
@@ -860,8 +910,16 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *float64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *float64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -882,14 +940,22 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 		flag: float64(p.Flag),
 		h:    p.H,
 	}
-	C.cblas_drotm(C.int(n), (*C.double)(&x[0]), C.int(incX), (*C.double)(&y[0]), C.int(incY), (*C.double)(unsafe.Pointer(&pi)))
+	C.cblas_drotm(C.int(n), (*C.double)(_x), C.int(incX), (*C.double)(_y), C.int(incY), (*C.double)(unsafe.Pointer(&pi)))
 }
 func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY int) (dotu complex64) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -903,15 +969,23 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	C.cblas_cdotu_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotu))
+	C.cblas_cdotu_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotu))
 	return dotu
 }
 func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY int) (dotc complex64) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *complex64
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *complex64
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -925,15 +999,23 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	C.cblas_cdotc_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotc))
+	C.cblas_cdotc_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotc))
 	return dotc
 }
 func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, incY int) (dotu complex128) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -947,15 +1029,23 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	C.cblas_zdotu_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotu))
+	C.cblas_zdotu_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotu))
 	return dotu
 }
 func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, incY int) (dotc complex128) {
 	if n < 0 {
 		panic("blas: n < 0")
 	}
+        var _x *complex128
+	if len(x) > 0 {
+		_x = &x[0]
+	}
 	if incX == 0 {
 		panic("blas: zero x index increment")
+	}
+        var _y *complex128
+	if len(y) > 0 {
+		_y = &y[0]
 	}
 	if incY == 0 {
 		panic("blas: zero y index increment")
@@ -969,7 +1059,7 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	C.cblas_zdotc_sub(C.int(n), unsafe.Pointer(&x[0]), C.int(incX), unsafe.Pointer(&y[0]), C.int(incY), unsafe.Pointer(&dotc))
+	C.cblas_zdotc_sub(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(&dotc))
 	return dotc
 }
 
