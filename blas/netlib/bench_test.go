@@ -1,4 +1,4 @@
-package blas
+package netlib
 
 import (
 	"gonum.org/v1/gonum/blas"
