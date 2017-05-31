@@ -4,7 +4,7 @@
 // Use of this code is governed by a BSD-style
 // license that can be found in the LICENSE file
 
-package blas
+package netlib
 
 import (
 	"math/rand"

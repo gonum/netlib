@@ -25,7 +25,7 @@ import (
 
 const (
 	header        = "cblas.h"
-	documentation = "../../gonum/blas/native"
+	documentation = "../../../gonum/blas/native"
 	target        = "blas.go"
 
 	typ = "Implementation"
@@ -801,7 +801,7 @@ const handwritten = `// Do not manually edit this file. It was created by the ge
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package blas
+package netlib
 
 /*
 #cgo CFLAGS: -g -O2

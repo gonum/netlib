@@ -7,7 +7,7 @@
 // Ensure changes made to netlib/blas are reflected in gonum/blas/native where relevant.
 
 /*
-Package cgo provides bindings to a C BLAS library. This wrapper interface
+Package netlib provides bindings to a C BLAS library. This wrapper interface
 panics when the input arguments are invalid as per the standard, for example
 if a vector increment is zero. Please note that the treatment of NaN values
 is not specified, and differs among the BLAS implementations.
@@ -85,9 +85,9 @@ See http://www.crest.iu.edu/research/mtl/reference/html/banded.html
 for more information
 
 */
-package blas // import "gonum.org/v1/netlib/blas"
+package netlib // import "gonum.org/v1/netlib/blas/netlib"
 
-// BUG(btracey): The cgo package is intrinsically dependent on the underlying C
+// BUG(btracey): The netlib package is intrinsically dependent on the underlying C
 // implementation. The BLAS standard is silent on a number of behaviors, including
 // but not limited to how NaN values are treated. For this reason the result of
 // computations performed by the cgo BLAS package may disagree with the results

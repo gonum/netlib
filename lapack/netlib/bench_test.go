@@ -4,7 +4,7 @@
 
 // +build go1.7
 
-package lapack
+package netlib
 
 import (
 	"testing"

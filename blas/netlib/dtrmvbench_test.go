@@ -4,7 +4,7 @@
 
 // +build go1.7
 
-package blas
+package netlib
 
 import (
 	"strconv"
