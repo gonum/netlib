@@ -55,7 +55,6 @@ const (
 	badVn2          = "lapack: vn2 has insufficient length"
 	badUplo         = "lapack: illegal triangle"
 	badWork         = "lapack: insufficient working memory"
-	badWorkStride   = "lapack: insufficient working array stride"
 	badZ            = "lapack: insufficient z length"
 	kGTM            = "lapack: k > m"
 	kGTN            = "lapack: k > n"
