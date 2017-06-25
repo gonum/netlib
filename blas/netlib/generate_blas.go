@@ -25,7 +25,7 @@ import (
 
 const (
 	header        = "cblas.h"
-	documentation = "../../../gonum/blas/native"
+	documentation = "../../../gonum/blas/gonum"
 	target        = "blas.go"
 
 	typ = "Implementation"
