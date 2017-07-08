@@ -737,7 +737,7 @@ func othersShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 
 	switch {
 	case has["kL"] && has["kU"]:
-		fmt.Fprintf(buf, `	if lda*(m-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
+		fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 `)
@@ -830,6 +830,13 @@ type order int
 const (
 	rowMajor order = 101 + iota
 )
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
 
 func max(a, b int) int {
 	if a > b {
