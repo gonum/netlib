@@ -1061,6 +1061,7 @@ func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, inc
 	C.cblas_zswap(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zcopy copies the vector x to vector y.
 func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, incY int) {
 	// declared at cblas.h:114:6 void cblas_zcopy ...
 
@@ -1093,6 +1094,8 @@ func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, inc
 	C.cblas_zcopy(C.int(n), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zaxpy adds alpha times x to y:
+//  y[i] += alpha * x[i] for all i
 func (Implementation) Zaxpy(n int, alpha complex128, x []complex128, incX int, y []complex128, incY int) {
 	// declared at cblas.h:116:6 void cblas_zaxpy ...
 
