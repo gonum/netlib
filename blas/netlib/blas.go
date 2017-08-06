@@ -573,6 +573,9 @@ func (Implementation) Scasum(n int, x []complex64, incX int) float32 {
 	return float32(C.cblas_scasum(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
+// Dznrm2 computes the Euclidean norm of the complex vector x,
+//  ‖x‖_2 = sqrt(\sum_i x[i] * conj(x[i])).
+// This function returns 0 if incX is negative.
 func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
 	// declared at cblas.h:58:8 double cblas_dznrm2 ...
 
@@ -598,6 +601,9 @@ func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
 	return float64(C.cblas_dznrm2(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
+// Dzasum returns the sum of the absolute values of the elements of x
+//  \sum_i |Re(x[i])| + |Im(x[i])|
+// Dzasum returns 0 if incX is negative.
 func (Implementation) Dzasum(n int, x []complex128, incX int) float64 {
 	// declared at cblas.h:59:8 double cblas_dzasum ...
 
@@ -704,6 +710,8 @@ func (Implementation) Icamax(n int, x []complex64, incX int) int {
 	return int(C.cblas_icamax(C.int(n), unsafe.Pointer(_x), C.int(incX)))
 }
 
+// Izamax returns the index of the first element of x having largest |Re(·)|+|Im(·)|.
+// Izamax returns -1 if n is 0 or incX is negative.
 func (Implementation) Izamax(n int, x []complex128, incX int) int {
 	// declared at cblas.h:68:13 int cblas_izamax ...
 
@@ -1029,6 +1037,7 @@ func (Implementation) Caxpy(n int, alpha complex64, x []complex64, incX int, y [
 	C.cblas_caxpy(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zswap exchanges the elements of two complex vectors x and y.
 func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, incY int) {
 	// declared at cblas.h:112:6 void cblas_zswap ...
 
@@ -1279,6 +1288,8 @@ func (Implementation) Cscal(n int, alpha complex64, x []complex64, incX int) {
 	C.cblas_cscal(C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
+// Zscal scales the vector x by a complex scalar alpha.
+// Zscal has no effect if incX < 0.
 func (Implementation) Zscal(n int, alpha complex128, x []complex128, incX int) {
 	// declared at cblas.h:148:6 void cblas_zscal ...
 
@@ -1329,6 +1340,8 @@ func (Implementation) Csscal(n int, alpha float32, x []complex64, incX int) {
 	C.cblas_csscal(C.int(n), C.float(alpha), unsafe.Pointer(_x), C.int(incX))
 }
 
+// Zdscal scales the vector x by a real scalar alpha.
+// Zdscal has no effect if incX < 0.
 func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 	// declared at cblas.h:150:6 void cblas_zdscal ...
 
