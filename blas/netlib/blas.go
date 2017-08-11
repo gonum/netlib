@@ -3929,6 +3929,10 @@ func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int
 	C.cblas_zgeru(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
+// Zgerc performs the rank-one operation
+//  A += alpha * x * y^H
+// where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
+// and y is an n element vector.
 func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
 	// declared at cblas.h:415:6 void cblas_zgerc ...
 
