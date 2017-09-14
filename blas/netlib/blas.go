@@ -3890,6 +3890,10 @@ func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []compl
 	C.cblas_zhpmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zgeru performs the rank-one operation
+//  A += alpha * x * y^T
+// where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
+// and y is an n element vector.
 func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
 	// declared at cblas.h:412:6 void cblas_zgeru ...
 
@@ -3972,6 +3976,11 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 	C.cblas_zgerc(C.enum_CBLAS_ORDER(rowMajor), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
+// Zher performs the Hermitian rank-one operation
+//  A += alpha * x * x^H
+// where A is an n×n Hermitian matrix, alpha is a real scalar, and x is an n
+// element vector. On entry, the imaginary parts of the diagonal elements of A
+// are ignored and assumed to be zero, on return they will be set to zero.
 func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, a []complex128, lda int) {
 	// declared at cblas.h:418:6 void cblas_zher ...
 
@@ -4033,6 +4042,11 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	C.cblas_zhpr(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_ap))
 }
 
+// Zher2 performs the Hermitian rank-two operation
+//  A += alpha*x*y^H + conj(alpha)*y*x^H
+// where alpha is a scalar, x and y are n element vectors and A is an n×n
+// Hermitian matrix. On entry, the imaginary parts of the diagonal elements are
+// ignored and assumed to be zero. On return they will be set to zero.
 func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
 	// declared at cblas.h:424:6 void cblas_zher2 ...
 
