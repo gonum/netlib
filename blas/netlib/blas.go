@@ -1365,9 +1365,9 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 }
 
 // Sgemv computes
-//  y = alpha * a * x + beta * y if tA = blas.NoTrans
-//  y = alpha * A^T * x + beta * y if tA = blas.Trans or blas.ConjTrans
-// where A is an m×n dense matrix, x and y are vectors, and alpha is a scalar.
+//  y = alpha * A * x + beta * y    if tA = blas.NoTrans
+//  y = alpha * A^T * x + beta * y  if tA = blas.Trans or blas.ConjTrans
+// where A is an m×n dense matrix, x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:171:6 void cblas_sgemv ...
 
@@ -1738,9 +1738,9 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Dgemv computes
-//  y = alpha * a * x + beta * y if tA = blas.NoTrans
-//  y = alpha * A^T * x + beta * y if tA = blas.Trans or blas.ConjTrans
-// where A is an m×n dense matrix, x and y are vectors, and alpha is a scalar.
+//  y = alpha * A * x + beta * y    if tA = blas.NoTrans
+//  y = alpha * A^T * x + beta * y  if tA = blas.Trans or blas.ConjTrans
+// where A is an m×n dense matrix, x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:204:6 void cblas_dgemv ...
 
@@ -2434,6 +2434,11 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	C.cblas_ctpsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), unsafe.Pointer(_ap), unsafe.Pointer(_x), C.int(incX))
 }
 
+// Zgemv performs one of the matrix-vector operations
+//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
+//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
+//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+// where alpha and beta are scalars, x and y are vectors, and A is an m×n dense matrix.
 func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:270:6 void cblas_zgemv ...
 
