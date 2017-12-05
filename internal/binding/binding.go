@@ -341,6 +341,7 @@ unsigned long long __builtin_bswap64 (unsigned long long x);
 		model(),
 		cc.IncludePaths(includePaths),
 		cc.SysIncludePaths(sysIncludePaths),
+		cc.EnableAnonymousStructFields(),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("binding: failed to parse %q: %v", paths, err)
