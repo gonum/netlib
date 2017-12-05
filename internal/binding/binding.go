@@ -320,7 +320,7 @@ func (d *Declaration) Parameters() []Parameter {
 	return p
 }
 
-// Declarations returns the C function declarations in the givel set of file paths.
+// Declarations returns the C function declarations in the given set of file paths.
 func Declarations(paths ...string) ([]Declaration, error) {
 	predefined, includePaths, sysIncludePaths, err := cc.HostConfig()
 	if err != nil {
