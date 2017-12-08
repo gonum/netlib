@@ -4036,6 +4036,11 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	C.cblas_zher(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.double(alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_a), C.int(lda))
 }
 
+// Zhpr performs the Hermitian rank-1 operation
+//  A += alpha * x * x^H,
+// where alpha is a real scalar, x is a vector, and A is an n×n hermitian matrix
+// in packed form. On entry, the imaginary parts of the diagonal elements are
+// assumed to be zero, and on return they are set to zero.
 func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, ap []complex128) {
 	// declared at cblas.h:421:6 void cblas_zhpr ...
 
