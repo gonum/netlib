@@ -31,21 +31,8 @@ if [ ! -e ${CACHE_DIR}/last_commit_id ]; then
     pushd OpenBLAS
     echo OpenBLAS version:$(git rev-parse HEAD)
     sudo make FC=gfortran &> /dev/null && sudo make PREFIX=${CACHE_DIR} install
-    popd
-	
-    curl http://www.netlib.org/blas/blast-forum/cblas.tgz | tar -zx
-	
-    pushd CBLAS
-    sudo mv Makefile.LINUX Makefile.in
-    sudo BLLIB=${CACHE_DIR}/lib/libopenblas.a make alllib
-    sudo mv lib/cblas_LINUX.a ${CACHE_DIR}/lib/libcblas.a
-    popd
-
-    # Record commit id used to generate cache.
-    pushd OpenBLAS
     echo $(git rev-parse HEAD) > ${CACHE_DIR}/last_commit_id
     popd
-
 fi
 
 # copy the cache files into /usr
