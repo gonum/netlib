@@ -6,7 +6,7 @@ Wrapper packages providing an interface to the NETLIB C BLAS and LAPACKE impleme
 ## Installation
 
 ```
-  go get gonum.org/v1/netlib/...
+  go get -d gonum.org/v1/netlib/...
 ```
 
 
@@ -17,9 +17,13 @@ Install OpenBLAS:
   make
 ```
 
-Then install the lapack/cgo package:
+Then install the CGO BLAS wrapper package:
 ```sh
-  CGO_LDFLAGS="-L/path/to/OpenBLAS -lopenblas" go install github.com/gonum/lapack/cgo
+  CGO_LDFLAGS="-L/path/to/OpenBLAS -lopenblas" go install gonum.org/v1/netlib/blas/netlib
+```
+or the CGO LAPACKE wrapper package:
+```sh
+  CGO_LDFLAGS="-L/path/to/OpenBLAS -lopenblas" go install gonum.org/v1/netlib/lapack/netlib
 ```
 
 For Windows you can download binary packages for OpenBLAS at
@@ -33,13 +37,13 @@ adjust the `CGO_LDFLAGS` variable:
 
 ## Packages
 
-### blas
+### blas/netlib
 
 Binding to a C implementation of the cblas interface (e.g. ATLAS, OpenBLAS, Intel MKL)
 
 The recommended (free) option for good performance on both Linux and Darwin is OpenBLAS.
 
-### lapack
+### lapack/netlib
 
 Binding to a C implementation of the lapacke interface (e.g. ATLAS, OpenBLAS, Intel MKL)
 
