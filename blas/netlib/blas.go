@@ -4117,6 +4117,11 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	C.cblas_zher2(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(_y), C.int(incY), unsafe.Pointer(_a), C.int(lda))
 }
 
+// Zhpr2 performs the Hermitian rank-2 operation
+//  A += alpha*x*y^H + conj(alpha)*y*x^H,
+// where alpha is a complex scalar, x and y are n element vectors, and A is an
+// n×n Hermitian matrix, supplied in packed form. On entry, the imaginary parts
+// of the diagonal elements are assumed to be zero, and on return they are set to zero.
 func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, ap []complex128) {
 	// declared at cblas.h:427:6 void cblas_zhpr2 ...
 
