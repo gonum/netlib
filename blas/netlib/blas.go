@@ -3874,6 +3874,11 @@ func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []comple
 	C.cblas_zhbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zhpmv performs the matrix-vector operation
+//  y = alpha * A * x + beta * y
+// where alpha and beta are scalars, x and y are vectors, and A is an n×n
+// Hermitian matrix in packed form. The imaginary parts of the diagonal
+// elements of A are ignored and assumed to be zero.
 func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:408:6 void cblas_zhpmv ...
 
