@@ -26,11 +26,11 @@ if [ ! -e ${CACHE_DIR}/last_commit_id ]; then
     # cache generation
     echo "Building cache at $CACHE_DIR"
     mkdir ${CACHE_DIR}
-    sudo git clone --depth=1 git://github.com/xianyi/OpenBLAS
+    git clone --depth=1 git://github.com/xianyi/OpenBLAS
 
     pushd OpenBLAS
     echo OpenBLAS version:$(git rev-parse HEAD)
-    sudo make FC=gfortran &> /dev/null && sudo make PREFIX=${CACHE_DIR} install
+    make FC=gfortran &> /dev/null && make PREFIX=${CACHE_DIR} install
     echo $(git rev-parse HEAD) > ${CACHE_DIR}/last_commit_id
     popd
 fi
