@@ -2619,6 +2619,12 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	C.cblas_ztbmv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
+// Ztpmv performs one of the matrix-vector operations
+//  x = A * x    if trans = blas.NoTrans
+//  x = A^T * x  if trans = blas.Trans
+//  x = A^H * x  if trans = blas.ConjTrans
+// where x is an n element vector and A is an n×n triangular matrix, supplied in
+// packed form.
 func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
 	// declared at cblas.h:288:6 void cblas_ztpmv ...
 
