@@ -20,10 +20,11 @@ https://groups.google.com/forum/#!forum/gonum-dev
 ### What actually happened?
 
 
-### What version of Go, Gonum and C implementation are you using?
+### What version of Go, Gonum, Gonum/netlib and C implementation are you using?
 <!--
 Paste the output of `go version` and if you are installing Gonum from source, paste
-the output of `(cd $(go env GOPATH)/src/gonum.org/v1/gonum && git rev-parse HEAD)`.
+the output of `(cd $(go env GOPATH)/src/gonum.org/v1/gonum && git rev-parse HEAD)`
+and `(cd $(go env GOPATH)/src/gonum.org/v1/netlib && git rev-parse HEAD)`.
 -->
 
 
