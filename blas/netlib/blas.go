@@ -2747,6 +2747,18 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	C.cblas_ztbsv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(n), C.int(k), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX))
 }
 
+// Ztpsv solves one of the systems of equations
+//  A*x = b     if trans == blas.NoTrans,
+//  A^T*x = b,  if trans == blas.Trans,
+//  A^H*x = b,  if trans == blas.ConjTrans,
+// where b and x are n element vectors and A is an n×n triangular matrix in
+// packed form.
+//
+// On entry, x contains the values of b, and the solution is
+// stored in-place into x.
+//
+// No test for singularity or near-singularity is included in this
+// routine. Such tests must be performed before calling this routine.
 func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
 	// declared at cblas.h:299:6 void cblas_ztpsv ...
 
