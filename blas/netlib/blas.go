@@ -2487,6 +2487,12 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 	C.cblas_zgemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zgbmv performs one of the matrix-vector operations
+//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
+//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
+//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+// where alpha and beta are scalars, x and y are vectors, and A is an m×n band matrix
+// with kL subdiagonals and kU superdiagonals.
 func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:275:6 void cblas_zgbmv ...
 
@@ -3850,6 +3856,11 @@ func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex12
 	C.cblas_zhemv(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_x), C.int(incX), unsafe.Pointer(&beta), unsafe.Pointer(_y), C.int(incY))
 }
 
+// Zhbmv performs the matrix-vector operation
+//  y = alpha * A * x + beta * y
+// where alpha and beta are scalars, x and y are vectors, and A is an n×n
+// Hermitian band matrix with k super-diagonals. The imaginary parts of
+// the diagonal elements of A are ignored and assumed to be zero.
 func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:404:6 void cblas_zhbmv ...
 
