@@ -1076,12 +1076,8 @@ func (impl Implementation) Dgeqrf(m, n int, a []float64, lda int, tau, work []fl
 	if len(work) < max(1, lwork) {
 		panic(shortWork)
 	}
-	if lwork == -1 {
-		work[0] = float64(n)
-		return
-	}
 	checkMatrix(m, n, a, lda)
-	if lwork < n {
+	if lwork < n && lwork != -1 {
 		panic(badWork)
 	}
 	k := min(m, n)
