@@ -108,6 +108,10 @@ func TestDpotrf(t *testing.T) {
 	testlapack.DpotrfTest(t, impl)
 }
 
+func TestDpotrs(t *testing.T) {
+	testlapack.DpotrsTest(t, impl)
+}
+
 func TestDgebak(t *testing.T) {
 	testlapack.DgebakTest(t, impl)
 }
