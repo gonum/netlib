@@ -674,6 +674,23 @@ func (impl Implementation) Dpotrf(ul blas.Uplo, n int, a []float64, lda int) (ok
 	return lapacke.Dpotrf(ul, n, a, lda)
 }
 
+// Dpotrs solves a system of n linear equations A*X = B where A is an n×n
+// symmetric positive definite matrix and B is an n×nrhs matrix. The matrix A is
+// represented by its Cholesky factorization
+//  A = U^T*U  if uplo == blas.Upper
+//  A = L*L^T  if uplo == blas.Lower
+// as computed by Dpotrf. On entry, B contains the right-hand side matrix B, on
+// return it contains the solution matrix X.
+func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int) {
+	if uplo != blas.Upper && uplo != blas.Lower {
+		panic(badUplo)
+	}
+	checkMatrix(n, n, a, lda)
+	checkMatrix(n, nrhs, b, ldb)
+
+	lapacke.Dpotrs(uplo, n, nrhs, a, lda, b, ldb)
+}
+
 // Dgebal balances an n×n matrix A. Balancing consists of two stages, permuting
 // and scaling. Both steps are optional and depend on the value of job.
 //
