@@ -95,23 +95,6 @@ var byteTypes = map[string]string{
 
 	"d": "blas.Diag",
 
-	"job":    "lapack.Job",
-	"joba":   "lapack.Job",
-	"jobr":   "lapack.Job",
-	"jobp":   "lapack.Job",
-	"jobq":   "lapack.Job",
-	"jobt":   "lapack.Job",
-	"jobu":   "lapack.Job",
-	"jobu1":  "lapack.Job",
-	"jobu2":  "lapack.Job",
-	"jobv":   "lapack.Job",
-	"jobv1t": "lapack.Job",
-	"jobv2t": "lapack.Job",
-	"jobvl":  "lapack.Job",
-	"jobvr":  "lapack.Job",
-	"jobvt":  "lapack.Job",
-	"jobz":   "lapack.Job",
-
 	"side": "blas.Side",
 
 	"trans":  "blas.Transpose",
@@ -120,6 +103,23 @@ var byteTypes = map[string]string{
 	"transr": "blas.Transpose",
 
 	"ul": "blas.Uplo",
+
+	"job":    "byte",
+	"joba":   "byte",
+	"jobr":   "byte",
+	"jobp":   "byte",
+	"jobq":   "byte",
+	"jobt":   "byte",
+	"jobu":   "byte",
+	"jobu1":  "byte",
+	"jobu2":  "byte",
+	"jobv":   "byte",
+	"jobv1t": "byte",
+	"jobv2t": "byte",
+	"jobvl":  "byte",
+	"jobvr":  "byte",
+	"jobvt":  "byte",
+	"jobz":   "byte",
 
 	"balanc": "byte",
 	"cmach":  "byte",
@@ -155,7 +155,7 @@ func typeForByte(n string) string {
 var intTypes = map[string]string{
 	"forwrd": "int32",
 
-	"ijob": "lapack.Job",
+	"ijob": "byte",
 
 	"wantq": "int32",
 	"wantz": "int32",
