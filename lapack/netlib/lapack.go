@@ -33,7 +33,7 @@ const (
 	badIlo          = "lapack: ilo out of range"
 	badIhi          = "lapack: ihi out of range"
 	badIpiv         = "lapack: bad permutation length"
-	badJob          = "lapack: bad Job"
+	badBalanceJob   = "lapack: bad BalanceJob"
 	badK1           = "lapack: k1 out of range"
 	badK2           = "lapack: k2 out of range"
 	badKperm        = "lapack: incorrect permutation length"
@@ -734,10 +734,10 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 // scale must have length equal to n, otherwise Dgebal will panic.
 //
 // Dgebal is an internal routine. It is exported for testing purposes.
-func (impl Implementation) Dgebal(job lapack.Job, n int, a []float64, lda int, scale []float64) (ilo, ihi int) {
+func (impl Implementation) Dgebal(job lapack.BalanceJob, n int, a []float64, lda int, scale []float64) (ilo, ihi int) {
 	switch job {
 	default:
-		panic(badJob)
+		panic(badBalanceJob)
 	case lapack.None, lapack.Permute, lapack.Scale, lapack.PermuteScale:
 	}
 	checkMatrix(n, n, a, lda)
@@ -747,7 +747,7 @@ func (impl Implementation) Dgebal(job lapack.Job, n int, a []float64, lda int, s
 
 	ilo32 := make([]int32, 1)
 	ihi32 := make([]int32, 1)
-	lapacke.Dgebal(job, n, a, lda, ilo32, ihi32, scale)
+	lapacke.Dgebal(byte(job), n, a, lda, ilo32, ihi32, scale)
 	ilo = int(ilo32[0]) - 1
 	ihi = int(ihi32[0]) - 1
 	for j := 0; j < ilo; j++ {
@@ -770,10 +770,10 @@ func (impl Implementation) Dgebal(job lapack.Job, n int, a []float64, lda int, s
 // the eigenvectors of the original matrix.
 //
 // Dgebak is an internal routine. It is exported for testing purposes.
-func (impl Implementation) Dgebak(job lapack.Job, side lapack.EVSide, n, ilo, ihi int, scale []float64, m int, v []float64, ldv int) {
+func (impl Implementation) Dgebak(job lapack.BalanceJob, side lapack.EVSide, n, ilo, ihi int, scale []float64, m int, v []float64, ldv int) {
 	switch job {
 	default:
-		panic(badJob)
+		panic(badBalanceJob)
 	case lapack.None, lapack.Permute, lapack.Scale, lapack.PermuteScale:
 	}
 	var bside blas.Side
@@ -800,7 +800,7 @@ func (impl Implementation) Dgebak(job lapack.Job, side lapack.EVSide, n, ilo, ih
 	for j := ihi + 1; j < n; j++ {
 		scale[j]++
 	}
-	lapacke.Dgebak(job, bside, n, ilo+1, ihi+1, scale, m, v, ldv)
+	lapacke.Dgebak(byte(job), bside, n, ilo+1, ihi+1, scale, m, v, ldv)
 	// Convert permutation indices back to 0-based.
 	for j := 0; j < ilo; j++ {
 		scale[j]--
@@ -1303,7 +1303,7 @@ func (impl Implementation) Dgesvd(jobU, jobVT lapack.SVDJob, m, n int, a []float
 		work[0] = float64(minWork)
 		return true
 	}
-	return lapacke.Dgesvd(lapack.Job(jobU), lapack.Job(jobVT), m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork)
+	return lapacke.Dgesvd(byte(jobU), byte(jobVT), m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork)
 }
 
 // Dgetf2 computes the LU decomposition of the m×n matrix A.
@@ -1573,7 +1573,7 @@ func (impl Implementation) Dggsvd3(jobU, jobV, jobQ lapack.GSVDJob, m, n, p int,
 		}
 		_iwork[i] = int32(v)
 	}
-	ok = lapacke.Dggsvd3(lapack.Job(jobU), lapack.Job(jobV), lapack.Job(jobQ), m, n, p, _k, _l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, _iwork)
+	ok = lapacke.Dggsvd3(byte(jobU), byte(jobV), byte(jobQ), m, n, p, _k, _l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, _iwork)
 	for i, v := range _iwork {
 		iwork[i] = int(v - 1)
 	}
@@ -1674,7 +1674,7 @@ func (impl Implementation) Dggsvp3(jobU, jobV, jobQ lapack.GSVDJob, m, p, n int,
 		}
 		_iwork[i] = int32(v)
 	}
-	lapacke.Dggsvp3(lapack.Job(jobU), lapack.Job(jobV), lapack.Job(jobQ), m, p, n, a, lda, b, ldb, tola, tolb, _k, _l, u, ldu, v, ldv, q, ldq, _iwork, tau, work, lwork)
+	lapacke.Dggsvp3(byte(jobU), byte(jobV), byte(jobQ), m, p, n, a, lda, b, ldb, tola, tolb, _k, _l, u, ldu, v, ldv, q, ldq, _iwork, tau, work, lwork)
 	for i, v := range _iwork {
 		iwork[i] = int(v - 1)
 	}
@@ -2335,7 +2335,7 @@ func (impl Implementation) Dsyev(jobz lapack.EVJob, uplo blas.Uplo, n int, a []f
 	if lwork < 3*n-1 {
 		panic(badWork)
 	}
-	return lapacke.Dsyev(lapack.Job(jobz), uplo, n, a, lda, w, work, lwork)
+	return lapacke.Dsyev(byte(jobz), uplo, n, a, lda, w, work, lwork)
 }
 
 // Dsytrd reduces a symmetric n×n matrix A to symmetric tridiagonal form by an
@@ -2688,7 +2688,7 @@ func (impl Implementation) Dhseqr(job lapack.EVJob, compz lapack.EVComp, n, ilo,
 		}
 	}
 
-	return lapacke.Dhseqr(lapack.Job(job), lapack.Comp(compz), n, ilo+1, ihi+1,
+	return lapacke.Dhseqr(byte(job), lapack.Comp(compz), n, ilo+1, ihi+1,
 		h, ldh, wr, wi, z, ldz, work, lwork)
 }
 
@@ -2794,7 +2794,7 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 		return 0
 	}
 
-	first = lapacke.Dgeev(lapack.Job(jobvl), lapack.Job(jobvr), n, a, max(n, lda), wr, wi,
+	first = lapacke.Dgeev(byte(jobvl), byte(jobvr), n, a, max(n, lda), wr, wi,
 		vl, max(n, ldvl), vr, max(n, ldvr), work, lwork)
 	if lwork == -1 && int(work[0]) < minwrk {
 		work[0] = float64(minwrk)
@@ -2989,6 +2989,6 @@ func (impl Implementation) Dtgsja(jobU, jobV, jobQ lapack.GSVDJob, m, p, n, k, l
 	}
 
 	ncycle := []int32{0}
-	ok = lapacke.Dtgsja(lapack.Job(jobU), lapack.Job(jobV), lapack.Job(jobQ), m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle)
+	ok = lapacke.Dtgsja(byte(jobU), byte(jobV), byte(jobQ), m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle)
 	return int(ncycle[0]), ok
 }
