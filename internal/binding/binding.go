@@ -335,6 +335,7 @@ func Declarations(paths ...string) ([]Declaration, error) {
 #define __inline
 #define __restrict
 unsigned __builtin_bswap32 (unsigned x);
+unsigned __builtin_bswap16 (unsigned x);
 unsigned long long __builtin_bswap64 (unsigned long long x);
 `,
 		paths,
