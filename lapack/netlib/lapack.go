@@ -2276,7 +2276,7 @@ func (impl Implementation) Dsteqr(compz lapack.EVComp, n int, d, e, z []float64,
 		checkMatrix(n, n, z, ldz)
 	}
 
-	return lapacke.Dsteqr(lapack.Comp(compz), n, d, e, z, ldz, work)
+	return lapacke.Dsteqr(byte(compz), n, d, e, z, ldz, work)
 }
 
 // Dsterf computes all eigenvalues of a symmetric tridiagonal matrix using the
@@ -2513,7 +2513,7 @@ func (impl Implementation) Dtrexc(compq lapack.EVComp, n int, t []float64, ldt i
 
 	ifst32 := []int32{int32(ifst + 1)}
 	ilst32 := []int32{int32(ilst + 1)}
-	ok = lapacke.Dtrexc(lapack.Comp(compq), n, t, ldt, q, ldq, ifst32, ilst32, work)
+	ok = lapacke.Dtrexc(byte(compq), n, t, ldt, q, ldq, ifst32, ilst32, work)
 	ifst = int(ifst32[0] - 1)
 	ilst = int(ilst32[0] - 1)
 	return ifst, ilst, ok
@@ -2688,7 +2688,7 @@ func (impl Implementation) Dhseqr(job lapack.EVJob, compz lapack.EVComp, n, ilo,
 		}
 	}
 
-	return lapacke.Dhseqr(byte(job), lapack.Comp(compz), n, ilo+1, ihi+1,
+	return lapacke.Dhseqr(byte(job), byte(compz), n, ilo+1, ihi+1,
 		h, ldh, wr, wi, z, ldz, work, lwork)
 }
 

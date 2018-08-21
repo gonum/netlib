@@ -19,7 +19,6 @@ import (
 	"unsafe"
 
 	"gonum.org/v1/gonum/blas"
-	"gonum.org/v1/gonum/lapack"
 )
 
 // Type order is used to specify the matrix storage format. We still interact with
@@ -34,7 +33,7 @@ const (
 func isZero(ret C.int) bool { return ret == 0 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsdc.f.
-func Sbdsdc(ul blas.Uplo, compq lapack.Comp, n int, d, e, u []float32, ldu int, vt []float32, ldvt int, q []float32, iq []int32, work []float32, iwork []int32) bool {
+func Sbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float32, ldu int, vt []float32, ldvt int, q []float32, iq []int32, work []float32, iwork []int32) bool {
 	switch ul {
 	case blas.Upper:
 		ul = 'U'
@@ -79,7 +78,7 @@ func Sbdsdc(ul blas.Uplo, compq lapack.Comp, n int, d, e, u []float32, ldu int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc.f.
-func Dbdsdc(ul blas.Uplo, compq lapack.Comp, n int, d, e, u []float64, ldu int, vt []float64, ldvt int, q []float64, iq []int32, work []float64, iwork []int32) bool {
+func Dbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float64, ldu int, vt []float64, ldvt int, q []float64, iq []int32, work []float64, iwork []int32) bool {
 	switch ul {
 	case blas.Upper:
 		ul = 'U'
@@ -6030,7 +6029,7 @@ func Zggglm(n, m, p int, a []complex128, lda int, b []complex128, ldb int, d, x,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghrd.f.
-func Sgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []float32, lda int, b []float32, ldb int, q []float32, ldq int, z []float32, ldz int) bool {
+func Sgghrd(compq, compz byte, n, ilo, ihi int, a []float32, lda int, b []float32, ldb int, q []float32, ldq int, z []float32, ldz int) bool {
 	var _a *float32
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6051,7 +6050,7 @@ func Sgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []float32, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghrd.f.
-func Dgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []float64, lda int, b []float64, ldb int, q []float64, ldq int, z []float64, ldz int) bool {
+func Dgghrd(compq, compz byte, n, ilo, ihi int, a []float64, lda int, b []float64, ldb int, q []float64, ldq int, z []float64, ldz int) bool {
 	var _a *float64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6072,7 +6071,7 @@ func Dgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []float64, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgghrd.f.
-func Cgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []complex64, lda int, b []complex64, ldb int, q []complex64, ldq int, z []complex64, ldz int) bool {
+func Cgghrd(compq, compz byte, n, ilo, ihi int, a []complex64, lda int, b []complex64, ldb int, q []complex64, ldq int, z []complex64, ldz int) bool {
 	var _a *complex64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6093,7 +6092,7 @@ func Cgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []complex64, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgghrd.f.
-func Zgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []complex128, lda int, b []complex128, ldb int, q []complex128, ldq int, z []complex128, ldz int) bool {
+func Zgghrd(compq, compz byte, n, ilo, ihi int, a []complex128, lda int, b []complex128, ldb int, q []complex128, ldq int, z []complex128, ldz int) bool {
 	var _a *complex128
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6114,7 +6113,7 @@ func Zgghrd(compq, compz lapack.Comp, n, ilo, ihi int, a []complex128, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghd3.f.
-func Sgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []float32, lda int, b []float32, ldb int, q []float32, ldq int, z []float32, ldz int, work []float32, lwork int) bool {
+func Sgghd3(compq, compz byte, n, ilo, ihi int, a []float32, lda int, b []float32, ldb int, q []float32, ldq int, z []float32, ldz int, work []float32, lwork int) bool {
 	var _a *float32
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6139,7 +6138,7 @@ func Sgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []float32, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3.f.
-func Dgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []float64, lda int, b []float64, ldb int, q []float64, ldq int, z []float64, ldz int, work []float64, lwork int) bool {
+func Dgghd3(compq, compz byte, n, ilo, ihi int, a []float64, lda int, b []float64, ldb int, q []float64, ldq int, z []float64, ldz int, work []float64, lwork int) bool {
 	var _a *float64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6164,7 +6163,7 @@ func Dgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []float64, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgghd3.f.
-func Cgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []complex64, lda int, b []complex64, ldb int, q []complex64, ldq int, z []complex64, ldz int, work []complex64, lwork int) bool {
+func Cgghd3(compq, compz byte, n, ilo, ihi int, a []complex64, lda int, b []complex64, ldb int, q []complex64, ldq int, z []complex64, ldz int, work []complex64, lwork int) bool {
 	var _a *complex64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -6189,7 +6188,7 @@ func Cgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []complex64, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgghd3.f.
-func Zgghd3(compq, compz lapack.Comp, n, ilo, ihi int, a []complex128, lda int, b []complex128, ldb int, q []complex128, ldq int, z []complex128, ldz int, work []complex128, lwork int) bool {
+func Zgghd3(compq, compz byte, n, ilo, ihi int, a []complex128, lda int, b []complex128, ldb int, q []complex128, ldq int, z []complex128, ldz int, work []complex128, lwork int) bool {
 	var _a *complex128
 	if len(a) > 0 {
 		_a = &a[0]
@@ -9886,7 +9885,7 @@ func Zhfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shgeqz.f.
-func Shgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []float32, ldh int, t []float32, ldt int, alphar, alphai, beta, q []float32, ldq int, z []float32, ldz int, work []float32, lwork int) bool {
+func Shgeqz(job, compq, compz byte, n, ilo, ihi int, h []float32, ldh int, t []float32, ldt int, alphar, alphai, beta, q []float32, ldq int, z []float32, ldz int, work []float32, lwork int) bool {
 	var _h *float32
 	if len(h) > 0 {
 		_h = &h[0]
@@ -9923,7 +9922,7 @@ func Shgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []float32, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhgeqz.f.
-func Dhgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []float64, ldh int, t []float64, ldt int, alphar, alphai, beta, q []float64, ldq int, z []float64, ldz int, work []float64, lwork int) bool {
+func Dhgeqz(job, compq, compz byte, n, ilo, ihi int, h []float64, ldh int, t []float64, ldt int, alphar, alphai, beta, q []float64, ldq int, z []float64, ldz int, work []float64, lwork int) bool {
 	var _h *float64
 	if len(h) > 0 {
 		_h = &h[0]
@@ -9960,7 +9959,7 @@ func Dhgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []float64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chgeqz.f.
-func Chgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []complex64, ldh int, t []complex64, ldt int, alpha, beta, q []complex64, ldq int, z []complex64, ldz int, work []complex64, lwork int, rwork []float32) bool {
+func Chgeqz(job, compq, compz byte, n, ilo, ihi int, h []complex64, ldh int, t []complex64, ldt int, alpha, beta, q []complex64, ldq int, z []complex64, ldz int, work []complex64, lwork int, rwork []float32) bool {
 	var _h *complex64
 	if len(h) > 0 {
 		_h = &h[0]
@@ -9997,7 +9996,7 @@ func Chgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []complex64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhgeqz.f.
-func Zhgeqz(job byte, compq, compz lapack.Comp, n, ilo, ihi int, h []complex128, ldh int, t []complex128, ldt int, alpha, beta, q []complex128, ldq int, z []complex128, ldz int, work []complex128, lwork int, rwork []float64) bool {
+func Zhgeqz(job, compq, compz byte, n, ilo, ihi int, h []complex128, ldh int, t []complex128, ldt int, alpha, beta, q []complex128, ldq int, z []complex128, ldz int, work []complex128, lwork int, rwork []float64) bool {
 	var _h *complex128
 	if len(h) > 0 {
 		_h = &h[0]
@@ -11252,7 +11251,7 @@ func Zhsein(job, eigsrc, initv byte, sel []int32, n int, h []complex128, ldh int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shseqr.f.
-func Shseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []float32, ldh int, wr, wi, z []float32, ldz int, work []float32, lwork int) int {
+func Shseqr(job, compz byte, n, ilo, ihi int, h []float32, ldh int, wr, wi, z []float32, ldz int, work []float32, lwork int) int {
 	var _h *float32
 	if len(h) > 0 {
 		_h = &h[0]
@@ -11277,7 +11276,7 @@ func Shseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []float32, ldh int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhseqr.f.
-func Dhseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []float64, ldh int, wr, wi, z []float64, ldz int, work []float64, lwork int) int {
+func Dhseqr(job, compz byte, n, ilo, ihi int, h []float64, ldh int, wr, wi, z []float64, ldz int, work []float64, lwork int) int {
 	var _h *float64
 	if len(h) > 0 {
 		_h = &h[0]
@@ -11302,7 +11301,7 @@ func Dhseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []float64, ldh int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chseqr.f.
-func Chseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []complex64, ldh int, w, z []complex64, ldz int, work []complex64, lwork int) int {
+func Chseqr(job, compz byte, n, ilo, ihi int, h []complex64, ldh int, w, z []complex64, ldz int, work []complex64, lwork int) int {
 	var _h *complex64
 	if len(h) > 0 {
 		_h = &h[0]
@@ -11323,7 +11322,7 @@ func Chseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []complex64, ldh int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhseqr.f.
-func Zhseqr(job byte, compz lapack.Comp, n, ilo, ihi int, h []complex128, ldh int, w, z []complex128, ldz int, work []complex128, lwork int) int {
+func Zhseqr(job, compz byte, n, ilo, ihi int, h []complex128, ldh int, w, z []complex128, ldz int, work []complex128, lwork int) int {
 	var _h *complex128
 	if len(h) > 0 {
 		_h = &h[0]
@@ -17732,7 +17731,7 @@ func Zptcon(n int, d []float64, e []complex128, anorm float64, rcond, work []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spteqr.f.
-func Spteqr(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32) bool {
+func Spteqr(compz byte, n int, d, e, z []float32, ldz int, work []float32) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -17753,7 +17752,7 @@ func Spteqr(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpteqr.f.
-func Dpteqr(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64) bool {
+func Dpteqr(compz byte, n int, d, e, z []float64, ldz int, work []float64) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -17774,7 +17773,7 @@ func Dpteqr(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpteqr.f.
-func Cpteqr(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, work []float32) bool {
+func Cpteqr(compz byte, n int, d, e []float32, z []complex64, ldz int, work []float32) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -17795,7 +17794,7 @@ func Cpteqr(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, wo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpteqr.f.
-func Zpteqr(compz lapack.Comp, n int, d, e []float64, z []complex128, ldz int, work []float64) bool {
+func Zpteqr(compz byte, n int, d, e []float64, z []complex128, ldz int, work []float64) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -20588,7 +20587,7 @@ func Dstebz(rng, order byte, n int, vl, vu float64, il, iu int, abstol float64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstedc.f.
-func Sstedc(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Sstedc(compz byte, n int, d, e, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -20613,7 +20612,7 @@ func Sstedc(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstedc.f.
-func Dstedc(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dstedc(compz byte, n int, d, e, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -20638,7 +20637,7 @@ func Dstedc(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstedc.f.
-func Cstedc(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Cstedc(compz byte, n int, d, e []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -20667,7 +20666,7 @@ func Cstedc(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, wo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstedc.f.
-func Zstedc(compz lapack.Comp, n int, d, e []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zstedc(compz byte, n int, d, e []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -21172,7 +21171,7 @@ func Zstemr(jobz, rng byte, n int, d, e []float64, vl, vu float64, il, iu int, m
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssteqr.f.
-func Ssteqr(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32) bool {
+func Ssteqr(compz byte, n int, d, e, z []float32, ldz int, work []float32) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -21193,7 +21192,7 @@ func Ssteqr(compz lapack.Comp, n int, d, e, z []float32, ldz int, work []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsteqr.f.
-func Dsteqr(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64) bool {
+func Dsteqr(compz byte, n int, d, e, z []float64, ldz int, work []float64) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -21214,7 +21213,7 @@ func Dsteqr(compz lapack.Comp, n int, d, e, z []float64, ldz int, work []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csteqr.f.
-func Csteqr(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, work []float32) bool {
+func Csteqr(compz byte, n int, d, e []float32, z []complex64, ldz int, work []float32) bool {
 	var _d *float32
 	if len(d) > 0 {
 		_d = &d[0]
@@ -21235,7 +21234,7 @@ func Csteqr(compz lapack.Comp, n int, d, e []float32, z []complex64, ldz int, wo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsteqr.f.
-func Zsteqr(compz lapack.Comp, n int, d, e []float64, z []complex128, ldz int, work []float64) bool {
+func Zsteqr(compz byte, n int, d, e []float64, z []complex128, ldz int, work []float64) bool {
 	var _d *float64
 	if len(d) > 0 {
 		_d = &d[0]
@@ -26584,7 +26583,7 @@ func Ztrevc(side blas.Side, howmny byte, sel []int32, n int, t []complex128, ldt
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strexc.f.
-func Strexc(compq lapack.Comp, n int, t []float32, ldt int, q []float32, ldq int, ifst, ilst []int32, work []float32) bool {
+func Strexc(compq byte, n int, t []float32, ldt int, q []float32, ldq int, ifst, ilst []int32, work []float32) bool {
 	var _t *float32
 	if len(t) > 0 {
 		_t = &t[0]
@@ -26609,7 +26608,7 @@ func Strexc(compq lapack.Comp, n int, t []float32, ldt int, q []float32, ldq int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrexc.f.
-func Dtrexc(compq lapack.Comp, n int, t []float64, ldt int, q []float64, ldq int, ifst, ilst []int32, work []float64) bool {
+func Dtrexc(compq byte, n int, t []float64, ldt int, q []float64, ldq int, ifst, ilst []int32, work []float64) bool {
 	var _t *float64
 	if len(t) > 0 {
 		_t = &t[0]
@@ -26634,7 +26633,7 @@ func Dtrexc(compq lapack.Comp, n int, t []float64, ldt int, q []float64, ldq int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrexc.f.
-func Ctrexc(compq lapack.Comp, n int, t []complex64, ldt int, q []complex64, ldq, ifst, ilst int) bool {
+func Ctrexc(compq byte, n int, t []complex64, ldt int, q []complex64, ldq, ifst, ilst int) bool {
 	var _t *complex64
 	if len(t) > 0 {
 		_t = &t[0]
@@ -26647,7 +26646,7 @@ func Ctrexc(compq lapack.Comp, n int, t []complex64, ldt int, q []complex64, ldq
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrexc.f.
-func Ztrexc(compq lapack.Comp, n int, t []complex128, ldt int, q []complex128, ldq, ifst, ilst int) bool {
+func Ztrexc(compq byte, n int, t []complex128, ldt int, q []complex128, ldq, ifst, ilst int) bool {
 	var _t *complex128
 	if len(t) > 0 {
 		_t = &t[0]
@@ -26896,7 +26895,7 @@ func Ztrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strsen.f.
-func Strsen(job byte, compq lapack.Comp, sel []int32, n int, t []float32, ldt int, q []float32, ldq int, wr, wi []float32, m []int32, s, sep, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Strsen(job, compq byte, sel []int32, n int, t []float32, ldt int, q []float32, ldq int, wr, wi []float32, m []int32, s, sep, work []float32, lwork int, iwork []int32, liwork int) bool {
 	var _sel *int32
 	if len(sel) > 0 {
 		_sel = &sel[0]
@@ -26941,7 +26940,7 @@ func Strsen(job byte, compq lapack.Comp, sel []int32, n int, t []float32, ldt in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsen.f.
-func Dtrsen(job byte, compq lapack.Comp, sel []int32, n int, t []float64, ldt int, q []float64, ldq int, wr, wi []float64, m []int32, s, sep, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dtrsen(job, compq byte, sel []int32, n int, t []float64, ldt int, q []float64, ldq int, wr, wi []float64, m []int32, s, sep, work []float64, lwork int, iwork []int32, liwork int) bool {
 	var _sel *int32
 	if len(sel) > 0 {
 		_sel = &sel[0]
@@ -26986,7 +26985,7 @@ func Dtrsen(job byte, compq lapack.Comp, sel []int32, n int, t []float64, ldt in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsen.f.
-func Ctrsen(job byte, compq lapack.Comp, sel []int32, n int, t []complex64, ldt int, q []complex64, ldq int, w []complex64, m []int32, s, sep []float32, work []complex64, lwork int) bool {
+func Ctrsen(job, compq byte, sel []int32, n int, t []complex64, ldt int, q []complex64, ldq int, w []complex64, m []int32, s, sep []float32, work []complex64, lwork int) bool {
 	var _sel *int32
 	if len(sel) > 0 {
 		_sel = &sel[0]
@@ -27023,7 +27022,7 @@ func Ctrsen(job byte, compq lapack.Comp, sel []int32, n int, t []complex64, ldt 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsen.f.
-func Ztrsen(job byte, compq lapack.Comp, sel []int32, n int, t []complex128, ldt int, q []complex128, ldq int, w []complex128, m []int32, s, sep []float64, work []complex128, lwork int) bool {
+func Ztrsen(job, compq byte, sel []int32, n int, t []complex128, ldt int, q []complex128, ldq int, w []complex128, m []int32, s, sep []float64, work []complex128, lwork int) bool {
 	var _sel *int32
 	if len(sel) > 0 {
 		_sel = &sel[0]

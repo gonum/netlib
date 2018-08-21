@@ -90,8 +90,8 @@ var cToGoTypeConv = map[string]string{
 var cgoEnums = map[string]*template.Template{}
 
 var byteTypes = map[string]string{
-	"compq": "lapack.Comp",
-	"compz": "lapack.Comp",
+	"compq": "byte",
+	"compz": "byte",
 
 	"d": "blas.Diag",
 
@@ -535,7 +535,6 @@ import (
 	"unsafe"
 
 	"gonum.org/v1/gonum/blas"
-	"gonum.org/v1/gonum/lapack"
 )
 
 // Type order is used to specify the matrix storage format. We still interact with
