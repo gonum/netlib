@@ -13,62 +13,65 @@ import (
 	"gonum.org/v1/netlib/lapack/lapacke"
 )
 
-// Copied from lapack/native. Keep in sync.
+// Copied from gonum/lapack/gonum. Keep in sync.
 const (
-	absIncNotOne    = "lapack: increment not one or negative one"
-	badAlpha        = "lapack: bad alpha length"
-	badAuxv         = "lapack: auxv has insufficient length"
-	badBeta         = "lapack: bad beta length"
-	badD            = "lapack: d has insufficient length"
-	badDecompUpdate = "lapack: bad decomp update"
-	badDiag         = "lapack: bad diag"
-	badDims         = "lapack: bad input dimensions"
-	badDirect       = "lapack: bad direct"
-	badE            = "lapack: e has insufficient length"
-	badEVComp       = "lapack: bad EVComp"
-	badEVJob        = "lapack: bad EVJob"
-	badEVSide       = "lapack: bad EVSide"
-	badGSVDJob      = "lapack: bad GSVDJob"
-	badHowMany      = "lapack: bad HowMany"
-	badIlo          = "lapack: ilo out of range"
-	badIhi          = "lapack: ihi out of range"
-	badIpiv         = "lapack: bad permutation length"
-	badBalanceJob   = "lapack: bad BalanceJob"
-	badK1           = "lapack: k1 out of range"
-	badK2           = "lapack: k2 out of range"
-	badKperm        = "lapack: incorrect permutation length"
-	badLdA          = "lapack: index of a out of range"
-	badNb           = "lapack: nb out of range"
-	badNorm         = "lapack: bad norm"
-	badPivot        = "lapack: bad pivot"
-	badS            = "lapack: s has insufficient length"
-	badShifts       = "lapack: bad shifts"
-	badSide         = "lapack: bad side"
-	badSlice        = "lapack: bad input slice length"
-	badSort         = "lapack: bad Sort"
-	badStore        = "lapack: bad store"
-	badTau          = "lapack: tau has insufficient length"
-	badTauQ         = "lapack: tauQ has insufficient length"
-	badTauP         = "lapack: tauP has insufficient length"
-	badTrans        = "lapack: bad trans"
-	badVn1          = "lapack: vn1 has insufficient length"
-	badVn2          = "lapack: vn2 has insufficient length"
-	badUplo         = "lapack: illegal triangle"
-	badWork         = "lapack: insufficient working memory"
-	badZ            = "lapack: insufficient z length"
-	kGTM            = "lapack: k > m"
-	kGTN            = "lapack: k > n"
-	kLT0            = "lapack: k < 0"
-	mLT0            = "lapack: m < 0"
-	mLTN            = "lapack: m < n"
-	nanScale        = "lapack: NaN scale factor"
-	negDimension    = "lapack: negative matrix dimension"
-	negZ            = "lapack: negative z value"
-	nLT0            = "lapack: n < 0"
-	nLTM            = "lapack: n < m"
-	offsetGTM       = "lapack: offset > m"
-	shortWork       = "lapack: working array shorter than declared"
-	zeroDiv         = "lapack: zero divisor"
+	absIncNotOne  = "lapack: increment not one or negative one"
+	badAlpha      = "lapack: bad alpha length"
+	badApplyOrtho = "lapack: bad ApplyOrtho"
+	badAuxv       = "lapack: auxv has insufficient length"
+	badBeta       = "lapack: bad beta length"
+	badD          = "lapack: d has insufficient length"
+	badDiag       = "lapack: bad diag"
+	badDims       = "lapack: bad input dimensions"
+	badDirect     = "lapack: bad direct"
+	badE          = "lapack: e has insufficient length"
+	badEVComp     = "lapack: bad EVComp"
+	badEVHowMany  = "lapack: bad EVHowMany"
+	badEVJob      = "lapack: bad EVJob"
+	badEVSide     = "lapack: bad EVSide"
+	badGenOrtho   = "lapack: bad GenOrtho"
+	badGSVDJob    = "lapack: bad GSVDJob"
+	badIlo        = "lapack: ilo out of range"
+	badIhi        = "lapack: ihi out of range"
+	badIpiv       = "lapack: bad permutation length"
+	badBalanceJob = "lapack: bad BalanceJob"
+	badK1         = "lapack: k1 out of range"
+	badK2         = "lapack: k2 out of range"
+	badKperm      = "lapack: incorrect permutation length"
+	badLdA        = "lapack: index of a out of range"
+	badNb         = "lapack: nb out of range"
+	badNorm       = "lapack: bad norm"
+	badPivot      = "lapack: bad pivot"
+	badS          = "lapack: s has insufficient length"
+	badSchurComp  = "lapack: bad SchurComp"
+	badSchurJob   = "lapack: bad SchurJob"
+	badShifts     = "lapack: bad shifts"
+	badSide       = "lapack: bad side"
+	badSlice      = "lapack: bad input slice length"
+	badSort       = "lapack: bad Sort"
+	badStore      = "lapack: bad store"
+	badTau        = "lapack: tau has insufficient length"
+	badTauQ       = "lapack: tauQ has insufficient length"
+	badTauP       = "lapack: tauP has insufficient length"
+	badTrans      = "lapack: bad trans"
+	badVn1        = "lapack: vn1 has insufficient length"
+	badVn2        = "lapack: vn2 has insufficient length"
+	badUplo       = "lapack: illegal triangle"
+	badWork       = "lapack: insufficient working memory"
+	badZ          = "lapack: insufficient z length"
+	kGTM          = "lapack: k > m"
+	kGTN          = "lapack: k > n"
+	kLT0          = "lapack: k < 0"
+	mLT0          = "lapack: m < 0"
+	mLTN          = "lapack: m < n"
+	nanScale      = "lapack: NaN scale factor"
+	negDimension  = "lapack: negative matrix dimension"
+	negZ          = "lapack: negative z value"
+	nLT0          = "lapack: n < 0"
+	nLTM          = "lapack: n < m"
+	offsetGTM     = "lapack: offset > m"
+	shortWork     = "lapack: working array shorter than declared"
+	zeroDiv       = "lapack: zero divisor"
 )
 
 func min(m, n int) int {
@@ -738,7 +741,7 @@ func (impl Implementation) Dgebal(job lapack.BalanceJob, n int, a []float64, lda
 	switch job {
 	default:
 		panic(badBalanceJob)
-	case lapack.None, lapack.Permute, lapack.Scale, lapack.PermuteScale:
+	case lapack.BalanceNone, lapack.Permute, lapack.Scale, lapack.PermuteScale:
 	}
 	checkMatrix(n, n, a, lda)
 	if len(scale) != n {
@@ -774,15 +777,15 @@ func (impl Implementation) Dgebak(job lapack.BalanceJob, side lapack.EVSide, n, 
 	switch job {
 	default:
 		panic(badBalanceJob)
-	case lapack.None, lapack.Permute, lapack.Scale, lapack.PermuteScale:
+	case lapack.BalanceNone, lapack.Permute, lapack.Scale, lapack.PermuteScale:
 	}
 	var bside blas.Side
 	switch side {
 	default:
-		panic(badSide)
-	case lapack.LeftEV:
+		panic(badEVSide)
+	case lapack.EVLeft:
 		bside = blas.Left
-	case lapack.RightEV:
+	case lapack.EVRight:
 		bside = blas.Right
 	}
 	checkMatrix(n, m, v, ldv)
@@ -1692,9 +1695,16 @@ func (impl Implementation) Dggsvp3(jobU, jobV, jobQ lapack.GSVDJob, m, p, n int,
 // If vect == lapack.ApplyP, then A is assumed to have been a k×n matrix, and
 // P^T is of order n. If k < n, then Dorgbr returns the first m rows of P^T,
 // where n >= m >= k. If k >= n, then Dorgbr returns P^T as an n×n matrix.
-func (impl Implementation) Dorgbr(vect lapack.DecompUpdate, m, n, k int, a []float64, lda int, tau, work []float64, lwork int) {
+func (impl Implementation) Dorgbr(vect lapack.GenOrtho, m, n, k int, a []float64, lda int, tau, work []float64, lwork int) {
 	mn := min(m, n)
-	wantq := vect == lapack.ApplyQ
+	var wantq bool
+	switch vect {
+	case lapack.GenerateQ:
+		wantq = true
+	case lapack.GeneratePT:
+	default:
+		panic(badGenOrtho)
+	}
 	if wantq {
 		if m < n || n < min(m, k) || m < min(m, k) {
 			panic(badDims)
@@ -1971,7 +1981,7 @@ func (impl Implementation) Dorgtr(uplo blas.Uplo, n int, a []float64, lda int, t
 // returns it in work[0].
 //
 // Dormbr is an internal routine. It is exported for testing purposes.
-func (impl Implementation) Dormbr(vect lapack.DecompUpdate, side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) {
+func (impl Implementation) Dormbr(vect lapack.ApplyOrtho, side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) {
 	if side != blas.Left && side != blas.Right {
 		panic(badSide)
 	}
@@ -1979,7 +1989,7 @@ func (impl Implementation) Dormbr(vect lapack.DecompUpdate, side blas.Side, tran
 		panic(badTrans)
 	}
 	if vect != lapack.ApplyP && vect != lapack.ApplyQ {
-		panic(badDecompUpdate)
+		panic(badApplyOrtho)
 	}
 	nq := n
 	nw := m
@@ -2266,10 +2276,10 @@ func (impl Implementation) Dsteqr(compz lapack.EVComp, n int, d, e, z []float64,
 	if len(e) < n-1 {
 		panic(badE)
 	}
-	if compz != lapack.None && compz != lapack.TridiagEV && compz != lapack.OriginalEV {
+	if compz != lapack.EVCompNone && compz != lapack.EVTridiag && compz != lapack.EVOrig {
 		panic(badEVComp)
 	}
-	if compz != lapack.None {
+	if compz != lapack.EVCompNone {
 		if len(work) < max(1, 2*n-2) {
 			panic(badWork)
 		}
@@ -2484,12 +2494,12 @@ func (impl Implementation) Dtrcon(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 // work must have length at least n, otherwise Dtrexc will panic.
 //
 // Dtrexc is an internal routine. It is exported for testing purposes.
-func (impl Implementation) Dtrexc(compq lapack.EVComp, n int, t []float64, ldt int, q []float64, ldq int, ifst, ilst int, work []float64) (ifstOut, ilstOut int, ok bool) {
+func (impl Implementation) Dtrexc(compq lapack.UpdateSchurComp, n int, t []float64, ldt int, q []float64, ldq int, ifst, ilst int, work []float64) (ifstOut, ilstOut int, ok bool) {
 	checkMatrix(n, n, t, ldt)
 	switch compq {
 	default:
 		panic("lapack: bad value of compq")
-	case lapack.None:
+	case lapack.UpdateSchurNone:
 		// q is not referenced but LAPACKE checks that ldq >= n always.
 		q = nil
 		ldq = max(1, n)
@@ -2650,18 +2660,18 @@ func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 //      URL: http://dx.doi.org/10.1137/S0895479801384585
 //
 // Dhseqr is an internal routine. It is exported for testing purposes.
-func (impl Implementation) Dhseqr(job lapack.EVJob, compz lapack.EVComp, n, ilo, ihi int, h []float64, ldh int, wr, wi []float64, z []float64, ldz int, work []float64, lwork int) (unconverged int) {
+func (impl Implementation) Dhseqr(job lapack.SchurJob, compz lapack.SchurComp, n, ilo, ihi int, h []float64, ldh int, wr, wi []float64, z []float64, ldz int, work []float64, lwork int) (unconverged int) {
 	switch job {
 	default:
-		panic(badEVJob)
+		panic(badSchurJob)
 	case lapack.EigenvaluesOnly, lapack.EigenvaluesAndSchur:
 	}
 	var wantz bool
 	switch compz {
 	default:
-		panic(badEVComp)
-	case lapack.None:
-	case lapack.HessEV, lapack.OriginalEV:
+		panic(badSchurComp)
+	case lapack.SchurNone:
+	case lapack.SchurHess, lapack.SchurOrig:
 		wantz = true
 	}
 	switch {
@@ -2744,18 +2754,18 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 	switch jobvl {
 	default:
 		panic("lapack: invalid LeftEVJob")
-	case lapack.ComputeLeftEV:
+	case lapack.LeftEVCompute:
 		wantvl = true
-	case lapack.None:
+	case lapack.LeftEVNone:
 		wantvl = false
 	}
 	var wantvr bool
 	switch jobvr {
 	default:
 		panic("lapack: invalid RightEVJob")
-	case lapack.ComputeRightEV:
+	case lapack.RightEVCompute:
 		wantvr = true
-	case lapack.None:
+	case lapack.RightEVNone:
 		wantvr = false
 	}
 	switch {
