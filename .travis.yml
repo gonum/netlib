@@ -38,6 +38,12 @@ matrix:
   - os: osx
     env: BLAS_LIB=OpenBLAS
 
+before_install:
+ # Required for imports check.
+ - go get gonum.org/v1/tools/cmd/check-imports
+ # Required for copyright header check.
+ - go get gonum.org/v1/tools/cmd/check-copyright
+
 # Cache used to persist the compiled BLAS library between CI calls.
 cache:
   directories:
@@ -48,6 +54,8 @@ install:
  - travis_wait 20 source ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/install.sh
 
 script:
+ - ${TRAVIS_BUILD_DIR}/.travis/check-imports.sh
+ - ${TRAVIS_BUILD_DIR}/.travis/check-copyright.sh
  - source ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/test.sh
  - test -z "$(gofmt -d .)"
  # This is run last since it alters the tree.
