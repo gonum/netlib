@@ -345,7 +345,12 @@ func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 	if p.Name() != "Diag" {
 		return false
 	}
-	fmt.Fprint(buf, `	if d != blas.NonUnit && d != blas.Unit {
+	fmt.Fprint(buf, `	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 `)
@@ -364,12 +369,12 @@ func gemmShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bo
 	}
 
 	fmt.Fprint(buf, `	var rowA, colA, rowB, colB int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		rowA, colA = m, k
 	} else {
 		rowA, colA = k, m
 	}
-	if tB == blas.NoTrans {
+	if tB == cblasNoTrans {
 		rowB, colB = k, n
 	} else {
 		rowB, colB = n, k
@@ -400,7 +405,7 @@ func mvShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 	}
 
 	fmt.Fprint(buf, `	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -485,7 +490,7 @@ func rkShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 	}
 
 	fmt.Fprint(buf, `	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -553,7 +558,12 @@ func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 	if p.Name() != "Side" {
 		return false
 	}
-	fmt.Fprint(buf, `	if s != blas.Left && s != blas.Right {
+	fmt.Fprint(buf, `	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
 `)
@@ -584,7 +594,7 @@ func sidedShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 
 	if hasA && hasB {
 		fmt.Fprint(buf, `	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -614,17 +624,34 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 	case "t", "tA", "tB":
 		switch {
 		case strings.HasPrefix(d.Name, "cblas_ch"), strings.HasPrefix(d.Name, "cblas_zh"):
-			fmt.Fprintf(buf, `	if %[1]s != blas.NoTrans && %[1]s != blas.ConjTrans {
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = cblasNoTrans
+	case blas.ConjTrans:
+		%[1]s = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 `, n)
 		case strings.HasPrefix(d.Name, "cblas_cs"), strings.HasPrefix(d.Name, "cblas_zs"):
-			fmt.Fprintf(buf, `	if %[1]s != blas.NoTrans && %[1]s != blas.Trans {
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = cblasNoTrans
+	case blas.Trans:
+		%[1]s = cblasTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 `, n)
 		default:
-			fmt.Fprintf(buf, `	if %[1]s != blas.NoTrans && %[1]s != blas.Trans && %[1]s != blas.ConjTrans {
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = cblasNoTrans
+	case blas.Trans:
+		%[1]s = cblasTrans
+	case blas.ConjTrans:
+		%[1]s = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 `, n)
@@ -637,7 +664,12 @@ func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 	if p.Name() != "Uplo" {
 		return false
 	}
-	fmt.Fprint(buf, `	if ul != blas.Upper && ul != blas.Lower {
+	fmt.Fprint(buf, `	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 `)
@@ -827,8 +859,21 @@ var (
 // an API that allows client calls to specify order, so this is here to document that fact.
 type order int
 
+const rowMajor order = 101
+
 const (
-	rowMajor order = 101 + iota
+	cblasNoTrans   = 111
+	cblasTrans     = 112
+	cblasConjTrans = 113
+
+	cblasUpper = 121
+	cblasLower = 122
+
+	cblasNonUnit = 131
+	cblasUnit    = 132
+
+	cblasLeft  = 141
+	cblasRight = 142
 )
 
 func min(a, b int) int {

@@ -60,7 +60,7 @@ var needsInt = map[string]bool{
 	"geevx": true,
 }
 
-// allUplo is a list of routines that allow 'A' for their uplo argument.
+// allUplo is a list of routines that allow any value for their uplo argument.
 // The list keys are truncated by one character to cover all four numeric types.
 var allUplo = map[string]bool{
 	"lacpy": true,
@@ -88,69 +88,6 @@ var cToGoTypeConv = map[string]string{
 }
 
 var cgoEnums = map[string]*template.Template{}
-
-var byteTypes = map[string]string{
-	"compq": "byte",
-	"compz": "byte",
-
-	"d": "blas.Diag",
-
-	"side": "blas.Side",
-
-	"trans":  "blas.Transpose",
-	"trana":  "blas.Transpose",
-	"tranb":  "blas.Transpose",
-	"transr": "blas.Transpose",
-
-	"ul": "blas.Uplo",
-
-	"job":    "byte",
-	"joba":   "byte",
-	"jobr":   "byte",
-	"jobp":   "byte",
-	"jobq":   "byte",
-	"jobt":   "byte",
-	"jobu":   "byte",
-	"jobu1":  "byte",
-	"jobu2":  "byte",
-	"jobv":   "byte",
-	"jobv1t": "byte",
-	"jobv2t": "byte",
-	"jobvl":  "byte",
-	"jobvr":  "byte",
-	"jobvt":  "byte",
-	"jobz":   "byte",
-
-	"balanc": "byte",
-	"cmach":  "byte",
-	"direct": "byte",
-	"dist":   "byte",
-	"equed":  "byte",
-	"eigsrc": "byte",
-	"fact":   "byte",
-	"howmny": "byte",
-	"id":     "byte",
-	"initv":  "byte",
-	"norm":   "byte",
-	"order":  "byte",
-	"pack":   "byte",
-	"sense":  "byte",
-	"signs":  "byte",
-	"storev": "byte",
-	"sym":    "byte",
-	"typ":    "byte",
-	"rng":    "byte",
-	"vect":   "byte",
-	"way":    "byte",
-}
-
-func typeForByte(n string) string {
-	t, ok := byteTypes[n]
-	if !ok {
-		return fmt.Sprintf("<unknown %q>", n)
-	}
-	return t
-}
 
 var intTypes = map[string]string{
 	"forwrd": "int32",
@@ -193,8 +130,8 @@ func convForIntSlice(n string) string {
 }
 
 var goTypes = map[binding.TypeKey]*template.Template{
-	{Kind: cc.Char}:                           template.Must(template.New("byte").Funcs(map[string]interface{}{"typefor": typeForByte}).Parse("{{typefor .}}")),
 	{Kind: cc.Int}:                            template.Must(template.New("int").Funcs(map[string]interface{}{"typefor": typeForInt}).Parse("{{typefor .}}")),
+	{Kind: cc.Char}:                           template.Must(template.New("byte").Parse("byte")),
 	{Kind: cc.Char, IsPointer: true}:          template.Must(template.New("[]byte").Parse("[]byte")),
 	{Kind: cc.Int, IsPointer: true}:           template.Must(template.New("[]int32").Parse("[]int32")),
 	{Kind: cc.FloatComplex, IsPointer: true}:  template.Must(template.New("[]complex64").Parse("[]complex64")),
@@ -416,24 +353,11 @@ func uplo(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 		return false
 	}
 	lapackeName := strings.TrimSuffix(strings.TrimPrefix(d.Name, prefix), suffix)
-	if allUplo[lapackeName[1:]] {
+	if !allUplo[lapackeName[1:]] {
 		fmt.Fprint(buf, `	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		ul = 'A'
-	}
-`)
-	} else {
-		fmt.Fprint(buf, `	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 `)
 	}
@@ -445,12 +369,9 @@ func diag(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 		return false
 	}
 	fmt.Fprint(buf, `	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 `)
 	return true
@@ -461,10 +382,7 @@ func side(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 		return false
 	}
 	fmt.Fprint(buf, `	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -478,14 +396,9 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 		return false
 	}
 	fmt.Fprintf(buf, `	switch %[1]s {
-	case blas.NoTrans:
-		%[1]s = 'N'
-	case blas.Trans:
-		%[1]s = 'T'
-	case blas.ConjTrans:
-		%[1]s = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad %[1]s")
 	}
 `, n)
 	return false
@@ -531,11 +444,7 @@ package lapacke
 */
 import "C"
 
-import (
-	"unsafe"
-
-	"gonum.org/v1/gonum/blas"
-)
+import "unsafe"
 
 // Type order is used to specify the matrix storage format. We still interact with
 // an API that allows client calls to specify order, so this is here to document that fact.
