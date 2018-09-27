@@ -31,7 +31,20 @@ var (
 type order int
 
 const (
-	rowMajor order = 101 + iota
+	rowMajor order = 101
+
+	cblasNoTrans   = 111
+	cblasTrans     = 112
+	cblasConjTrans = 113
+
+	cblasUpper = 121
+	cblasLower = 122
+
+	cblasNonUnit = 131
+	cblasUnit    = 132
+
+	cblasLeft  = 141
+	cblasRight = 142
 )
 
 func min(a, b int) int {
@@ -1371,7 +1384,14 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:171:6 void cblas_sgemv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -1399,7 +1419,7 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -1424,7 +1444,14 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:176:6 void cblas_sgbmv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -1458,7 +1485,7 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -1482,13 +1509,30 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:181:6 void cblas_strmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1521,13 +1565,30 @@ func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:185:6 void cblas_stbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1563,13 +1624,30 @@ func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float32, incX int) {
 	// declared at cblas.h:189:6 void cblas_stpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1611,13 +1689,30 @@ func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:192:6 void cblas_strsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1657,13 +1752,30 @@ func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:196:6 void cblas_stbsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1705,13 +1817,30 @@ func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float32, incX int) {
 	// declared at cblas.h:200:6 void cblas_stpsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1747,7 +1876,14 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:204:6 void cblas_dgemv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -1775,7 +1911,7 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -1800,7 +1936,14 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:209:6 void cblas_dgbmv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -1834,7 +1977,7 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -1858,13 +2001,30 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:214:6 void cblas_dtrmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1897,13 +2057,30 @@ func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:218:6 void cblas_dtbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1939,13 +2116,30 @@ func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float64, incX int) {
 	// declared at cblas.h:222:6 void cblas_dtpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -1987,13 +2181,30 @@ func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:225:6 void cblas_dtrsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2033,13 +2244,30 @@ func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:229:6 void cblas_dtbsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2081,13 +2309,30 @@ func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float64, incX int) {
 	// declared at cblas.h:233:6 void cblas_dtpsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2119,7 +2364,14 @@ func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
 	// declared at cblas.h:237:6 void cblas_cgemv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -2147,7 +2399,7 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -2167,7 +2419,14 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
 	// declared at cblas.h:242:6 void cblas_cgbmv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -2201,7 +2460,7 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -2221,13 +2480,30 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex64, lda int, x []complex64, incX int) {
 	// declared at cblas.h:247:6 void cblas_ctrmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2256,13 +2532,30 @@ func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex64, lda int, x []complex64, incX int) {
 	// declared at cblas.h:251:6 void cblas_ctbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2294,13 +2587,30 @@ func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex64, incX int) {
 	// declared at cblas.h:255:6 void cblas_ctpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2332,13 +2642,30 @@ func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex64, lda int, x []complex64, incX int) {
 	// declared at cblas.h:258:6 void cblas_ctrsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2367,13 +2694,30 @@ func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex64, lda int, x []complex64, incX int) {
 	// declared at cblas.h:262:6 void cblas_ctbsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2405,13 +2749,30 @@ func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex64, incX int) {
 	// declared at cblas.h:266:6 void cblas_ctpsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2448,7 +2809,14 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:270:6 void cblas_zgemv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -2476,7 +2844,7 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -2502,7 +2870,14 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:275:6 void cblas_zgbmv ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -2536,7 +2911,7 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 		panic("blas: zero y index increment")
 	}
 	var lenX, lenY int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		lenX, lenY = n, m
 	} else {
 		lenX, lenY = m, n
@@ -2561,13 +2936,30 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex128, lda int, x []complex128, incX int) {
 	// declared at cblas.h:280:6 void cblas_ztrmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2602,13 +2994,30 @@ func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex128, lda int, x []complex128, incX int) {
 	// declared at cblas.h:284:6 void cblas_ztbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2646,13 +3055,30 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
 	// declared at cblas.h:288:6 void cblas_ztpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2695,13 +3121,30 @@ func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex128, lda int, x []complex128, incX int) {
 	// declared at cblas.h:291:6 void cblas_ztrsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2742,13 +3185,30 @@ func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex128, lda int, x []complex128, incX int) {
 	// declared at cblas.h:295:6 void cblas_ztbsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2792,13 +3252,30 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
 	// declared at cblas.h:299:6 void cblas_ztpsv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if n < 0 {
@@ -2834,7 +3311,12 @@ func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 func (Implementation) Ssymv(ul blas.Uplo, n int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:307:6 void cblas_ssymv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -2877,7 +3359,12 @@ func (Implementation) Ssymv(ul blas.Uplo, n int, alpha float32, a []float32, lda
 func (Implementation) Ssbmv(ul blas.Uplo, n, k int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:311:6 void cblas_ssbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -2923,7 +3410,12 @@ func (Implementation) Ssbmv(ul blas.Uplo, n, k int, alpha float32, a []float32, 
 func (Implementation) Sspmv(ul blas.Uplo, n int, alpha float32, ap, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:315:6 void cblas_sspmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3010,7 +3502,12 @@ func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []f
 func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX int, a []float32, lda int) {
 	// declared at cblas.h:322:6 void cblas_ssyr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3043,7 +3540,12 @@ func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX int, ap []float32) {
 	// declared at cblas.h:325:6 void cblas_sspr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3078,7 +3580,12 @@ func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, incX int, y []float32, incY int, a []float32, lda int) {
 	// declared at cblas.h:328:6 void cblas_ssyr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3121,7 +3628,12 @@ func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, incX int, y []float32, incY int, ap []float32) {
 	// declared at cblas.h:332:6 void cblas_sspr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3167,7 +3679,12 @@ func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 func (Implementation) Dsymv(ul blas.Uplo, n int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:336:6 void cblas_dsymv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3210,7 +3727,12 @@ func (Implementation) Dsymv(ul blas.Uplo, n int, alpha float64, a []float64, lda
 func (Implementation) Dsbmv(ul blas.Uplo, n, k int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:340:6 void cblas_dsbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3256,7 +3778,12 @@ func (Implementation) Dsbmv(ul blas.Uplo, n, k int, alpha float64, a []float64, 
 func (Implementation) Dspmv(ul blas.Uplo, n int, alpha float64, ap, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:344:6 void cblas_dspmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3343,7 +3870,12 @@ func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []f
 func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX int, a []float64, lda int) {
 	// declared at cblas.h:351:6 void cblas_dsyr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3376,7 +3908,12 @@ func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX int, ap []float64) {
 	// declared at cblas.h:354:6 void cblas_dspr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3411,7 +3948,12 @@ func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, incX int, y []float64, incY int, a []float64, lda int) {
 	// declared at cblas.h:357:6 void cblas_dsyr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3454,7 +3996,12 @@ func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, incX int, y []float64, incY int, ap []float64) {
 	// declared at cblas.h:361:6 void cblas_dspr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3496,7 +4043,12 @@ func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
 	// declared at cblas.h:369:6 void cblas_chemv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3535,7 +4087,12 @@ func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64,
 func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
 	// declared at cblas.h:373:6 void cblas_chbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3577,7 +4134,12 @@ func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex
 func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []complex64, incX int, beta complex64, y []complex64, incY int) {
 	// declared at cblas.h:377:6 void cblas_chpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3697,7 +4259,12 @@ func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, 
 func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, incX int, a []complex64, lda int) {
 	// declared at cblas.h:387:6 void cblas_cher ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3726,7 +4293,12 @@ func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, in
 func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, incX int, ap []complex64) {
 	// declared at cblas.h:390:6 void cblas_chpr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3758,7 +4330,12 @@ func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, in
 func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, a []complex64, lda int) {
 	// declared at cblas.h:393:6 void cblas_cher2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3797,7 +4374,12 @@ func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, ap []complex64) {
 	// declared at cblas.h:396:6 void cblas_chpr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3844,7 +4426,12 @@ func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:400:6 void cblas_zhemv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3888,7 +4475,12 @@ func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex12
 func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:404:6 void cblas_zhbmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -3935,7 +4527,12 @@ func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []comple
 func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:408:6 void cblas_zhpmv ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -4068,7 +4665,12 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, a []complex128, lda int) {
 	// declared at cblas.h:418:6 void cblas_zher ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -4102,7 +4704,12 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, incX int, ap []complex128) {
 	// declared at cblas.h:421:6 void cblas_zhpr ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -4139,7 +4746,12 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
 	// declared at cblas.h:424:6 void cblas_zher2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -4183,7 +4795,12 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, ap []complex128) {
 	// declared at cblas.h:427:6 void cblas_zhpr2 ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if n < 0 {
@@ -4233,10 +4850,24 @@ func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex12
 func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
 	// declared at cblas.h:440:6 void cblas_sgemm ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if tB != blas.NoTrans && tB != blas.Trans && tB != blas.ConjTrans {
+	switch tB {
+	case blas.NoTrans:
+		tB = cblasNoTrans
+	case blas.Trans:
+		tB = cblasTrans
+	case blas.ConjTrans:
+		tB = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -4261,12 +4892,12 @@ func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a
 		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		rowA, colA = m, k
 	} else {
 		rowA, colA = k, m
 	}
-	if tB == blas.NoTrans {
+	if tB == cblasNoTrans {
 		rowB, colB = k, n
 	} else {
 		rowB, colB = n, k
@@ -4291,10 +4922,20 @@ func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a
 func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
 	// declared at cblas.h:445:6 void cblas_ssymm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -4316,7 +4957,7 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4341,10 +4982,22 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []float32, lda int, beta float32, c []float32, ldc int) {
 	// declared at cblas.h:450:6 void cblas_ssyrk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -4362,7 +5015,7 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -4384,10 +5037,22 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
 	// declared at cblas.h:454:6 void cblas_ssyr2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -4409,7 +5074,7 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -4435,16 +5100,38 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int) {
 	// declared at cblas.h:459:6 void cblas_strmm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -4462,7 +5149,7 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4491,16 +5178,38 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int) {
 	// declared at cblas.h:464:6 void cblas_strsm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -4518,7 +5227,7 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4543,10 +5252,24 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
 	// declared at cblas.h:470:6 void cblas_dgemm ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if tB != blas.NoTrans && tB != blas.Trans && tB != blas.ConjTrans {
+	switch tB {
+	case blas.NoTrans:
+		tB = cblasNoTrans
+	case blas.Trans:
+		tB = cblasTrans
+	case blas.ConjTrans:
+		tB = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -4571,12 +5294,12 @@ func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a
 		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		rowA, colA = m, k
 	} else {
 		rowA, colA = k, m
 	}
-	if tB == blas.NoTrans {
+	if tB == cblasNoTrans {
 		rowB, colB = k, n
 	} else {
 		rowB, colB = n, k
@@ -4601,10 +5324,20 @@ func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a
 func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
 	// declared at cblas.h:475:6 void cblas_dsymm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -4626,7 +5359,7 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4651,10 +5384,22 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []float64, lda int, beta float64, c []float64, ldc int) {
 	// declared at cblas.h:480:6 void cblas_dsyrk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -4672,7 +5417,7 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -4694,10 +5439,22 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
 	// declared at cblas.h:484:6 void cblas_dsyr2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -4719,7 +5476,7 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -4745,16 +5502,38 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int) {
 	// declared at cblas.h:489:6 void cblas_dtrmm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -4772,7 +5551,7 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4801,16 +5580,38 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int) {
 	// declared at cblas.h:494:6 void cblas_dtrsm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -4828,7 +5629,7 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4845,10 +5646,24 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
 	// declared at cblas.h:500:6 void cblas_cgemm ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if tB != blas.NoTrans && tB != blas.Trans && tB != blas.ConjTrans {
+	switch tB {
+	case blas.NoTrans:
+		tB = cblasNoTrans
+	case blas.Trans:
+		tB = cblasTrans
+	case blas.ConjTrans:
+		tB = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -4873,12 +5688,12 @@ func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64,
 		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		rowA, colA = m, k
 	} else {
 		rowA, colA = k, m
 	}
-	if tB == blas.NoTrans {
+	if tB == cblasNoTrans {
 		rowB, colB = k, n
 	} else {
 		rowB, colB = n, k
@@ -4898,10 +5713,20 @@ func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64,
 func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
 	// declared at cblas.h:505:6 void cblas_csymm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -4923,7 +5748,7 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -4943,10 +5768,20 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, beta complex64, c []complex64, ldc int) {
 	// declared at cblas.h:510:6 void cblas_csyrk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -4964,7 +5799,7 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -4981,10 +5816,20 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
 	// declared at cblas.h:514:6 void cblas_csyr2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5006,7 +5851,7 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5026,16 +5871,38 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
 	// declared at cblas.h:519:6 void cblas_ctrmm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -5053,7 +5920,7 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5070,16 +5937,38 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
 	// declared at cblas.h:524:6 void cblas_ctrsm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -5097,7 +5986,7 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5114,10 +6003,24 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:530:6 void cblas_zgemm ...
 
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if tB != blas.NoTrans && tB != blas.Trans && tB != blas.ConjTrans {
+	switch tB {
+	case blas.NoTrans:
+		tB = cblasNoTrans
+	case blas.Trans:
+		tB = cblasTrans
+	case blas.ConjTrans:
+		tB = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if m < 0 {
@@ -5142,12 +6045,12 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 		_c = &c[0]
 	}
 	var rowA, colA, rowB, colB int
-	if tA == blas.NoTrans {
+	if tA == cblasNoTrans {
 		rowA, colA = m, k
 	} else {
 		rowA, colA = k, m
 	}
-	if tB == blas.NoTrans {
+	if tB == cblasNoTrans {
 		rowB, colB = k, n
 	} else {
 		rowB, colB = n, k
@@ -5167,10 +6070,20 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:535:6 void cblas_zsymm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -5192,7 +6105,7 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5212,10 +6125,20 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:540:6 void cblas_zsyrk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5233,7 +6156,7 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5250,10 +6173,20 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:544:6 void cblas_zsyr2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.Trans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.Trans:
+		t = cblasTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5275,7 +6208,7 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5295,16 +6228,38 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:549:6 void cblas_ztrmm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -5322,7 +6277,7 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5339,16 +6294,38 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:554:6 void cblas_ztrsm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if tA != blas.NoTrans && tA != blas.Trans && tA != blas.ConjTrans {
+	switch tA {
+	case blas.NoTrans:
+		tA = cblasNoTrans
+	case blas.Trans:
+		tA = cblasTrans
+	case blas.ConjTrans:
+		tA = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
-	if d != blas.NonUnit && d != blas.Unit {
+	switch d {
+	case blas.NonUnit:
+		d = cblasNonUnit
+	case blas.Unit:
+		d = cblasUnit
+	default:
 		panic("blas: illegal diagonal")
 	}
 	if m < 0 {
@@ -5366,7 +6343,7 @@ func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 		_b = &b[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5383,10 +6360,20 @@ func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
 	// declared at cblas.h:564:6 void cblas_chemm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -5408,7 +6395,7 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5428,10 +6415,20 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []complex64, lda int, beta float32, c []complex64, ldc int) {
 	// declared at cblas.h:569:6 void cblas_cherk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5449,7 +6446,7 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5466,10 +6463,20 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta float32, c []complex64, ldc int) {
 	// declared at cblas.h:573:6 void cblas_cher2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5491,7 +6498,7 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5511,10 +6518,20 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:578:6 void cblas_zhemm ...
 
-	if s != blas.Left && s != blas.Right {
+	switch s {
+	case blas.Left:
+		s = cblasLeft
+	case blas.Right:
+		s = cblasRight
+	default:
 		panic("blas: illegal side")
 	}
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
 	if m < 0 {
@@ -5536,7 +6553,7 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 		_c = &c[0]
 	}
 	var k int
-	if s == blas.Left {
+	if s == cblasLeft {
 		k = m
 	} else {
 		k = n
@@ -5556,10 +6573,20 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128, ldc int) {
 	// declared at cblas.h:583:6 void cblas_zherk ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5577,7 +6604,7 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n
@@ -5594,10 +6621,20 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta float64, c []complex128, ldc int) {
 	// declared at cblas.h:587:6 void cblas_zher2k ...
 
-	if ul != blas.Upper && ul != blas.Lower {
+	switch ul {
+	case blas.Upper:
+		ul = cblasUpper
+	case blas.Lower:
+		ul = cblasLower
+	default:
 		panic("blas: illegal triangle")
 	}
-	if t != blas.NoTrans && t != blas.ConjTrans {
+	switch t {
+	case blas.NoTrans:
+		t = cblasNoTrans
+	case blas.ConjTrans:
+		t = cblasConjTrans
+	default:
 		panic("blas: illegal transpose")
 	}
 	if n < 0 {
@@ -5619,7 +6656,7 @@ func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 		_c = &c[0]
 	}
 	var row, col int
-	if t == blas.NoTrans {
+	if t == cblasNoTrans {
 		row, col = n, k
 	} else {
 		row, col = k, n

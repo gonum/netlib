@@ -221,7 +221,7 @@ func (impl Implementation) Dlacn2(n int, v, x []float64, isgn []int, est float64
 func (impl Implementation) Dlacpy(uplo blas.Uplo, m, n int, a []float64, lda int, b []float64, ldb int) {
 	checkMatrix(m, n, a, lda)
 	checkMatrix(m, n, b, ldb)
-	lapacke.Dlacpy(uplo, m, n, a, lda, b, ldb)
+	lapacke.Dlacpy(byte(uplo), m, n, a, lda, b, ldb)
 }
 
 // Dlapmt rearranges the columns of the m×n matrix X as specified by the
@@ -351,7 +351,7 @@ func (Implementation) Dlarfb(side blas.Side, trans blas.Transpose, direct lapack
 	ldwork = nw
 	work = make([]float64, ldwork*k)
 
-	lapacke.Dlarfb(side, trans, byte(direct), byte(store), m, n, k, v, ldv, t, ldt, c, ldc, work, ldwork)
+	lapacke.Dlarfb(byte(side), byte(trans), byte(direct), byte(store), m, n, k, v, ldv, t, ldt, c, ldc, work, ldwork)
 }
 
 // Dlarfg generates an elementary reflector for a Householder matrix. It creates
@@ -457,7 +457,7 @@ func (impl Implementation) Dlansy(norm lapack.MatrixNorm, uplo blas.Uplo, n int,
 	if uplo != blas.Upper && uplo != blas.Lower {
 		panic(badUplo)
 	}
-	return lapacke.Dlansy(byte(norm), uplo, n, a, lda, work)
+	return lapacke.Dlansy(byte(norm), byte(uplo), n, a, lda, work)
 }
 
 // Dlantr computes the specified norm of an m×n trapezoidal matrix A. If
@@ -479,7 +479,7 @@ func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 	if norm == lapack.MaxColumnSum && len(work) < n {
 		panic(badWork)
 	}
-	return lapacke.Dlantr(byte(norm), uplo, diag, m, n, a, lda, work)
+	return lapacke.Dlantr(byte(norm), byte(uplo), byte(diag), m, n, a, lda, work)
 }
 
 // Dlarfx applies an elementary reflector H to a real m×n matrix C, from either
@@ -517,7 +517,7 @@ func (impl Implementation) Dlarfx(side blas.Side, m, n int, v []float64, tau flo
 		panic(badSide)
 	}
 
-	lapacke.Dlarfx(side, m, n, v, tau, c, ldc, work)
+	lapacke.Dlarfx(byte(side), m, n, v, tau, c, ldc, work)
 }
 
 // Dlascl multiplies an m×n matrix by the scalar cto/cfrom.
@@ -546,7 +546,7 @@ func (impl Implementation) Dlascl(kind lapack.MatrixType, kl, ku int, cfrom, cto
 // Dlaset is an internal routine. It is exported for testing purposes.
 func (impl Implementation) Dlaset(uplo blas.Uplo, m, n int, alpha, beta float64, a []float64, lda int) {
 	checkMatrix(m, n, a, lda)
-	lapacke.Dlaset(uplo, m, n, alpha, beta, a, lda)
+	lapacke.Dlaset(byte(uplo), m, n, alpha, beta, a, lda)
 }
 
 // Dlasrt sorts the numbers in the input slice d. If s == lapack.SortIncreasing,
@@ -613,7 +613,7 @@ func (impl Implementation) Dpotrf(ul blas.Uplo, n int, a []float64, lda int) (ok
 	if n == 0 {
 		return true
 	}
-	return lapacke.Dpotrf(ul, n, a, lda)
+	return lapacke.Dpotrf(byte(ul), n, a, lda)
 }
 
 // Dpotrs solves a system of n linear equations A*X = B where A is an n×n
@@ -630,7 +630,7 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 	checkMatrix(n, n, a, lda)
 	checkMatrix(n, nrhs, b, ldb)
 
-	lapacke.Dpotrs(uplo, n, nrhs, a, lda, b, ldb)
+	lapacke.Dpotrs(byte(uplo), n, nrhs, a, lda, b, ldb)
 }
 
 // Dgebal balances an n×n matrix A. Balancing consists of two stages, permuting
@@ -742,7 +742,7 @@ func (impl Implementation) Dgebak(job lapack.BalanceJob, side lapack.EVSide, n, 
 	for j := ihi + 1; j < n; j++ {
 		scale[j]++
 	}
-	lapacke.Dgebak(byte(job), bside, n, ilo+1, ihi+1, scale, m, v, ldv)
+	lapacke.Dgebak(byte(job), byte(bside), n, ilo+1, ihi+1, scale, m, v, ldv)
 	// Convert permutation indices back to 0-based.
 	for j := 0; j < ilo; j++ {
 		scale[j]--
@@ -819,7 +819,7 @@ func (impl Implementation) Dbdsqr(uplo blas.Uplo, n, ncvt, nru, ncc int, d, e, v
 	if len(c) == 0 {
 		c = make([]float64, 1)
 	}
-	return lapacke.Dbdsqr(uplo, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, work)
+	return lapacke.Dbdsqr(byte(uplo), n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, work)
 }
 
 // Dgebrd reduces a general m×n matrix A to upper or lower bidiagonal form B by
@@ -1164,7 +1164,7 @@ func (impl Implementation) Dgels(trans blas.Transpose, m, n, nrhs int, a []float
 	if lwork < mn+max(mn, nrhs) {
 		panic(badWork)
 	}
-	return lapacke.Dgels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork)
+	return lapacke.Dgels(byte(trans), m, n, nrhs, a, lda, b, ldb, work, lwork)
 }
 
 const noSVDO = "dgesvd: not coded for overwrite"
@@ -1363,7 +1363,7 @@ func (impl Implementation) Dgetrs(trans blas.Transpose, n, nrhs int, a []float64
 	for i, v := range ipiv {
 		ipiv32[i] = int32(v) + 1 // Transform to one-indexed.
 	}
-	lapacke.Dgetrs(trans, n, nrhs, a, lda, ipiv32, b, ldb)
+	lapacke.Dgetrs(byte(trans), n, nrhs, a, lda, ipiv32, b, ldb)
 }
 
 // Dggsvd3 computes the generalized singular value decomposition (GSVD)
@@ -1882,7 +1882,7 @@ func (impl Implementation) Dorgtr(uplo blas.Uplo, n int, a []float64, lda int, t
 	if !upper && uplo != blas.Lower {
 		panic(badUplo)
 	}
-	lapacke.Dorgtr(uplo, n, a, lda, tau, work, lwork)
+	lapacke.Dorgtr(byte(uplo), n, a, lda, tau, work, lwork)
 }
 
 // Dormbr applies a multiplicative update to the matrix C based on a
@@ -1951,7 +1951,7 @@ func (impl Implementation) Dormbr(vect lapack.ApplyOrtho, side blas.Side, trans 
 	if lwork < max(1, nw) && lwork != -1 {
 		panic(badWork)
 	}
-	lapacke.Dormbr(byte(vect), side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork)
+	lapacke.Dormbr(byte(vect), byte(side), byte(trans), m, n, k, a, lda, tau, c, ldc, work, lwork)
 }
 
 // Dormhr multiplies an m×n general matrix C with an nq×nq orthogonal matrix Q
@@ -2031,7 +2031,7 @@ func (impl Implementation) Dormhr(side blas.Side, trans blas.Transpose, m, n, il
 			panic(badTau)
 		}
 	}
-	lapacke.Dormhr(side, trans, m, n, ilo+1, ihi+1, a, lda, tau, c, ldc, work, lwork)
+	lapacke.Dormhr(byte(side), byte(trans), m, n, ilo+1, ihi+1, a, lda, tau, c, ldc, work, lwork)
 }
 
 // Dormlq multiplies the matrix C by the orthogonal matrix Q defined by the
@@ -2080,7 +2080,7 @@ func (impl Implementation) Dormlq(side blas.Side, trans blas.Transpose, m, n, k 
 		panic(badWork)
 	}
 
-	lapacke.Dormlq(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork)
+	lapacke.Dormlq(byte(side), byte(trans), m, n, k, a, lda, tau, c, ldc, work, lwork)
 }
 
 // Dormqr multiplies an m×n matrix C by an orthogonal matrix Q as
@@ -2142,7 +2142,7 @@ func (impl Implementation) Dormqr(side blas.Side, trans blas.Transpose, m, n, k 
 		}
 	}
 
-	lapacke.Dormqr(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork)
+	lapacke.Dormqr(byte(side), byte(trans), m, n, k, a, lda, tau, c, ldc, work, lwork)
 }
 
 // Dpocon estimates the reciprocal of the condition number of a positive-definite
@@ -2174,7 +2174,7 @@ func (impl Implementation) Dpocon(uplo blas.Uplo, n int, a []float64, lda int, a
 		}
 		_iwork[i] = int32(v)
 	}
-	lapacke.Dpocon(uplo, n, a, lda, anorm, rcond, work, _iwork)
+	lapacke.Dpocon(byte(uplo), n, a, lda, anorm, rcond, work, _iwork)
 	for i, v := range _iwork {
 		iwork[i] = int(v)
 	}
@@ -2284,7 +2284,7 @@ func (impl Implementation) Dsyev(jobz lapack.EVJob, uplo blas.Uplo, n int, a []f
 	if lwork < 3*n-1 {
 		panic(badWork)
 	}
-	return lapacke.Dsyev(byte(jobz), uplo, n, a, lda, w, work, lwork)
+	return lapacke.Dsyev(byte(jobz), byte(uplo), n, a, lda, w, work, lwork)
 }
 
 // Dsytrd reduces a symmetric n×n matrix A to symmetric tridiagonal form by an
@@ -2353,7 +2353,7 @@ func (impl Implementation) Dsytrd(uplo blas.Uplo, n int, a []float64, lda int, d
 		panic(badUplo)
 	}
 
-	lapacke.Dsytrd(uplo, n, a, lda, d, e, tau, work, lwork)
+	lapacke.Dsytrd(byte(uplo), n, a, lda, d, e, tau, work, lwork)
 }
 
 // Dtrcon estimates the reciprocal of the condition number of a triangular matrix A.
@@ -2387,7 +2387,7 @@ func (impl Implementation) Dtrcon(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 		}
 		_iwork[i] = int32(v)
 	}
-	lapacke.Dtrcon(byte(norm), uplo, diag, n, a, lda, rcond, work, _iwork)
+	lapacke.Dtrcon(byte(norm), byte(uplo), byte(diag), n, a, lda, rcond, work, _iwork)
 	for i, v := range _iwork {
 		iwork[i] = int(v)
 	}
@@ -2482,14 +2482,14 @@ func (impl Implementation) Dtrtri(uplo blas.Uplo, diag blas.Diag, n int, a []flo
 	if diag != blas.NonUnit && diag != blas.Unit {
 		panic(badDiag)
 	}
-	return lapacke.Dtrtri(uplo, diag, n, a, lda)
+	return lapacke.Dtrtri(byte(uplo), byte(diag), n, a, lda)
 }
 
 // Dtrtrs solves a triangular system of the form A * X = B or A^T * X = B.
 // Dtrtrs returns whether the solve completed successfully.
 // If A is singular, no solve is performed.
 func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag blas.Diag, n, nrhs int, a []float64, lda int, b []float64, ldb int) (ok bool) {
-	return lapacke.Dtrtrs(uplo, trans, diag, n, nrhs, a, lda, b, ldb)
+	return lapacke.Dtrtrs(byte(uplo), byte(trans), byte(diag), n, nrhs, a, lda, b, ldb)
 }
 
 // Dhseqr computes the eigenvalues of an n×n Hessenberg matrix H and,

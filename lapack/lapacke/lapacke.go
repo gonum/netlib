@@ -15,11 +15,7 @@ package lapacke
 */
 import "C"
 
-import (
-	"unsafe"
-
-	"gonum.org/v1/gonum/blas"
-)
+import "unsafe"
 
 // Type order is used to specify the matrix storage format. We still interact with
 // an API that allows client calls to specify order, so this is here to document that fact.
@@ -33,14 +29,11 @@ const (
 func isZero(ret C.int) bool { return ret == 0 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsdc.f.
-func Sbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float32, ldu int, vt []float32, ldvt int, q []float32, iq []int32, work []float32, iwork []int32) bool {
+func Sbdsdc(ul, compq byte, n int, d, e, u []float32, ldu int, vt []float32, ldvt int, q []float32, iq []int32, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -78,14 +71,11 @@ func Sbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float32, ldu int, vt []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc.f.
-func Dbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float64, ldu int, vt []float64, ldvt int, q []float64, iq []int32, work []float64, iwork []int32) bool {
+func Dbdsdc(ul, compq byte, n int, d, e, u []float64, ldu int, vt []float64, ldvt int, q []float64, iq []int32, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -123,14 +113,11 @@ func Dbdsdc(ul blas.Uplo, compq byte, n int, d, e, u []float64, ldu int, vt []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsvdx.f.
-func Sbdsvdx(ul blas.Uplo, jobz, rng byte, n int, d, e []float32, vl, vu, il, iu, ns int, s, z []float32, ldz int, work []float32, iwork []int32) bool {
+func Sbdsvdx(ul, jobz, rng byte, n int, d, e []float32, vl, vu, il, iu, ns int, s, z []float32, ldz int, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -160,14 +147,11 @@ func Sbdsvdx(ul blas.Uplo, jobz, rng byte, n int, d, e []float32, vl, vu, il, iu
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsvdx.f.
-func Dbdsvdx(ul blas.Uplo, jobz, rng byte, n int, d, e []float64, vl, vu, il, iu, ns int, s, z []float64, ldz int, work []float64, iwork []int32) bool {
+func Dbdsvdx(ul, jobz, rng byte, n int, d, e []float64, vl, vu, il, iu, ns int, s, z []float64, ldz int, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -197,14 +181,11 @@ func Dbdsvdx(ul blas.Uplo, jobz, rng byte, n int, d, e []float64, vl, vu, il, iu
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsqr.f.
-func Sbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e, vt []float32, ldvt int, u []float32, ldu int, c []float32, ldc int, work []float32) bool {
+func Sbdsqr(ul byte, n, ncvt, nru, ncc int, d, e, vt []float32, ldvt int, u []float32, ldu int, c []float32, ldc int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -234,14 +215,11 @@ func Sbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e, vt []float32, ldvt int, u
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsqr.f.
-func Dbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e, vt []float64, ldvt int, u []float64, ldu int, c []float64, ldc int, work []float64) bool {
+func Dbdsqr(ul byte, n, ncvt, nru, ncc int, d, e, vt []float64, ldvt int, u []float64, ldu int, c []float64, ldc int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -271,14 +249,11 @@ func Dbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e, vt []float64, ldvt int, u
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cbdsqr.f.
-func Cbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e []float32, vt []complex64, ldvt int, u []complex64, ldu int, c []complex64, ldc int, work []float32) bool {
+func Cbdsqr(ul byte, n, ncvt, nru, ncc int, d, e []float32, vt []complex64, ldvt int, u []complex64, ldu int, c []complex64, ldc int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -308,14 +283,11 @@ func Cbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e []float32, vt []complex64,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbdsqr.f.
-func Zbdsqr(ul blas.Uplo, n, ncvt, nru, ncc int, d, e []float64, vt []complex128, ldvt int, u []complex128, ldu int, c []complex128, ldc int, work []float64) bool {
+func Zbdsqr(ul byte, n, ncvt, nru, ncc int, d, e []float64, vt []complex128, ldvt int, u []complex128, ldu int, c []complex128, ldc int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -843,14 +815,9 @@ func Zgbequb(m, n, kl, ku int, ab []complex128, ldab int, r, c, rowcnd, colcnd, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbrfs.f.
-func Sgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Sgbrfs(trans byte, n, kl, ku, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -894,14 +861,9 @@ func Sgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, ldab int, a
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbrfs.f.
-func Dgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dgbrfs(trans byte, n, kl, ku, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -945,14 +907,9 @@ func Dgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, ldab int, a
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbrfs.f.
-func Cgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgbrfs(trans byte, n, kl, ku, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -996,14 +953,9 @@ func Cgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64, ldab int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbrfs.f.
-func Zgbrfs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgbrfs(trans byte, n, kl, ku, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1115,14 +1067,9 @@ func Zgbsv(n, kl, ku, nrhs int, ab []complex128, ldab int, ipiv []int32, b []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbsvx.f.
-func Sgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, ipiv []int32, equed []byte, r, c, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sgbsvx(fact, trans byte, n, kl, ku, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, ipiv []int32, equed []byte, r, c, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1182,14 +1129,9 @@ func Sgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbsvx.f.
-func Dgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, ipiv []int32, equed []byte, r, c, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dgbsvx(fact, trans byte, n, kl, ku, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, ipiv []int32, equed []byte, r, c, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1249,14 +1191,9 @@ func Dgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbsvx.f.
-func Cgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, ipiv []int32, equed []byte, r, c []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgbsvx(fact, trans byte, n, kl, ku, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, ipiv []int32, equed []byte, r, c []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1316,14 +1253,9 @@ func Cgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbsvx.f.
-func Zgbsvx(fact byte, trans blas.Transpose, n, kl, ku, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, ipiv []int32, equed []byte, r, c []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgbsvx(fact, trans byte, n, kl, ku, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, ipiv []int32, equed []byte, r, c []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1435,14 +1367,9 @@ func Zgbtrf(m, n, kl, ku int, ab []complex128, ldab int, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbtrs.f.
-func Sgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, ldab int, ipiv []int32, b []float32, ldb int) bool {
+func Sgbtrs(trans byte, n, kl, ku, nrhs int, ab []float32, ldab int, ipiv []int32, b []float32, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1462,14 +1389,9 @@ func Sgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float32, ldab int, i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbtrs.f.
-func Dgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, ldab int, ipiv []int32, b []float64, ldb int) bool {
+func Dgbtrs(trans byte, n, kl, ku, nrhs int, ab []float64, ldab int, ipiv []int32, b []float64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1489,14 +1411,9 @@ func Dgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []float64, ldab int, i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbtrs.f.
-func Cgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64, ldab int, ipiv []int32, b []complex64, ldb int) bool {
+func Cgbtrs(trans byte, n, kl, ku, nrhs int, ab []complex64, ldab int, ipiv []int32, b []complex64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1516,14 +1433,9 @@ func Cgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex64, ldab int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbtrs.f.
-func Zgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex128, ldab int, ipiv []int32, b []complex128, ldb int) bool {
+func Zgbtrs(trans byte, n, kl, ku, nrhs int, ab []complex128, ldab int, ipiv []int32, b []complex128, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -1543,12 +1455,9 @@ func Zgbtrs(trans blas.Transpose, n, kl, ku, nrhs int, ab []complex128, ldab int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgebak.f.
-func Sgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float32, m int, v []float32, ldv int) bool {
+func Sgebak(job, side byte, n, ilo, ihi int, scale []float32, m int, v []float32, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -1564,12 +1473,9 @@ func Sgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float32, m int, v
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebak.f.
-func Dgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float64, m int, v []float64, ldv int) bool {
+func Dgebak(job, side byte, n, ilo, ihi int, scale []float64, m int, v []float64, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -1585,12 +1491,9 @@ func Dgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float64, m int, v
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebak.f.
-func Cgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float32, m int, v []complex64, ldv int) bool {
+func Cgebak(job, side byte, n, ilo, ihi int, scale []float32, m int, v []complex64, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -1606,12 +1509,9 @@ func Cgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float32, m int, v
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgebak.f.
-func Zgebak(job byte, side blas.Side, n, ilo, ihi int, scale []float64, m int, v []complex128, ldv int) bool {
+func Zgebak(job, side byte, n, ilo, ihi int, scale []float64, m int, v []complex128, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -2807,14 +2707,9 @@ func Zgelqf(m, n int, a []complex128, lda int, tau, work []complex128, lwork int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgels.f.
-func Sgels(trans blas.Transpose, m, n, nrhs int, a []float32, lda int, b []float32, ldb int, work []float32, lwork int) bool {
+func Sgels(trans byte, m, n, nrhs int, a []float32, lda int, b []float32, ldb int, work []float32, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -2834,14 +2729,9 @@ func Sgels(trans blas.Transpose, m, n, nrhs int, a []float32, lda int, b []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgels.f.
-func Dgels(trans blas.Transpose, m, n, nrhs int, a []float64, lda int, b []float64, ldb int, work []float64, lwork int) bool {
+func Dgels(trans byte, m, n, nrhs int, a []float64, lda int, b []float64, ldb int, work []float64, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -2861,14 +2751,9 @@ func Dgels(trans blas.Transpose, m, n, nrhs int, a []float64, lda int, b []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgels.f.
-func Cgels(trans blas.Transpose, m, n, nrhs int, a []complex64, lda int, b []complex64, ldb int, work []complex64, lwork int) bool {
+func Cgels(trans byte, m, n, nrhs int, a []complex64, lda int, b []complex64, ldb int, work []complex64, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -2888,14 +2773,9 @@ func Cgels(trans blas.Transpose, m, n, nrhs int, a []complex64, lda int, b []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgels.f.
-func Zgels(trans blas.Transpose, m, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, work []complex128, lwork int) bool {
+func Zgels(trans byte, m, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, work []complex128, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -3619,14 +3499,9 @@ func Zgeqrfp(m, n int, a []complex128, lda int, tau, work []complex128, lwork in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfs.f.
-func Sgerfs(trans blas.Transpose, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Sgerfs(trans byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -3670,14 +3545,9 @@ func Sgerfs(trans blas.Transpose, n, nrhs int, a []float32, lda int, af []float3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgerfs.f.
-func Dgerfs(trans blas.Transpose, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dgerfs(trans byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -3721,14 +3591,9 @@ func Dgerfs(trans blas.Transpose, n, nrhs int, a []float64, lda int, af []float6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgerfs.f.
-func Cgerfs(trans blas.Transpose, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgerfs(trans byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -3772,14 +3637,9 @@ func Cgerfs(trans blas.Transpose, n, nrhs int, a []complex64, lda int, af []comp
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgerfs.f.
-func Zgerfs(trans blas.Transpose, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgerfs(trans byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4477,14 +4337,9 @@ func Zgesvj(joba, jobu, jobv byte, m, n int, a []complex128, lda int, sva []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvx.f.
-func Sgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, equed []byte, r, c, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sgesvx(fact, trans byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, equed []byte, r, c, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4544,14 +4399,9 @@ func Sgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []float32, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesvx.f.
-func Dgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, equed []byte, r, c, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dgesvx(fact, trans byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, equed []byte, r, c, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4611,14 +4461,9 @@ func Dgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []float64, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgesvx.f.
-func Cgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, equed []byte, r, c []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgesvx(fact, trans byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, equed []byte, r, c []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4678,14 +4523,9 @@ func Cgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []complex64, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvx.f.
-func Zgesvx(fact byte, trans blas.Transpose, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, equed []byte, r, c []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgesvx(fact, trans byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, equed []byte, r, c []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4969,14 +4809,9 @@ func Zgetri(n int, a []complex128, lda int, ipiv []int32, work []complex128, lwo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgetrs.f.
-func Sgetrs(trans blas.Transpose, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int) bool {
+func Sgetrs(trans byte, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -4996,14 +4831,9 @@ func Sgetrs(trans blas.Transpose, n, nrhs int, a []float32, lda int, ipiv []int3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetrs.f.
-func Dgetrs(trans blas.Transpose, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int) bool {
+func Dgetrs(trans byte, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -5023,14 +4853,9 @@ func Dgetrs(trans blas.Transpose, n, nrhs int, a []float64, lda int, ipiv []int3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetrs.f.
-func Cgetrs(trans blas.Transpose, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
+func Cgetrs(trans byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -5050,14 +4875,9 @@ func Cgetrs(trans blas.Transpose, n, nrhs int, a []complex64, lda int, ipiv []in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetrs.f.
-func Zgetrs(trans blas.Transpose, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
+func Zgetrs(trans byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -5077,12 +4897,9 @@ func Zgetrs(trans blas.Transpose, n, nrhs int, a []complex128, lda int, ipiv []i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggbak.f.
-func Sggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float32, m int, v []float32, ldv int) bool {
+func Sggbak(job, side byte, n, ilo, ihi int, lscale, rscale []float32, m int, v []float32, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -5102,12 +4919,9 @@ func Sggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggbak.f.
-func Dggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float64, m int, v []float64, ldv int) bool {
+func Dggbak(job, side byte, n, ilo, ihi int, lscale, rscale []float64, m int, v []float64, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -5127,12 +4941,9 @@ func Dggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float64,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggbak.f.
-func Cggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float32, m int, v []complex64, ldv int) bool {
+func Cggbak(job, side byte, n, ilo, ihi int, lscale, rscale []float32, m int, v []complex64, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -5152,12 +4963,9 @@ func Cggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggbak.f.
-func Zggbak(job byte, side blas.Side, n, ilo, ihi int, lscale, rscale []float64, m int, v []complex128, ldv int) bool {
+func Zggbak(job, side byte, n, ilo, ihi int, lscale, rscale []float64, m int, v []complex128, ldv int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -7061,14 +6869,9 @@ func Zgtcon(norm byte, n int, dl, d, du, du2 []complex128, ipiv []int32, anorm f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtrfs.f.
-func Sgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Sgtrfs(trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7132,14 +6935,9 @@ func Sgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtrfs.f.
-func Dgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dgtrfs(trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7203,14 +7001,9 @@ func Dgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtrfs.f.
-func Cgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgtrfs(trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7274,14 +7067,9 @@ func Cgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtrfs.f.
-func Zgtrfs(trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgtrfs(trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7429,14 +7217,9 @@ func Zgtsv(n, nrhs int, dl, d, du, b []complex128, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsvx.f.
-func Sgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sgtsvx(fact, trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7504,14 +7287,9 @@ func Sgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, du
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsvx.f.
-func Dgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dgtsvx(fact, trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7579,14 +7357,9 @@ func Dgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, du
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtsvx.f.
-func Cgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cgtsvx(fact, trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7654,14 +7427,9 @@ func Cgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, du
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtsvx.f.
-func Zgtsvx(fact byte, trans blas.Transpose, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zgtsvx(fact, trans byte, n, nrhs int, dl, d, du, dlf, df, duf, du2 []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7829,14 +7597,9 @@ func Zgttrf(n int, dl, d, du, du2 []complex128, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgttrs.f.
-func Sgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []float32, ipiv []int32, b []float32, ldb int) bool {
+func Sgttrs(trans byte, n, nrhs int, dl, d, du, du2 []float32, ipiv []int32, b []float32, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7868,14 +7631,9 @@ func Sgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []float32, ipiv []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgttrs.f.
-func Dgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []float64, ipiv []int32, b []float64, ldb int) bool {
+func Dgttrs(trans byte, n, nrhs int, dl, d, du, du2 []float64, ipiv []int32, b []float64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7907,14 +7665,9 @@ func Dgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []float64, ipiv []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgttrs.f.
-func Cgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []complex64, ipiv []int32, b []complex64, ldb int) bool {
+func Cgttrs(trans byte, n, nrhs int, dl, d, du, du2 []complex64, ipiv []int32, b []complex64, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7946,14 +7699,9 @@ func Cgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []complex64, ipiv 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgttrs.f.
-func Zgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []complex128, ipiv []int32, b []complex128, ldb int) bool {
+func Zgttrs(trans byte, n, nrhs int, dl, d, du, du2 []complex128, ipiv []int32, b []complex128, ldb int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -7985,14 +7733,11 @@ func Zgttrs(trans blas.Transpose, n, nrhs int, dl, d, du, du2 []complex128, ipiv
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbev.f.
-func Chbev(jobz byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
+func Chbev(jobz, ul byte, n, kd int, ab []complex64, ldab int, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8018,14 +7763,11 @@ func Chbev(jobz byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, w []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbev.f.
-func Zhbev(jobz byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
+func Zhbev(jobz, ul byte, n, kd int, ab []complex128, ldab int, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8051,14 +7793,11 @@ func Zhbev(jobz byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, w []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbevd.f.
-func Chbevd(jobz byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Chbevd(jobz, ul byte, n, kd int, ab []complex64, ldab int, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8088,14 +7827,11 @@ func Chbevd(jobz byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, w []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbevd.f.
-func Zhbevd(jobz byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zhbevd(jobz, ul byte, n, kd int, ab []complex128, ldab int, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8125,14 +7861,11 @@ func Zhbevd(jobz byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, w []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbevx.f.
-func Chbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, q []complex64, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
+func Chbevx(jobz, rng, ul byte, n, kd int, ab []complex64, ldab int, q []complex64, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8174,14 +7907,11 @@ func Chbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, q
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbevx.f.
-func Zhbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, q []complex128, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
+func Zhbevx(jobz, rng, ul byte, n, kd int, ab []complex128, ldab int, q []complex128, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8223,14 +7953,11 @@ func Zhbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgst.f.
-func Chbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, x []complex64, ldx int, work []complex64, rwork []float32) bool {
+func Chbgst(vect, ul byte, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, x []complex64, ldx int, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8256,14 +7983,11 @@ func Chbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbgst.f.
-func Zhbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, x []complex128, ldx int, work []complex128, rwork []float64) bool {
+func Zhbgst(vect, ul byte, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, x []complex128, ldx int, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8289,14 +8013,11 @@ func Zhbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgv.f.
-func Chbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
+func Chbgv(jobz, ul byte, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8326,14 +8047,11 @@ func Chbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbgv.f.
-func Zhbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
+func Zhbgv(jobz, ul byte, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8363,14 +8081,11 @@ func Zhbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, bb
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgvd.f.
-func Chbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Chbgvd(jobz, ul byte, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8404,14 +8119,11 @@ func Chbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbgvd.f.
-func Zhbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zhbgvd(jobz, ul byte, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8445,14 +8157,11 @@ func Zhbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgvx.f.
-func Chbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, q []complex64, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
+func Chbgvx(jobz, rng, ul byte, n, ka, kb int, ab []complex64, ldab int, bb []complex64, ldbb int, q []complex64, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8498,14 +8207,11 @@ func Chbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []complex64, ldab in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbgvx.f.
-func Zhbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, q []complex128, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
+func Zhbgvx(jobz, rng, ul byte, n, ka, kb int, ab []complex128, ldab int, bb []complex128, ldbb int, q []complex128, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8551,14 +8257,11 @@ func Zhbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []complex128, ldab i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbtrd.f.
-func Chbtrd(vect byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, d, e []float32, q []complex64, ldq int, work []complex64) bool {
+func Chbtrd(vect, ul byte, n, kd int, ab []complex64, ldab int, d, e []float32, q []complex64, ldq int, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -8584,14 +8287,11 @@ func Chbtrd(vect byte, ul blas.Uplo, n, kd int, ab []complex64, ldab int, d, e [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbtrd.f.
-func Zhbtrd(vect byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, d, e []float64, q []complex128, ldq int, work []complex128) bool {
+func Zhbtrd(vect, ul byte, n, kd int, ab []complex128, ldab int, d, e []float64, q []complex128, ldq int, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -8617,14 +8317,11 @@ func Zhbtrd(vect byte, ul blas.Uplo, n, kd int, ab []complex128, ldab int, d, e 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/checon.f.
-func Checon(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
+func Checon(ul byte, n int, a []complex64, lda int, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -8646,14 +8343,11 @@ func Checon(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, anorm flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhecon.f.
-func Zhecon(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
+func Zhecon(ul byte, n int, a []complex128, lda int, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -8675,14 +8369,11 @@ func Zhecon(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, anorm fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheequb.f.
-func Cheequb(ul blas.Uplo, n int, a []complex64, lda int, s, scond, amax []float32, work []complex64) bool {
+func Cheequb(ul byte, n int, a []complex64, lda int, s, scond, amax []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -8708,14 +8399,11 @@ func Cheequb(ul blas.Uplo, n int, a []complex64, lda int, s, scond, amax []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheequb.f.
-func Zheequb(ul blas.Uplo, n int, a []complex128, lda int, s, scond, amax []float64, work []complex128) bool {
+func Zheequb(ul byte, n int, a []complex128, lda int, s, scond, amax []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -8741,14 +8429,11 @@ func Zheequb(ul blas.Uplo, n int, a []complex128, lda int, s, scond, amax []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheev.f.
-func Cheev(jobz byte, ul blas.Uplo, n int, a []complex64, lda int, w []float32, work []complex64, lwork int, rwork []float32) bool {
+func Cheev(jobz, ul byte, n int, a []complex64, lda int, w []float32, work []complex64, lwork int, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -8770,14 +8455,11 @@ func Cheev(jobz byte, ul blas.Uplo, n int, a []complex64, lda int, w []float32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheev.f.
-func Zheev(jobz byte, ul blas.Uplo, n int, a []complex128, lda int, w []float64, work []complex128, lwork int, rwork []float64) bool {
+func Zheev(jobz, ul byte, n int, a []complex128, lda int, w []float64, work []complex128, lwork int, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -8799,14 +8481,11 @@ func Zheev(jobz byte, ul blas.Uplo, n int, a []complex128, lda int, w []float64,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevd.f.
-func Cheevd(jobz byte, ul blas.Uplo, n int, a []complex64, lda int, w []float32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Cheevd(jobz, ul byte, n int, a []complex64, lda int, w []float32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -8832,14 +8511,11 @@ func Cheevd(jobz byte, ul blas.Uplo, n int, a []complex64, lda int, w []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevd.f.
-func Zheevd(jobz byte, ul blas.Uplo, n int, a []complex128, lda int, w []float64, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zheevd(jobz, ul byte, n int, a []complex128, lda int, w []float64, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -8865,14 +8541,11 @@ func Zheevd(jobz byte, ul blas.Uplo, n int, a []complex128, lda int, w []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevr.f.
-func Cheevr(jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, isuppz []int32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Cheevr(jobz, rng, ul byte, n int, a []complex64, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, isuppz []int32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -8910,14 +8583,11 @@ func Cheevr(jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda int, vl, vu 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevr.f.
-func Zheevr(jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, isuppz []int32, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zheevr(jobz, rng, ul byte, n int, a []complex128, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, isuppz []int32, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -8955,14 +8625,11 @@ func Zheevr(jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda int, vl, vu
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevx.f.
-func Cheevx(jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, iwork, ifail []int32) bool {
+func Cheevx(jobz, rng, ul byte, n int, a []complex64, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9000,14 +8667,11 @@ func Cheevx(jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda int, vl, vu 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevx.f.
-func Zheevx(jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, iwork, ifail []int32) bool {
+func Zheevx(jobz, rng, ul byte, n int, a []complex128, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9045,14 +8709,11 @@ func Zheevx(jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda int, vl, vu
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegst.f.
-func Chegst(itype int, ul blas.Uplo, n int, a []complex64, lda int, b []complex64, ldb int) bool {
+func Chegst(itype int, ul byte, n int, a []complex64, lda int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9066,14 +8727,11 @@ func Chegst(itype int, ul blas.Uplo, n int, a []complex64, lda int, b []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegst.f.
-func Zhegst(itype int, ul blas.Uplo, n int, a []complex128, lda int, b []complex128, ldb int) bool {
+func Zhegst(itype int, ul byte, n int, a []complex128, lda int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9087,14 +8745,11 @@ func Zhegst(itype int, ul blas.Uplo, n int, a []complex128, lda int, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegv.f.
-func Chegv(itype int, jobz byte, ul blas.Uplo, n int, a []complex64, lda int, b []complex64, ldb int, w []float32, work []complex64, lwork int, rwork []float32) bool {
+func Chegv(itype int, jobz, ul byte, n int, a []complex64, lda int, b []complex64, ldb int, w []float32, work []complex64, lwork int, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9120,14 +8775,11 @@ func Chegv(itype int, jobz byte, ul blas.Uplo, n int, a []complex64, lda int, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegv.f.
-func Zhegv(itype int, jobz byte, ul blas.Uplo, n int, a []complex128, lda int, b []complex128, ldb int, w []float64, work []complex128, lwork int, rwork []float64) bool {
+func Zhegv(itype int, jobz, ul byte, n int, a []complex128, lda int, b []complex128, ldb int, w []float64, work []complex128, lwork int, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9153,14 +8805,11 @@ func Zhegv(itype int, jobz byte, ul blas.Uplo, n int, a []complex128, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegvd.f.
-func Chegvd(itype int, jobz byte, ul blas.Uplo, n int, a []complex64, lda int, b []complex64, ldb int, w []float32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Chegvd(itype int, jobz, ul byte, n int, a []complex64, lda int, b []complex64, ldb int, w []float32, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9190,14 +8839,11 @@ func Chegvd(itype int, jobz byte, ul blas.Uplo, n int, a []complex64, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegvd.f.
-func Zhegvd(itype int, jobz byte, ul blas.Uplo, n int, a []complex128, lda int, b []complex128, ldb int, w []float64, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zhegvd(itype int, jobz, ul byte, n int, a []complex128, lda int, b []complex128, ldb int, w []float64, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9227,14 +8873,11 @@ func Zhegvd(itype int, jobz byte, ul blas.Uplo, n int, a []complex128, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegvx.f.
-func Chegvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda int, b []complex64, ldb int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, iwork, ifail []int32) bool {
+func Chegvx(itype int, jobz, rng, ul byte, n int, a []complex64, lda int, b []complex64, ldb int, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9276,14 +8919,11 @@ func Chegvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []complex64, lda i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegvx.f.
-func Zhegvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda int, b []complex128, ldb int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, iwork, ifail []int32) bool {
+func Zhegvx(itype int, jobz, rng, ul byte, n int, a []complex128, lda int, b []complex128, ldb int, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9325,14 +8965,11 @@ func Zhegvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []complex128, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cherfs.f.
-func Cherfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cherfs(ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9374,14 +9011,11 @@ func Cherfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zherfs.f.
-func Zherfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zherfs(ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9423,14 +9057,11 @@ func Zherfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv.f.
-func Chesv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64, lwork int) bool {
+func Chesv(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9452,14 +9083,11 @@ func Chesv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv.f.
-func Zhesv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128, lwork int) bool {
+func Zhesv(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9481,14 +9109,11 @@ func Zhesv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesvx.f.
-func Chesvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, lwork int, rwork []float32) bool {
+func Chesvx(fact, ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, lwork int, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9534,14 +9159,11 @@ func Chesvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesvx.f.
-func Zhesvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, lwork int, rwork []float64) bool {
+func Zhesvx(fact, ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, lwork int, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9587,14 +9209,11 @@ func Zhesvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd.f.
-func Chetrd(ul blas.Uplo, n int, a []complex64, lda int, d, e []float32, tau, work []complex64, lwork int) bool {
+func Chetrd(ul byte, n int, a []complex64, lda int, d, e []float32, tau, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9620,14 +9239,11 @@ func Chetrd(ul blas.Uplo, n int, a []complex64, lda int, d, e []float32, tau, wo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrd.f.
-func Zhetrd(ul blas.Uplo, n int, a []complex128, lda int, d, e []float64, tau, work []complex128, lwork int) bool {
+func Zhetrd(ul byte, n int, a []complex128, lda int, d, e []float64, tau, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9653,14 +9269,11 @@ func Zhetrd(ul blas.Uplo, n int, a []complex128, lda int, d, e []float64, tau, w
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf.f.
-func Chetrf(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
+func Chetrf(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9678,14 +9291,11 @@ func Chetrf(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf.f.
-func Zhetrf(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
+func Zhetrf(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9703,14 +9313,11 @@ func Zhetrf(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri.f.
-func Chetri(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
+func Chetri(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9728,14 +9335,11 @@ func Chetri(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri.f.
-func Zhetri(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
+func Zhetri(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9753,14 +9357,11 @@ func Zhetri(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs.f.
-func Chetrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
+func Chetrs(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -9778,14 +9379,11 @@ func Chetrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs.f.
-func Zhetrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
+func Zhetrs(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -9803,32 +9401,19 @@ func Zhetrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chfrk.f.
-func Chfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, alpha float32, a []complex64, lda int, beta float32, c []complex64) bool {
+func Chfrk(transr, ul, trans byte, n, k int, alpha float32, a []complex64, lda int, beta float32, c []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -9844,32 +9429,19 @@ func Chfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhfrk.f.
-func Zhfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128) bool {
+func Zhfrk(transr, ul, trans byte, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -10033,14 +9605,11 @@ func Zhgeqz(job, compq, compz byte, n, ilo, ihi int, h []complex128, ldh int, t 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpcon.f.
-func Chpcon(ul blas.Uplo, n int, ap []complex64, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
+func Chpcon(ul byte, n int, ap []complex64, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10062,14 +9631,11 @@ func Chpcon(ul blas.Uplo, n int, ap []complex64, ipiv []int32, anorm float32, rc
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpcon.f.
-func Zhpcon(ul blas.Uplo, n int, ap []complex128, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
+func Zhpcon(ul byte, n int, ap []complex128, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10091,14 +9657,11 @@ func Zhpcon(ul blas.Uplo, n int, ap []complex128, ipiv []int32, anorm float64, r
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpev.f.
-func Chpev(jobz byte, ul blas.Uplo, n int, ap []complex64, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
+func Chpev(jobz, ul byte, n int, ap []complex64, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10124,14 +9687,11 @@ func Chpev(jobz byte, ul blas.Uplo, n int, ap []complex64, w []float32, z []comp
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpev.f.
-func Zhpev(jobz byte, ul blas.Uplo, n int, ap []complex128, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
+func Zhpev(jobz, ul byte, n int, ap []complex128, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10157,14 +9717,11 @@ func Zhpev(jobz byte, ul blas.Uplo, n int, ap []complex128, w []float64, z []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpevd.f.
-func Chpevd(jobz byte, ul blas.Uplo, n int, ap []complex64, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Chpevd(jobz, ul byte, n int, ap []complex64, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10194,14 +9751,11 @@ func Chpevd(jobz byte, ul blas.Uplo, n int, ap []complex64, w []float32, z []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpevd.f.
-func Zhpevd(jobz byte, ul blas.Uplo, n int, ap []complex128, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zhpevd(jobz, ul byte, n int, ap []complex128, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10231,14 +9785,11 @@ func Zhpevd(jobz byte, ul blas.Uplo, n int, ap []complex128, w []float64, z []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpevx.f.
-func Chpevx(jobz, rng byte, ul blas.Uplo, n int, ap []complex64, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
+func Chpevx(jobz, rng, ul byte, n int, ap []complex64, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10276,14 +9827,11 @@ func Chpevx(jobz, rng byte, ul blas.Uplo, n int, ap []complex64, vl, vu float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpevx.f.
-func Zhpevx(jobz, rng byte, ul blas.Uplo, n int, ap []complex128, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
+func Zhpevx(jobz, rng, ul byte, n int, ap []complex128, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10321,14 +9869,11 @@ func Zhpevx(jobz, rng byte, ul blas.Uplo, n int, ap []complex128, vl, vu float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgst.f.
-func Chpgst(itype int, ul blas.Uplo, n int, ap, bp []complex64) bool {
+func Chpgst(itype int, ul byte, n int, ap, bp []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10342,14 +9887,11 @@ func Chpgst(itype int, ul blas.Uplo, n int, ap, bp []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgst.f.
-func Zhpgst(itype int, ul blas.Uplo, n int, ap, bp []complex128) bool {
+func Zhpgst(itype int, ul byte, n int, ap, bp []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10363,14 +9905,11 @@ func Zhpgst(itype int, ul blas.Uplo, n int, ap, bp []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgv.f.
-func Chpgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex64, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
+func Chpgv(itype int, jobz, ul byte, n int, ap, bp []complex64, w []float32, z []complex64, ldz int, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10400,14 +9939,11 @@ func Chpgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex64, w []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgv.f.
-func Zhpgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex128, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
+func Zhpgv(itype int, jobz, ul byte, n int, ap, bp []complex128, w []float64, z []complex128, ldz int, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10437,14 +9973,11 @@ func Zhpgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex128, w []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvd.f.
-func Chpgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex64, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
+func Chpgvd(itype int, jobz, ul byte, n int, ap, bp []complex64, w []float32, z []complex64, ldz int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10478,14 +10011,11 @@ func Chpgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex64, w []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgvd.f.
-func Zhpgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex128, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
+func Zhpgvd(itype int, jobz, ul byte, n int, ap, bp []complex128, w []float64, z []complex128, ldz int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10519,14 +10049,11 @@ func Zhpgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp []complex128, w []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvx.f.
-func Chpgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []complex64, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
+func Chpgvx(itype int, jobz, rng, ul byte, n int, ap, bp []complex64, vl, vu float32, il, iu int, abstol float32, m []int32, w []float32, z []complex64, ldz int, work []complex64, rwork []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10568,14 +10095,11 @@ func Chpgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []complex64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgvx.f.
-func Zhpgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []complex128, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
+func Zhpgvx(itype int, jobz, rng, ul byte, n int, ap, bp []complex128, vl, vu float64, il, iu int, abstol float64, m []int32, w []float64, z []complex128, ldz int, work []complex128, rwork []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10617,14 +10141,11 @@ func Zhpgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []complex128,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chprfs.f.
-func Chprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Chprfs(ul byte, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10666,14 +10187,11 @@ func Chprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhprfs.f.
-func Zhprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zhprfs(ul byte, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10715,14 +10233,11 @@ func Zhprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpsv.f.
-func Chpsv(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
+func Chpsv(ul byte, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10740,14 +10255,11 @@ func Chpsv(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpsv.f.
-func Zhpsv(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
+func Zhpsv(ul byte, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10765,14 +10277,11 @@ func Zhpsv(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpsvx.f.
-func Chpsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Chpsvx(fact, ul byte, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10818,14 +10327,11 @@ func Chpsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpsvx.f.
-func Zhpsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zhpsvx(fact, ul byte, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10871,14 +10377,11 @@ func Zhpsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptrd.f.
-func Chptrd(ul blas.Uplo, n int, ap []complex64, d, e []float32, tau []complex64) bool {
+func Chptrd(ul byte, n int, ap []complex64, d, e []float32, tau []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10900,14 +10403,11 @@ func Chptrd(ul blas.Uplo, n int, ap []complex64, d, e []float32, tau []complex64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrd.f.
-func Zhptrd(ul blas.Uplo, n int, ap []complex128, d, e []float64, tau []complex128) bool {
+func Zhptrd(ul byte, n int, ap []complex128, d, e []float64, tau []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10929,14 +10429,11 @@ func Zhptrd(ul blas.Uplo, n int, ap []complex128, d, e []float64, tau []complex1
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptrf.f.
-func Chptrf(ul blas.Uplo, n int, ap []complex64, ipiv []int32) bool {
+func Chptrf(ul byte, n int, ap []complex64, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10950,14 +10447,11 @@ func Chptrf(ul blas.Uplo, n int, ap []complex64, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrf.f.
-func Zhptrf(ul blas.Uplo, n int, ap []complex128, ipiv []int32) bool {
+func Zhptrf(ul byte, n int, ap []complex128, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -10971,14 +10465,11 @@ func Zhptrf(ul blas.Uplo, n int, ap []complex128, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptri.f.
-func Chptri(ul blas.Uplo, n int, ap []complex64, ipiv []int32, work []complex64) bool {
+func Chptri(ul byte, n int, ap []complex64, ipiv []int32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -10996,14 +10487,11 @@ func Chptri(ul blas.Uplo, n int, ap []complex64, ipiv []int32, work []complex64)
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptri.f.
-func Zhptri(ul blas.Uplo, n int, ap []complex128, ipiv []int32, work []complex128) bool {
+func Zhptri(ul byte, n int, ap []complex128, ipiv []int32, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -11021,14 +10509,11 @@ func Zhptri(ul blas.Uplo, n int, ap []complex128, ipiv []int32, work []complex12
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptrs.f.
-func Chptrs(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
+func Chptrs(ul byte, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -11046,14 +10531,11 @@ func Chptrs(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrs.f.
-func Zhptrs(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
+func Zhptrs(ul byte, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -11469,15 +10951,7 @@ func Zlacn2(n int, v, x []complex128, est []float64, kase, isave []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slacpy.f.
-func Slacpy(ul blas.Uplo, m, n int, a []float32, lda int, b []float32, ldb int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Slacpy(ul byte, m, n int, a []float32, lda int, b []float32, ldb int) bool {
 	var _a *float32
 	if len(a) > 0 {
 		_a = &a[0]
@@ -11490,15 +10964,7 @@ func Slacpy(ul blas.Uplo, m, n int, a []float32, lda int, b []float32, ldb int) 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlacpy.f.
-func Dlacpy(ul blas.Uplo, m, n int, a []float64, lda int, b []float64, ldb int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Dlacpy(ul byte, m, n int, a []float64, lda int, b []float64, ldb int) bool {
 	var _a *float64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -11511,15 +10977,7 @@ func Dlacpy(ul blas.Uplo, m, n int, a []float64, lda int, b []float64, ldb int) 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacpy.f.
-func Clacpy(ul blas.Uplo, m, n int, a []complex64, lda int, b []complex64, ldb int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Clacpy(ul byte, m, n int, a []complex64, lda int, b []complex64, ldb int) bool {
 	var _a *complex64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -11532,15 +10990,7 @@ func Clacpy(ul blas.Uplo, m, n int, a []complex64, lda int, b []complex64, ldb i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacpy.f.
-func Zlacpy(ul blas.Uplo, m, n int, a []complex128, lda int, b []complex128, ldb int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Zlacpy(ul byte, m, n int, a []complex128, lda int, b []complex128, ldb int) bool {
 	var _a *complex128
 	if len(a) > 0 {
 		_a = &a[0]
@@ -11553,14 +11003,11 @@ func Zlacpy(ul blas.Uplo, m, n int, a []complex128, lda int, b []complex128, ldb
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacp2.f.
-func Clacp2(ul blas.Uplo, m, n int, a []float32, lda int, b []complex64, ldb int) bool {
+func Clacp2(ul byte, m, n int, a []float32, lda int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -11574,14 +11021,11 @@ func Clacp2(ul blas.Uplo, m, n int, a []float32, lda int, b []complex64, ldb int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacp2.f.
-func Zlacp2(ul blas.Uplo, m, n int, a []float64, lda int, b []complex128, ldb int) bool {
+func Zlacp2(ul byte, m, n int, a []float64, lda int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -12103,14 +11547,11 @@ func Zlange(norm byte, m, n int, a []complex128, lda int, work []float64) float6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanhe.f.
-func Clanhe(norm byte, ul blas.Uplo, n int, a []complex64, lda int, work []float32) float32 {
+func Clanhe(norm, ul byte, n int, a []complex64, lda int, work []float32) float32 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -12124,14 +11565,11 @@ func Clanhe(norm byte, ul blas.Uplo, n int, a []complex64, lda int, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlanhe.f.
-func Zlanhe(norm byte, ul blas.Uplo, n int, a []complex128, lda int, work []float64) float64 {
+func Zlanhe(norm, ul byte, n int, a []complex128, lda int, work []float64) float64 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -12145,14 +11583,11 @@ func Zlanhe(norm byte, ul blas.Uplo, n int, a []complex128, lda int, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansy.f.
-func Slansy(norm byte, ul blas.Uplo, n int, a []float32, lda int, work []float32) float32 {
+func Slansy(norm, ul byte, n int, a []float32, lda int, work []float32) float32 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -12166,14 +11601,11 @@ func Slansy(norm byte, ul blas.Uplo, n int, a []float32, lda int, work []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansy.f.
-func Dlansy(norm byte, ul blas.Uplo, n int, a []float64, lda int, work []float64) float64 {
+func Dlansy(norm, ul byte, n int, a []float64, lda int, work []float64) float64 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -12187,14 +11619,11 @@ func Dlansy(norm byte, ul blas.Uplo, n int, a []float64, lda int, work []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clansy.f.
-func Clansy(norm byte, ul blas.Uplo, n int, a []complex64, lda int, work []float32) float32 {
+func Clansy(norm, ul byte, n int, a []complex64, lda int, work []float32) float32 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -12208,14 +11637,11 @@ func Clansy(norm byte, ul blas.Uplo, n int, a []complex64, lda int, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlansy.f.
-func Zlansy(norm byte, ul blas.Uplo, n int, a []complex128, lda int, work []float64) float64 {
+func Zlansy(norm, ul byte, n int, a []complex128, lda int, work []float64) float64 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -12229,22 +11655,16 @@ func Zlansy(norm byte, ul blas.Uplo, n int, a []complex128, lda int, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slantr.f.
-func Slantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []float32, lda int, work []float32) float32 {
+func Slantr(norm, ul, d byte, m, n int, a []float32, lda int, work []float32) float32 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -12258,22 +11678,16 @@ func Slantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []float32, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlantr.f.
-func Dlantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []float64, lda int, work []float64) float64 {
+func Dlantr(norm, ul, d byte, m, n int, a []float64, lda int, work []float64) float64 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -12287,22 +11701,16 @@ func Dlantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []float64, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clantr.f.
-func Clantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []complex64, lda int, work []float32) float32 {
+func Clantr(norm, ul, d byte, m, n int, a []complex64, lda int, work []float32) float32 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -12316,22 +11724,16 @@ func Clantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []complex64, lda i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlantr.f.
-func Zlantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []complex128, lda int, work []float64) float64 {
+func Zlantr(norm, ul, d byte, m, n int, a []complex128, lda int, work []float64) float64 {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -12345,22 +11747,14 @@ func Zlantr(norm byte, ul blas.Uplo, d blas.Diag, m, n int, a []complex128, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfb.f.
-func Slarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k int, v []float32, ldv int, t []float32, ldt int, c []float32, ldc int, work []float32, ldwork int) bool {
+func Slarfb(side, trans, direct, storev byte, m, n, k int, v []float32, ldv int, t []float32, ldt int, c []float32, ldc int, work []float32, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -12384,22 +11778,14 @@ func Slarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfb.f.
-func Dlarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k int, v []float64, ldv int, t []float64, ldt int, c []float64, ldc int, work []float64, ldwork int) bool {
+func Dlarfb(side, trans, direct, storev byte, m, n, k int, v []float64, ldv int, t []float64, ldt int, c []float64, ldc int, work []float64, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -12423,22 +11809,14 @@ func Dlarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb.f.
-func Clarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k int, v []complex64, ldv int, t []complex64, ldt int, c []complex64, ldc int, work []complex64, ldwork int) bool {
+func Clarfb(side, trans, direct, storev byte, m, n, k int, v []complex64, ldv int, t []complex64, ldt int, c []complex64, ldc int, work []complex64, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -12462,22 +11840,14 @@ func Clarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfb.f.
-func Zlarfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k int, v []complex128, ldv int, t []complex128, ldt int, c []complex128, ldc int, work []complex128, ldwork int) bool {
+func Zlarfb(side, trans, direct, storev byte, m, n, k int, v []complex128, ldv int, t []complex128, ldt int, c []complex128, ldc int, work []complex128, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -12637,12 +12007,9 @@ func Zlarft(direct, storev byte, n, k int, v []complex128, ldv int, tau, t []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfx.f.
-func Slarfx(side blas.Side, m, n int, v []float32, tau float32, c []float32, ldc int, work []float32) bool {
+func Slarfx(side byte, m, n int, v []float32, tau float32, c []float32, ldc int, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -12662,12 +12029,9 @@ func Slarfx(side blas.Side, m, n int, v []float32, tau float32, c []float32, ldc
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfx.f.
-func Dlarfx(side blas.Side, m, n int, v []float64, tau float64, c []float64, ldc int, work []float64) bool {
+func Dlarfx(side byte, m, n int, v []float64, tau float64, c []float64, ldc int, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -12687,12 +12051,9 @@ func Dlarfx(side blas.Side, m, n int, v []float64, tau float64, c []float64, ldc
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfx.f.
-func Clarfx(side blas.Side, m, n int, v []complex64, tau complex64, c []complex64, ldc int, work []complex64) bool {
+func Clarfx(side byte, m, n int, v []complex64, tau complex64, c []complex64, ldc int, work []complex64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -12712,12 +12073,9 @@ func Clarfx(side blas.Side, m, n int, v []complex64, tau complex64, c []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfx.f.
-func Zlarfx(side blas.Side, m, n int, v []complex128, tau complex128, c []complex128, ldc int, work []complex128) bool {
+func Zlarfx(side byte, m, n int, v []complex128, tau complex128, c []complex128, ldc int, work []complex128) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -12825,15 +12183,7 @@ func Zlascl(typ byte, kl, ku int, cfrom, cto float64, m, n int, a []complex128, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaset.f.
-func Slaset(ul blas.Uplo, m, n int, alpha, beta float32, a []float32, lda int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Slaset(ul byte, m, n int, alpha, beta float32, a []float32, lda int) bool {
 	var _a *float32
 	if len(a) > 0 {
 		_a = &a[0]
@@ -12842,15 +12192,7 @@ func Slaset(ul blas.Uplo, m, n int, alpha, beta float32, a []float32, lda int) b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaset.f.
-func Dlaset(ul blas.Uplo, m, n int, alpha, beta float64, a []float64, lda int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Dlaset(ul byte, m, n int, alpha, beta float64, a []float64, lda int) bool {
 	var _a *float64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -12859,15 +12201,7 @@ func Dlaset(ul blas.Uplo, m, n int, alpha, beta float64, a []float64, lda int) b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claset.f.
-func Claset(ul blas.Uplo, m, n int, alpha, beta complex64, a []complex64, lda int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Claset(ul byte, m, n int, alpha, beta complex64, a []complex64, lda int) bool {
 	var _a *complex64
 	if len(a) > 0 {
 		_a = &a[0]
@@ -12876,15 +12210,7 @@ func Claset(ul blas.Uplo, m, n int, alpha, beta complex64, a []complex64, lda in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaset.f.
-func Zlaset(ul blas.Uplo, m, n int, alpha, beta complex128, a []complex128, lda int) bool {
-	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
-	default:
-		ul = 'A'
-	}
+func Zlaset(ul byte, m, n int, alpha, beta complex128, a []complex128, lda int) bool {
 	var _a *complex128
 	if len(a) > 0 {
 		_a = &a[0]
@@ -13047,14 +12373,11 @@ func Zlatms(m, n int, dist byte, iseed []int32, sym byte, d []float64, mode int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slauum.f.
-func Slauum(ul blas.Uplo, n int, a []float32, lda int) bool {
+func Slauum(ul byte, n int, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -13064,14 +12387,11 @@ func Slauum(ul blas.Uplo, n int, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauum.f.
-func Dlauum(ul blas.Uplo, n int, a []float64, lda int) bool {
+func Dlauum(ul byte, n int, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -13081,14 +12401,11 @@ func Dlauum(ul blas.Uplo, n int, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clauum.f.
-func Clauum(ul blas.Uplo, n int, a []complex64, lda int) bool {
+func Clauum(ul byte, n int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -13098,14 +12415,11 @@ func Clauum(ul blas.Uplo, n int, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlauum.f.
-func Zlauum(ul blas.Uplo, n int, a []complex128, lda int) bool {
+func Zlauum(ul byte, n int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -13115,14 +12429,11 @@ func Zlauum(ul blas.Uplo, n int, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sopgtr.f.
-func Sopgtr(ul blas.Uplo, n int, ap, tau, q []float32, ldq int, work []float32) bool {
+func Sopgtr(ul byte, n int, ap, tau, q []float32, ldq int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -13144,14 +12455,11 @@ func Sopgtr(ul blas.Uplo, n int, ap, tau, q []float32, ldq int, work []float32) 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dopgtr.f.
-func Dopgtr(ul blas.Uplo, n int, ap, tau, q []float64, ldq int, work []float64) bool {
+func Dopgtr(ul byte, n int, ap, tau, q []float64, ldq int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -13173,30 +12481,19 @@ func Dopgtr(ul blas.Uplo, n int, ap, tau, q []float64, ldq int, work []float64) 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sopmtr.f.
-func Sopmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, tau, c []float32, ldc int, work []float32) bool {
+func Sopmtr(side, ul, trans byte, m, n int, ap, tau, c []float32, ldc int, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13220,30 +12517,19 @@ func Sopmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, ta
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dopmtr.f.
-func Dopmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, tau, c []float64, ldc int, work []float64) bool {
+func Dopmtr(side, ul, trans byte, m, n int, ap, tau, c []float64, ldc int, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13471,14 +12757,11 @@ func Dorgrq(m, n, k int, a []float64, lda int, tau, work []float64, lwork int) b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtr.f.
-func Sorgtr(ul blas.Uplo, n int, a []float32, lda int, tau, work []float32, lwork int) bool {
+func Sorgtr(ul byte, n int, a []float32, lda int, tau, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -13496,14 +12779,11 @@ func Sorgtr(ul blas.Uplo, n int, a []float32, lda int, tau, work []float32, lwor
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgtr.f.
-func Dorgtr(ul blas.Uplo, n int, a []float64, lda int, tau, work []float64, lwork int) bool {
+func Dorgtr(ul byte, n int, a []float64, lda int, tau, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -13521,22 +12801,14 @@ func Dorgtr(ul blas.Uplo, n int, a []float64, lda int, tau, work []float64, lwor
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormbr.f.
-func Sormbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormbr(vect, side, trans byte, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13560,22 +12832,14 @@ func Sormbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormbr.f.
-func Dormbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormbr(vect, side, trans byte, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13599,22 +12863,14 @@ func Dormbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormhr.f.
-func Sormhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormhr(side, trans byte, m, n, ilo, ihi int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13638,22 +12894,14 @@ func Sormhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []float3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormhr.f.
-func Dormhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormhr(side, trans byte, m, n, ilo, ihi int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13677,22 +12925,14 @@ func Dormhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []float6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormlq.f.
-func Sormlq(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormlq(side, trans byte, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13716,22 +12956,14 @@ func Sormlq(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormlq.f.
-func Dormlq(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormlq(side, trans byte, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13755,22 +12987,14 @@ func Dormlq(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormql.f.
-func Sormql(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormql(side, trans byte, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13794,22 +13018,14 @@ func Sormql(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormql.f.
-func Dormql(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormql(side, trans byte, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13833,22 +13049,14 @@ func Dormql(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormqr.f.
-func Sormqr(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormqr(side, trans byte, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13872,22 +13080,14 @@ func Sormqr(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormqr.f.
-func Dormqr(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormqr(side, trans byte, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13911,22 +13111,14 @@ func Dormqr(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormrq.f.
-func Sormrq(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormrq(side, trans byte, m, n, k int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13950,22 +13142,14 @@ func Sormrq(side blas.Side, trans blas.Transpose, m, n, k int, a []float32, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormrq.f.
-func Dormrq(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormrq(side, trans byte, m, n, k int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -13989,22 +13173,14 @@ func Dormrq(side blas.Side, trans blas.Transpose, m, n, k int, a []float64, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormrz.f.
-func Sormrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormrz(side, trans byte, m, n, k, l int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -14028,22 +13204,14 @@ func Sormrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []float32, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormrz.f.
-func Dormrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormrz(side, trans byte, m, n, k, l int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -14067,30 +13235,19 @@ func Dormrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []float64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormtr.f.
-func Sormtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
+func Sormtr(side, ul, trans byte, m, n int, a []float32, lda int, tau, c []float32, ldc int, work []float32, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -14114,30 +13271,19 @@ func Sormtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormtr.f.
-func Dormtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
+func Dormtr(side, ul, trans byte, m, n int, a []float64, lda int, tau, c []float64, ldc int, work []float64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -14161,14 +13307,11 @@ func Dormtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbcon.f.
-func Spbcon(ul blas.Uplo, n, kd int, ab []float32, ldab int, anorm float32, rcond, work []float32, iwork []int32) bool {
+func Spbcon(ul byte, n, kd int, ab []float32, ldab int, anorm float32, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14190,14 +13333,11 @@ func Spbcon(ul blas.Uplo, n, kd int, ab []float32, ldab int, anorm float32, rcon
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbcon.f.
-func Dpbcon(ul blas.Uplo, n, kd int, ab []float64, ldab int, anorm float64, rcond, work []float64, iwork []int32) bool {
+func Dpbcon(ul byte, n, kd int, ab []float64, ldab int, anorm float64, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14219,14 +13359,11 @@ func Dpbcon(ul blas.Uplo, n, kd int, ab []float64, ldab int, anorm float64, rcon
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbcon.f.
-func Cpbcon(ul blas.Uplo, n, kd int, ab []complex64, ldab int, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
+func Cpbcon(ul byte, n, kd int, ab []complex64, ldab int, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -14248,14 +13385,11 @@ func Cpbcon(ul blas.Uplo, n, kd int, ab []complex64, ldab int, anorm float32, rc
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbcon.f.
-func Zpbcon(ul blas.Uplo, n, kd int, ab []complex128, ldab int, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
+func Zpbcon(ul byte, n, kd int, ab []complex128, ldab int, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -14277,14 +13411,11 @@ func Zpbcon(ul blas.Uplo, n, kd int, ab []complex128, ldab int, anorm float64, r
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbequ.f.
-func Spbequ(ul blas.Uplo, n, kd int, ab []float32, ldab int, s, scond, amax []float32) bool {
+func Spbequ(ul byte, n, kd int, ab []float32, ldab int, s, scond, amax []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14306,14 +13437,11 @@ func Spbequ(ul blas.Uplo, n, kd int, ab []float32, ldab int, s, scond, amax []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbequ.f.
-func Dpbequ(ul blas.Uplo, n, kd int, ab []float64, ldab int, s, scond, amax []float64) bool {
+func Dpbequ(ul byte, n, kd int, ab []float64, ldab int, s, scond, amax []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14335,14 +13463,11 @@ func Dpbequ(ul blas.Uplo, n, kd int, ab []float64, ldab int, s, scond, amax []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbequ.f.
-func Cpbequ(ul blas.Uplo, n, kd int, ab []complex64, ldab int, s, scond, amax []float32) bool {
+func Cpbequ(ul byte, n, kd int, ab []complex64, ldab int, s, scond, amax []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -14364,14 +13489,11 @@ func Cpbequ(ul blas.Uplo, n, kd int, ab []complex64, ldab int, s, scond, amax []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbequ.f.
-func Zpbequ(ul blas.Uplo, n, kd int, ab []complex128, ldab int, s, scond, amax []float64) bool {
+func Zpbequ(ul byte, n, kd int, ab []complex128, ldab int, s, scond, amax []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -14393,14 +13515,11 @@ func Zpbequ(ul blas.Uplo, n, kd int, ab []complex128, ldab int, s, scond, amax [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbrfs.f.
-func Spbrfs(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Spbrfs(ul byte, n, kd, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14438,14 +13557,11 @@ func Spbrfs(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, afb []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbrfs.f.
-func Dpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dpbrfs(ul byte, n, kd, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14483,14 +13599,11 @@ func Dpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, afb []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbrfs.f.
-func Cpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cpbrfs(ul byte, n, kd, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -14528,14 +13641,11 @@ func Cpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, afb []compl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbrfs.f.
-func Zpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zpbrfs(ul byte, n, kd, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -14573,14 +13683,11 @@ func Zpbrfs(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, afb []comp
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbstf.f.
-func Spbstf(ul blas.Uplo, n, kb int, bb []float32, ldbb int) bool {
+func Spbstf(ul byte, n, kb int, bb []float32, ldbb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _bb *float32
 	if len(bb) > 0 {
@@ -14590,14 +13697,11 @@ func Spbstf(ul blas.Uplo, n, kb int, bb []float32, ldbb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbstf.f.
-func Dpbstf(ul blas.Uplo, n, kb int, bb []float64, ldbb int) bool {
+func Dpbstf(ul byte, n, kb int, bb []float64, ldbb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _bb *float64
 	if len(bb) > 0 {
@@ -14607,14 +13711,11 @@ func Dpbstf(ul blas.Uplo, n, kb int, bb []float64, ldbb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbstf.f.
-func Cpbstf(ul blas.Uplo, n, kb int, bb []complex64, ldbb int) bool {
+func Cpbstf(ul byte, n, kb int, bb []complex64, ldbb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _bb *complex64
 	if len(bb) > 0 {
@@ -14624,14 +13725,11 @@ func Cpbstf(ul blas.Uplo, n, kb int, bb []complex64, ldbb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbstf.f.
-func Zpbstf(ul blas.Uplo, n, kb int, bb []complex128, ldbb int) bool {
+func Zpbstf(ul byte, n, kb int, bb []complex128, ldbb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _bb *complex128
 	if len(bb) > 0 {
@@ -14641,14 +13739,11 @@ func Zpbstf(ul blas.Uplo, n, kb int, bb []complex128, ldbb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbsv.f.
-func Spbsv(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
+func Spbsv(ul byte, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14662,14 +13757,11 @@ func Spbsv(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, b []float32, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbsv.f.
-func Dpbsv(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
+func Dpbsv(ul byte, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14683,14 +13775,11 @@ func Dpbsv(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, b []float64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbsv.f.
-func Cpbsv(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
+func Cpbsv(ul byte, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -14704,14 +13793,11 @@ func Cpbsv(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, b []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbsv.f.
-func Zpbsv(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
+func Zpbsv(ul byte, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -14725,14 +13811,11 @@ func Zpbsv(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbsvx.f.
-func Spbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Spbsvx(fact, ul byte, n, kd, nrhs int, ab []float32, ldab int, afb []float32, ldafb int, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14782,14 +13865,11 @@ func Spbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, af
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbsvx.f.
-func Dpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dpbsvx(fact, ul byte, n, kd, nrhs int, ab []float64, ldab int, afb []float64, ldafb int, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14839,14 +13919,11 @@ func Dpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, af
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbsvx.f.
-func Cpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cpbsvx(fact, ul byte, n, kd, nrhs int, ab []complex64, ldab int, afb []complex64, ldafb int, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -14896,14 +13973,11 @@ func Cpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbsvx.f.
-func Zpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zpbsvx(fact, ul byte, n, kd, nrhs int, ab []complex128, ldab int, afb []complex128, ldafb int, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -14953,14 +14027,11 @@ func Zpbsvx(fact byte, ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtrf.f.
-func Spbtrf(ul blas.Uplo, n, kd int, ab []float32, ldab int) bool {
+func Spbtrf(ul byte, n, kd int, ab []float32, ldab int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -14970,14 +14041,11 @@ func Spbtrf(ul blas.Uplo, n, kd int, ab []float32, ldab int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrf.f.
-func Dpbtrf(ul blas.Uplo, n, kd int, ab []float64, ldab int) bool {
+func Dpbtrf(ul byte, n, kd int, ab []float64, ldab int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -14987,14 +14055,11 @@ func Dpbtrf(ul blas.Uplo, n, kd int, ab []float64, ldab int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbtrf.f.
-func Cpbtrf(ul blas.Uplo, n, kd int, ab []complex64, ldab int) bool {
+func Cpbtrf(ul byte, n, kd int, ab []complex64, ldab int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -15004,14 +14069,11 @@ func Cpbtrf(ul blas.Uplo, n, kd int, ab []complex64, ldab int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbtrf.f.
-func Zpbtrf(ul blas.Uplo, n, kd int, ab []complex128, ldab int) bool {
+func Zpbtrf(ul byte, n, kd int, ab []complex128, ldab int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -15021,14 +14083,11 @@ func Zpbtrf(ul blas.Uplo, n, kd int, ab []complex128, ldab int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtrs.f.
-func Spbtrs(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
+func Spbtrs(ul byte, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -15042,14 +14101,11 @@ func Spbtrs(ul blas.Uplo, n, kd, nrhs int, ab []float32, ldab int, b []float32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrs.f.
-func Dpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
+func Dpbtrs(ul byte, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -15063,14 +14119,11 @@ func Dpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []float64, ldab int, b []float64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbtrs.f.
-func Cpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
+func Cpbtrs(ul byte, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -15084,14 +14137,11 @@ func Cpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []complex64, ldab int, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbtrs.f.
-func Zpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
+func Zpbtrs(ul byte, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -15105,24 +14155,16 @@ func Zpbtrs(ul blas.Uplo, n, kd, nrhs int, ab []complex128, ldab int, b []comple
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spftrf.f.
-func Spftrf(transr blas.Transpose, ul blas.Uplo, n int, a []float32) bool {
+func Spftrf(transr, ul byte, n int, a []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15132,24 +14174,16 @@ func Spftrf(transr blas.Transpose, ul blas.Uplo, n int, a []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftrf.f.
-func Dpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []float64) bool {
+func Dpftrf(transr, ul byte, n int, a []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15159,24 +14193,16 @@ func Dpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrf.f.
-func Cpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []complex64) bool {
+func Cpftrf(transr, ul byte, n int, a []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15186,24 +14212,16 @@ func Cpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftrf.f.
-func Zpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []complex128) bool {
+func Zpftrf(transr, ul byte, n int, a []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15213,24 +14231,16 @@ func Zpftrf(transr blas.Transpose, ul blas.Uplo, n int, a []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spftri.f.
-func Spftri(transr blas.Transpose, ul blas.Uplo, n int, a []float32) bool {
+func Spftri(transr, ul byte, n int, a []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15240,24 +14250,16 @@ func Spftri(transr blas.Transpose, ul blas.Uplo, n int, a []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftri.f.
-func Dpftri(transr blas.Transpose, ul blas.Uplo, n int, a []float64) bool {
+func Dpftri(transr, ul byte, n int, a []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15267,24 +14269,16 @@ func Dpftri(transr blas.Transpose, ul blas.Uplo, n int, a []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftri.f.
-func Cpftri(transr blas.Transpose, ul blas.Uplo, n int, a []complex64) bool {
+func Cpftri(transr, ul byte, n int, a []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15294,24 +14288,16 @@ func Cpftri(transr blas.Transpose, ul blas.Uplo, n int, a []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftri.f.
-func Zpftri(transr blas.Transpose, ul blas.Uplo, n int, a []complex128) bool {
+func Zpftri(transr, ul byte, n int, a []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15321,24 +14307,16 @@ func Zpftri(transr blas.Transpose, ul blas.Uplo, n int, a []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spftrs.f.
-func Spftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []float32, ldb int) bool {
+func Spftrs(transr, ul byte, n, nrhs int, a, b []float32, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15352,24 +14330,16 @@ func Spftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []float32, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftrs.f.
-func Dpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []float64, ldb int) bool {
+func Dpftrs(transr, ul byte, n, nrhs int, a, b []float64, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15383,24 +14353,16 @@ func Dpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []float64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrs.f.
-func Cpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []complex64, ldb int) bool {
+func Cpftrs(transr, ul byte, n, nrhs int, a, b []complex64, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15414,24 +14376,16 @@ func Cpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []complex64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftrs.f.
-func Zpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []complex128, ldb int) bool {
+func Zpftrs(transr, ul byte, n, nrhs int, a, b []complex128, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15445,14 +14399,11 @@ func Zpftrs(transr blas.Transpose, ul blas.Uplo, n, nrhs int, a, b []complex128,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spocon.f.
-func Spocon(ul blas.Uplo, n int, a []float32, lda int, anorm float32, rcond, work []float32, iwork []int32) bool {
+func Spocon(ul byte, n int, a []float32, lda int, anorm float32, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15474,14 +14425,11 @@ func Spocon(ul blas.Uplo, n int, a []float32, lda int, anorm float32, rcond, wor
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpocon.f.
-func Dpocon(ul blas.Uplo, n int, a []float64, lda int, anorm float64, rcond, work []float64, iwork []int32) bool {
+func Dpocon(ul byte, n int, a []float64, lda int, anorm float64, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15503,14 +14451,11 @@ func Dpocon(ul blas.Uplo, n int, a []float64, lda int, anorm float64, rcond, wor
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpocon.f.
-func Cpocon(ul blas.Uplo, n int, a []complex64, lda int, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
+func Cpocon(ul byte, n int, a []complex64, lda int, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15532,14 +14477,11 @@ func Cpocon(ul blas.Uplo, n int, a []complex64, lda int, anorm float32, rcond []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpocon.f.
-func Zpocon(ul blas.Uplo, n int, a []complex128, lda int, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
+func Zpocon(ul byte, n int, a []complex128, lda int, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15729,14 +14671,11 @@ func Zpoequb(n int, a []complex128, lda int, s, scond, amax []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sporfs.f.
-func Sporfs(ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Sporfs(ul byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15774,14 +14713,11 @@ func Sporfs(ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dporfs.f.
-func Dporfs(ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dporfs(ul byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15819,14 +14755,11 @@ func Dporfs(ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cporfs.f.
-func Cporfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cporfs(ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15864,14 +14797,11 @@ func Cporfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zporfs.f.
-func Zporfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zporfs(ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15909,14 +14839,11 @@ func Zporfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposv.f.
-func Sposv(ul blas.Uplo, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
+func Sposv(ul byte, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -15930,14 +14857,11 @@ func Sposv(ul blas.Uplo, n, nrhs int, a []float32, lda int, b []float32, ldb int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dposv.f.
-func Dposv(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
+func Dposv(ul byte, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -15951,14 +14875,11 @@ func Dposv(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposv.f.
-func Cposv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
+func Cposv(ul byte, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -15972,14 +14893,11 @@ func Cposv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, b []complex64, ldb
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zposv.f.
-func Zposv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
+func Zposv(ul byte, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -15993,14 +14911,11 @@ func Zposv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsposv.f.
-func Dsposv(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int, x []float64, ldx int, work []float64, swork []float32, iter []int32) bool {
+func Dsposv(ul byte, n, nrhs int, a []float64, lda int, b []float64, ldb int, x []float64, ldx int, work []float64, swork []float32, iter []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16030,14 +14945,11 @@ func Dsposv(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcposv.f.
-func Zcposv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, x []complex128, ldx int, work []complex128, swork []complex64, rwork []float64, iter []int32) bool {
+func Zcposv(ul byte, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, x []complex128, ldx int, work []complex128, swork []complex64, rwork []float64, iter []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16071,14 +14983,11 @@ func Zcposv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvx.f.
-func Sposvx(fact byte, ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf int, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sposvx(fact, ul byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -16128,14 +15037,11 @@ func Sposvx(fact byte, ul blas.Uplo, n, nrhs int, a []float32, lda int, af []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dposvx.f.
-func Dposvx(fact byte, ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf int, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dposvx(fact, ul byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16185,14 +15091,11 @@ func Dposvx(fact byte, ul blas.Uplo, n, nrhs int, a []float64, lda int, af []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposvx.f.
-func Cposvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cposvx(fact, ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -16242,14 +15145,11 @@ func Cposvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zposvx.f.
-func Zposvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zposvx(fact, ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16299,14 +15199,11 @@ func Zposvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrf2.f.
-func Spotrf2(ul blas.Uplo, n int, a []float32, lda int) bool {
+func Spotrf2(ul byte, n int, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -16316,14 +15213,11 @@ func Spotrf2(ul blas.Uplo, n int, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotrf2.f.
-func Dpotrf2(ul blas.Uplo, n int, a []float64, lda int) bool {
+func Dpotrf2(ul byte, n int, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16333,14 +15227,11 @@ func Dpotrf2(ul blas.Uplo, n int, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrf2.f.
-func Cpotrf2(ul blas.Uplo, n int, a []complex64, lda int) bool {
+func Cpotrf2(ul byte, n int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -16350,14 +15241,11 @@ func Cpotrf2(ul blas.Uplo, n int, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotrf2.f.
-func Zpotrf2(ul blas.Uplo, n int, a []complex128, lda int) bool {
+func Zpotrf2(ul byte, n int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16367,14 +15255,11 @@ func Zpotrf2(ul blas.Uplo, n int, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrf.f.
-func Spotrf(ul blas.Uplo, n int, a []float32, lda int) bool {
+func Spotrf(ul byte, n int, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -16384,14 +15269,11 @@ func Spotrf(ul blas.Uplo, n int, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotrf.f.
-func Dpotrf(ul blas.Uplo, n int, a []float64, lda int) bool {
+func Dpotrf(ul byte, n int, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16401,14 +15283,11 @@ func Dpotrf(ul blas.Uplo, n int, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrf.f.
-func Cpotrf(ul blas.Uplo, n int, a []complex64, lda int) bool {
+func Cpotrf(ul byte, n int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -16418,14 +15297,11 @@ func Cpotrf(ul blas.Uplo, n int, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotrf.f.
-func Zpotrf(ul blas.Uplo, n int, a []complex128, lda int) bool {
+func Zpotrf(ul byte, n int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16435,14 +15311,11 @@ func Zpotrf(ul blas.Uplo, n int, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotri.f.
-func Spotri(ul blas.Uplo, n int, a []float32, lda int) bool {
+func Spotri(ul byte, n int, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -16452,14 +15325,11 @@ func Spotri(ul blas.Uplo, n int, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotri.f.
-func Dpotri(ul blas.Uplo, n int, a []float64, lda int) bool {
+func Dpotri(ul byte, n int, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16469,14 +15339,11 @@ func Dpotri(ul blas.Uplo, n int, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotri.f.
-func Cpotri(ul blas.Uplo, n int, a []complex64, lda int) bool {
+func Cpotri(ul byte, n int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -16486,14 +15353,11 @@ func Cpotri(ul blas.Uplo, n int, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotri.f.
-func Zpotri(ul blas.Uplo, n int, a []complex128, lda int) bool {
+func Zpotri(ul byte, n int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16503,14 +15367,11 @@ func Zpotri(ul blas.Uplo, n int, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrs.f.
-func Spotrs(ul blas.Uplo, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
+func Spotrs(ul byte, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -16524,14 +15385,11 @@ func Spotrs(ul blas.Uplo, n, nrhs int, a []float32, lda int, b []float32, ldb in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotrs.f.
-func Dpotrs(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
+func Dpotrs(ul byte, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -16545,14 +15403,11 @@ func Dpotrs(ul blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrs.f.
-func Cpotrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
+func Cpotrs(ul byte, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -16566,14 +15421,11 @@ func Cpotrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, b []complex64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotrs.f.
-func Zpotrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
+func Zpotrs(ul byte, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -16587,14 +15439,11 @@ func Zpotrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, b []complex128, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppcon.f.
-func Sppcon(ul blas.Uplo, n int, ap []float32, anorm float32, rcond, work []float32, iwork []int32) bool {
+func Sppcon(ul byte, n int, ap []float32, anorm float32, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -16616,14 +15465,11 @@ func Sppcon(ul blas.Uplo, n int, ap []float32, anorm float32, rcond, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppcon.f.
-func Dppcon(ul blas.Uplo, n int, ap []float64, anorm float64, rcond, work []float64, iwork []int32) bool {
+func Dppcon(ul byte, n int, ap []float64, anorm float64, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -16645,14 +15491,11 @@ func Dppcon(ul blas.Uplo, n int, ap []float64, anorm float64, rcond, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppcon.f.
-func Cppcon(ul blas.Uplo, n int, ap []complex64, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
+func Cppcon(ul byte, n int, ap []complex64, anorm float32, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -16674,14 +15517,11 @@ func Cppcon(ul blas.Uplo, n int, ap []complex64, anorm float32, rcond []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zppcon.f.
-func Zppcon(ul blas.Uplo, n int, ap []complex128, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
+func Zppcon(ul byte, n int, ap []complex128, anorm float64, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -16703,14 +15543,11 @@ func Zppcon(ul blas.Uplo, n int, ap []complex128, anorm float64, rcond []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppequ.f.
-func Sppequ(ul blas.Uplo, n int, ap, s, scond, amax []float32) bool {
+func Sppequ(ul byte, n int, ap, s, scond, amax []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -16732,14 +15569,11 @@ func Sppequ(ul blas.Uplo, n int, ap, s, scond, amax []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppequ.f.
-func Dppequ(ul blas.Uplo, n int, ap, s, scond, amax []float64) bool {
+func Dppequ(ul byte, n int, ap, s, scond, amax []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -16761,14 +15595,11 @@ func Dppequ(ul blas.Uplo, n int, ap, s, scond, amax []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppequ.f.
-func Cppequ(ul blas.Uplo, n int, ap []complex64, s, scond, amax []float32) bool {
+func Cppequ(ul byte, n int, ap []complex64, s, scond, amax []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -16790,14 +15621,11 @@ func Cppequ(ul blas.Uplo, n int, ap []complex64, s, scond, amax []float32) bool 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zppequ.f.
-func Zppequ(ul blas.Uplo, n int, ap []complex128, s, scond, amax []float64) bool {
+func Zppequ(ul byte, n int, ap []complex128, s, scond, amax []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -16819,14 +15647,11 @@ func Zppequ(ul blas.Uplo, n int, ap []complex128, s, scond, amax []float64) bool
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spprfs.f.
-func Spprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Spprfs(ul byte, n, nrhs int, ap, afp, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -16864,14 +15689,11 @@ func Spprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []float32, ldb int, x []float3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpprfs.f.
-func Dpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dpprfs(ul byte, n, nrhs int, ap, afp, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -16909,14 +15731,11 @@ func Dpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []float64, ldb int, x []float6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpprfs.f.
-func Cpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cpprfs(ul byte, n, nrhs int, ap, afp, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -16954,14 +15773,11 @@ func Cpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []complex64, ldb int, x []comp
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpprfs.f.
-func Zpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zpprfs(ul byte, n, nrhs int, ap, afp, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -16999,14 +15815,11 @@ func Zpprfs(ul blas.Uplo, n, nrhs int, ap, afp, b []complex128, ldb int, x []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppsv.f.
-func Sppsv(ul blas.Uplo, n, nrhs int, ap, b []float32, ldb int) bool {
+func Sppsv(ul byte, n, nrhs int, ap, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -17020,14 +15833,11 @@ func Sppsv(ul blas.Uplo, n, nrhs int, ap, b []float32, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppsv.f.
-func Dppsv(ul blas.Uplo, n, nrhs int, ap, b []float64, ldb int) bool {
+func Dppsv(ul byte, n, nrhs int, ap, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -17041,14 +15851,11 @@ func Dppsv(ul blas.Uplo, n, nrhs int, ap, b []float64, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppsv.f.
-func Cppsv(ul blas.Uplo, n, nrhs int, ap, b []complex64, ldb int) bool {
+func Cppsv(ul byte, n, nrhs int, ap, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -17062,14 +15869,11 @@ func Cppsv(ul blas.Uplo, n, nrhs int, ap, b []complex64, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zppsv.f.
-func Zppsv(ul blas.Uplo, n, nrhs int, ap, b []complex128, ldb int) bool {
+func Zppsv(ul byte, n, nrhs int, ap, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -17083,14 +15887,11 @@ func Zppsv(ul blas.Uplo, n, nrhs int, ap, b []complex128, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppsvx.f.
-func Sppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float32, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sppsvx(fact, ul byte, n, nrhs int, ap, afp []float32, equed []byte, s, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -17140,14 +15941,11 @@ func Sppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float32, equed []byt
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppsvx.f.
-func Dppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float64, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dppsvx(fact, ul byte, n, nrhs int, ap, afp []float64, equed []byte, s, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -17197,14 +15995,11 @@ func Dppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float64, equed []byt
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppsvx.f.
-func Cppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cppsvx(fact, ul byte, n, nrhs int, ap, afp []complex64, equed []byte, s []float32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -17254,14 +16049,11 @@ func Cppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, equed []b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zppsvx.f.
-func Zppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zppsvx(fact, ul byte, n, nrhs int, ap, afp []complex128, equed []byte, s []float64, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -17311,14 +16103,11 @@ func Zppsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, equed []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptrf.f.
-func Spptrf(ul blas.Uplo, n int, ap []float32) bool {
+func Spptrf(ul byte, n int, ap []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -17328,14 +16117,11 @@ func Spptrf(ul blas.Uplo, n int, ap []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptrf.f.
-func Dpptrf(ul blas.Uplo, n int, ap []float64) bool {
+func Dpptrf(ul byte, n int, ap []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -17345,14 +16131,11 @@ func Dpptrf(ul blas.Uplo, n int, ap []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrf.f.
-func Cpptrf(ul blas.Uplo, n int, ap []complex64) bool {
+func Cpptrf(ul byte, n int, ap []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -17362,14 +16145,11 @@ func Cpptrf(ul blas.Uplo, n int, ap []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptrf.f.
-func Zpptrf(ul blas.Uplo, n int, ap []complex128) bool {
+func Zpptrf(ul byte, n int, ap []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -17379,14 +16159,11 @@ func Zpptrf(ul blas.Uplo, n int, ap []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptri.f.
-func Spptri(ul blas.Uplo, n int, ap []float32) bool {
+func Spptri(ul byte, n int, ap []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -17396,14 +16173,11 @@ func Spptri(ul blas.Uplo, n int, ap []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptri.f.
-func Dpptri(ul blas.Uplo, n int, ap []float64) bool {
+func Dpptri(ul byte, n int, ap []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -17413,14 +16187,11 @@ func Dpptri(ul blas.Uplo, n int, ap []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptri.f.
-func Cpptri(ul blas.Uplo, n int, ap []complex64) bool {
+func Cpptri(ul byte, n int, ap []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -17430,14 +16201,11 @@ func Cpptri(ul blas.Uplo, n int, ap []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptri.f.
-func Zpptri(ul blas.Uplo, n int, ap []complex128) bool {
+func Zpptri(ul byte, n int, ap []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -17447,14 +16215,11 @@ func Zpptri(ul blas.Uplo, n int, ap []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptrs.f.
-func Spptrs(ul blas.Uplo, n, nrhs int, ap, b []float32, ldb int) bool {
+func Spptrs(ul byte, n, nrhs int, ap, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -17468,14 +16233,11 @@ func Spptrs(ul blas.Uplo, n, nrhs int, ap, b []float32, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptrs.f.
-func Dpptrs(ul blas.Uplo, n, nrhs int, ap, b []float64, ldb int) bool {
+func Dpptrs(ul byte, n, nrhs int, ap, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -17489,14 +16251,11 @@ func Dpptrs(ul blas.Uplo, n, nrhs int, ap, b []float64, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrs.f.
-func Cpptrs(ul blas.Uplo, n, nrhs int, ap, b []complex64, ldb int) bool {
+func Cpptrs(ul byte, n, nrhs int, ap, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -17510,14 +16269,11 @@ func Cpptrs(ul blas.Uplo, n, nrhs int, ap, b []complex64, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptrs.f.
-func Zpptrs(ul blas.Uplo, n, nrhs int, ap, b []complex128, ldb int) bool {
+func Zpptrs(ul byte, n, nrhs int, ap, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -17531,14 +16287,11 @@ func Zpptrs(ul blas.Uplo, n, nrhs int, ap, b []complex128, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spstrf.f.
-func Spstrf(ul blas.Uplo, n int, a []float32, lda int, piv, rank []int32, tol float32, work []float32) bool {
+func Spstrf(ul byte, n int, a []float32, lda int, piv, rank []int32, tol float32, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -17560,14 +16313,11 @@ func Spstrf(ul blas.Uplo, n int, a []float32, lda int, piv, rank []int32, tol fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpstrf.f.
-func Dpstrf(ul blas.Uplo, n int, a []float64, lda int, piv, rank []int32, tol float64, work []float64) bool {
+func Dpstrf(ul byte, n int, a []float64, lda int, piv, rank []int32, tol float64, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -17589,14 +16339,11 @@ func Dpstrf(ul blas.Uplo, n int, a []float64, lda int, piv, rank []int32, tol fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpstrf.f.
-func Cpstrf(ul blas.Uplo, n int, a []complex64, lda int, piv, rank []int32, tol float32, work []float32) bool {
+func Cpstrf(ul byte, n int, a []complex64, lda int, piv, rank []int32, tol float32, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -17618,14 +16365,11 @@ func Cpstrf(ul blas.Uplo, n int, a []complex64, lda int, piv, rank []int32, tol 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstrf.f.
-func Zpstrf(ul blas.Uplo, n int, a []complex128, lda int, piv, rank []int32, tol float64, work []float64) bool {
+func Zpstrf(ul byte, n int, a []complex128, lda int, piv, rank []int32, tol float64, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -17897,14 +16641,11 @@ func Dptrfs(n, nrhs int, d, e, df, ef, b []float64, ldb int, x []float64, ldx in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptrfs.f.
-func Cptrfs(ul blas.Uplo, n, nrhs int, d []float32, e []complex64, df []float32, ef, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cptrfs(ul byte, n, nrhs int, d []float32, e []complex64, df []float32, ef, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -17950,14 +16691,11 @@ func Cptrfs(ul blas.Uplo, n, nrhs int, d []float32, e []complex64, df []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zptrfs.f.
-func Zptrfs(ul blas.Uplo, n, nrhs int, d []float64, e []complex128, df []float64, ef, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zptrfs(ul byte, n, nrhs int, d []float64, e []complex128, df []float64, ef, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -18345,14 +17083,11 @@ func Dpttrs(n, nrhs int, d, e, b []float64, ldb int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpttrs.f.
-func Cpttrs(ul blas.Uplo, n, nrhs int, d []float32, e, b []complex64, ldb int) bool {
+func Cpttrs(ul byte, n, nrhs int, d []float32, e, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float32
 	if len(d) > 0 {
@@ -18370,14 +17105,11 @@ func Cpttrs(ul blas.Uplo, n, nrhs int, d []float32, e, b []complex64, ldb int) b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpttrs.f.
-func Zpttrs(ul blas.Uplo, n, nrhs int, d []float64, e, b []complex128, ldb int) bool {
+func Zpttrs(ul byte, n, nrhs int, d []float64, e, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _d *float64
 	if len(d) > 0 {
@@ -18395,14 +17127,11 @@ func Zpttrs(ul blas.Uplo, n, nrhs int, d []float64, e, b []complex128, ldb int) 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbev.f.
-func Ssbev(jobz byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, w, z []float32, ldz int, work []float32) bool {
+func Ssbev(jobz, ul byte, n, kd int, ab []float32, ldab int, w, z []float32, ldz int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18424,14 +17153,11 @@ func Ssbev(jobz byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, w, z []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbev.f.
-func Dsbev(jobz byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, w, z []float64, ldz int, work []float64) bool {
+func Dsbev(jobz, ul byte, n, kd int, ab []float64, ldab int, w, z []float64, ldz int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18453,14 +17179,11 @@ func Dsbev(jobz byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, w, z []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbevd.f.
-func Ssbevd(jobz byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Ssbevd(jobz, ul byte, n, kd int, ab []float32, ldab int, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18486,14 +17209,11 @@ func Ssbevd(jobz byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, w, z []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbevd.f.
-func Dsbevd(jobz byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dsbevd(jobz, ul byte, n, kd int, ab []float64, ldab int, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18519,14 +17239,11 @@ func Dsbevd(jobz byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, w, z []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbevx.f.
-func Ssbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, q []float32, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
+func Ssbevx(jobz, rng, ul byte, n, kd int, ab []float32, ldab int, q []float32, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18564,14 +17281,11 @@ func Ssbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, q [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbevx.f.
-func Dsbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, q []float64, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
+func Dsbevx(jobz, rng, ul byte, n, kd int, ab []float64, ldab int, q []float64, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18609,14 +17323,11 @@ func Dsbevx(jobz, rng byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, q [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgst.f.
-func Ssbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, x []float32, ldx int, work []float32) bool {
+func Ssbgst(vect, ul byte, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, x []float32, ldx int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18638,14 +17349,11 @@ func Ssbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgst.f.
-func Dsbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, x []float64, ldx int, work []float64) bool {
+func Dsbgst(vect, ul byte, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, x []float64, ldx int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18667,14 +17375,11 @@ func Dsbgst(vect byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgv.f.
-func Ssbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, w, z []float32, ldz int, work []float32) bool {
+func Ssbgv(jobz, ul byte, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, w, z []float32, ldz int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18700,14 +17405,11 @@ func Ssbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgv.f.
-func Dsbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, w, z []float64, ldz int, work []float64) bool {
+func Dsbgv(jobz, ul byte, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, w, z []float64, ldz int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18733,14 +17435,11 @@ func Dsbgv(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgvd.f.
-func Ssbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Ssbgvd(jobz, ul byte, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18770,14 +17469,11 @@ func Ssbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgvd.f.
-func Dsbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dsbgvd(jobz, ul byte, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18807,14 +17503,11 @@ func Dsbgvd(jobz byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgvx.f.
-func Ssbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, q []float32, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
+func Ssbgvx(jobz, rng, ul byte, n, ka, kb int, ab []float32, ldab int, bb []float32, ldbb int, q []float32, ldq int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18856,14 +17549,11 @@ func Ssbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []float32, ldab int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgvx.f.
-func Dsbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, q []float64, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
+func Dsbgvx(jobz, rng, ul byte, n, ka, kb int, ab []float64, ldab int, bb []float64, ldbb int, q []float64, ldq int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18905,14 +17595,11 @@ func Dsbgvx(jobz, rng byte, ul blas.Uplo, n, ka, kb int, ab []float64, ldab int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbtrd.f.
-func Ssbtrd(vect byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, d, e, q []float32, ldq int, work []float32) bool {
+func Ssbtrd(vect, ul byte, n, kd int, ab []float32, ldab int, d, e, q []float32, ldq int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -18938,14 +17625,11 @@ func Ssbtrd(vect byte, ul blas.Uplo, n, kd int, ab []float32, ldab int, d, e, q 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbtrd.f.
-func Dsbtrd(vect byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, d, e, q []float64, ldq int, work []float64) bool {
+func Dsbtrd(vect, ul byte, n, kd int, ab []float64, ldab int, d, e, q []float64, ldq int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -18971,32 +17655,19 @@ func Dsbtrd(vect byte, ul blas.Uplo, n, kd int, ab []float64, ldab int, d, e, q 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssfrk.f.
-func Ssfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, alpha float32, a []float32, lda int, beta float32, c []float32) bool {
+func Ssfrk(transr, ul, trans byte, n, k int, alpha float32, a []float32, lda int, beta float32, c []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -19012,32 +17683,19 @@ func Ssfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsfrk.f.
-func Dsfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, alpha float64, a []float64, lda int, beta float64, c []float64) bool {
+func Dsfrk(transr, ul, trans byte, n, k int, alpha float64, a []float64, lda int, beta float64, c []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -19053,14 +17711,11 @@ func Dsfrk(transr blas.Transpose, ul blas.Uplo, trans blas.Transpose, n, k int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspcon.f.
-func Sspcon(ul blas.Uplo, n int, ap []float32, ipiv []int32, anorm float32, rcond, work []float32, iwork []int32) bool {
+func Sspcon(ul byte, n int, ap []float32, ipiv []int32, anorm float32, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19086,14 +17741,11 @@ func Sspcon(ul blas.Uplo, n int, ap []float32, ipiv []int32, anorm float32, rcon
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspcon.f.
-func Dspcon(ul blas.Uplo, n int, ap []float64, ipiv []int32, anorm float64, rcond, work []float64, iwork []int32) bool {
+func Dspcon(ul byte, n int, ap []float64, ipiv []int32, anorm float64, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19119,14 +17771,11 @@ func Dspcon(ul blas.Uplo, n int, ap []float64, ipiv []int32, anorm float64, rcon
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cspcon.f.
-func Cspcon(ul blas.Uplo, n int, ap []complex64, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
+func Cspcon(ul byte, n int, ap []complex64, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -19148,14 +17797,11 @@ func Cspcon(ul blas.Uplo, n int, ap []complex64, ipiv []int32, anorm float32, rc
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspcon.f.
-func Zspcon(ul blas.Uplo, n int, ap []complex128, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
+func Zspcon(ul byte, n int, ap []complex128, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -19177,14 +17823,11 @@ func Zspcon(ul blas.Uplo, n int, ap []complex128, ipiv []int32, anorm float64, r
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspev.f.
-func Sspev(jobz byte, ul blas.Uplo, n int, ap, w, z []float32, ldz int, work []float32) bool {
+func Sspev(jobz, ul byte, n int, ap, w, z []float32, ldz int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19206,14 +17849,11 @@ func Sspev(jobz byte, ul blas.Uplo, n int, ap, w, z []float32, ldz int, work []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspev.f.
-func Dspev(jobz byte, ul blas.Uplo, n int, ap, w, z []float64, ldz int, work []float64) bool {
+func Dspev(jobz, ul byte, n int, ap, w, z []float64, ldz int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19235,14 +17875,11 @@ func Dspev(jobz byte, ul blas.Uplo, n int, ap, w, z []float64, ldz int, work []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspevd.f.
-func Sspevd(jobz byte, ul blas.Uplo, n int, ap, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Sspevd(jobz, ul byte, n int, ap, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19268,14 +17905,11 @@ func Sspevd(jobz byte, ul blas.Uplo, n int, ap, w, z []float32, ldz int, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspevd.f.
-func Dspevd(jobz byte, ul blas.Uplo, n int, ap, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dspevd(jobz, ul byte, n int, ap, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19301,14 +17935,11 @@ func Dspevd(jobz byte, ul blas.Uplo, n int, ap, w, z []float64, ldz int, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspevx.f.
-func Sspevx(jobz, rng byte, ul blas.Uplo, n int, ap []float32, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
+func Sspevx(jobz, rng, ul byte, n int, ap []float32, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19342,14 +17973,11 @@ func Sspevx(jobz, rng byte, ul blas.Uplo, n int, ap []float32, vl, vu float32, i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspevx.f.
-func Dspevx(jobz, rng byte, ul blas.Uplo, n int, ap []float64, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
+func Dspevx(jobz, rng, ul byte, n int, ap []float64, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19383,14 +18011,11 @@ func Dspevx(jobz, rng byte, ul blas.Uplo, n int, ap []float64, vl, vu float64, i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgst.f.
-func Sspgst(itype int, ul blas.Uplo, n int, ap, bp []float32) bool {
+func Sspgst(itype int, ul byte, n int, ap, bp []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19404,14 +18029,11 @@ func Sspgst(itype int, ul blas.Uplo, n int, ap, bp []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgst.f.
-func Dspgst(itype int, ul blas.Uplo, n int, ap, bp []float64) bool {
+func Dspgst(itype int, ul byte, n int, ap, bp []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19425,14 +18047,11 @@ func Dspgst(itype int, ul blas.Uplo, n int, ap, bp []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgv.f.
-func Sspgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float32, ldz int, work []float32) bool {
+func Sspgv(itype int, jobz, ul byte, n int, ap, bp, w, z []float32, ldz int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19458,14 +18077,11 @@ func Sspgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float32, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgv.f.
-func Dspgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float64, ldz int, work []float64) bool {
+func Dspgv(itype int, jobz, ul byte, n int, ap, bp, w, z []float64, ldz int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19491,14 +18107,11 @@ func Dspgv(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgvd.f.
-func Sspgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Sspgvd(itype int, jobz, ul byte, n int, ap, bp, w, z []float32, ldz int, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19528,14 +18141,11 @@ func Sspgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float32, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgvd.f.
-func Dspgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dspgvd(itype int, jobz, ul byte, n int, ap, bp, w, z []float64, ldz int, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19565,14 +18175,11 @@ func Dspgvd(itype int, jobz byte, ul blas.Uplo, n int, ap, bp, w, z []float64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgvx.f.
-func Sspgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []float32, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
+func Sspgvx(itype int, jobz, rng, ul byte, n int, ap, bp []float32, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19610,14 +18217,11 @@ func Sspgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []float32, vl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgvx.f.
-func Dspgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []float64, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
+func Dspgvx(itype int, jobz, rng, ul byte, n int, ap, bp []float64, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19655,14 +18259,11 @@ func Dspgvx(itype int, jobz, rng byte, ul blas.Uplo, n int, ap, bp []float64, vl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssprfs.f.
-func Ssprfs(ul blas.Uplo, n, nrhs int, ap, afp []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Ssprfs(ul byte, n, nrhs int, ap, afp []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19704,14 +18305,11 @@ func Ssprfs(ul blas.Uplo, n, nrhs int, ap, afp []float32, ipiv []int32, b []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsprfs.f.
-func Dsprfs(ul blas.Uplo, n, nrhs int, ap, afp []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dsprfs(ul byte, n, nrhs int, ap, afp []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19753,14 +18351,11 @@ func Dsprfs(ul blas.Uplo, n, nrhs int, ap, afp []float64, ipiv []int32, b []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csprfs.f.
-func Csprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Csprfs(ul byte, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -19802,14 +18397,11 @@ func Csprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsprfs.f.
-func Zsprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zsprfs(ul byte, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -19851,14 +18443,11 @@ func Zsprfs(ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspsv.f.
-func Sspsv(ul blas.Uplo, n, nrhs int, ap []float32, ipiv []int32, b []float32, ldb int) bool {
+func Sspsv(ul byte, n, nrhs int, ap []float32, ipiv []int32, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -19876,14 +18465,11 @@ func Sspsv(ul blas.Uplo, n, nrhs int, ap []float32, ipiv []int32, b []float32, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspsv.f.
-func Dspsv(ul blas.Uplo, n, nrhs int, ap []float64, ipiv []int32, b []float64, ldb int) bool {
+func Dspsv(ul byte, n, nrhs int, ap []float64, ipiv []int32, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -19901,14 +18487,11 @@ func Dspsv(ul blas.Uplo, n, nrhs int, ap []float64, ipiv []int32, b []float64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cspsv.f.
-func Cspsv(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
+func Cspsv(ul byte, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -19926,14 +18509,11 @@ func Cspsv(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspsv.f.
-func Zspsv(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
+func Zspsv(ul byte, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -19951,14 +18531,11 @@ func Zspsv(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspsvx.f.
-func Sspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
+func Sspsvx(fact, ul byte, n, nrhs int, ap, afp []float32, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -20004,14 +18581,11 @@ func Sspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float32, ipiv []int3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspsvx.f.
-func Dspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
+func Dspsvx(fact, ul byte, n, nrhs int, ap, afp []float64, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -20057,14 +18631,11 @@ func Dspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []float64, ipiv []int3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cspsvx.f.
-func Cspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Cspsvx(fact, ul byte, n, nrhs int, ap, afp []complex64, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -20110,14 +18681,11 @@ func Cspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex64, ipiv []in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspsvx.f.
-func Zspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zspsvx(fact, ul byte, n, nrhs int, ap, afp []complex128, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -20163,14 +18731,11 @@ func Zspsvx(fact byte, ul blas.Uplo, n, nrhs int, ap, afp []complex128, ipiv []i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptrd.f.
-func Ssptrd(ul blas.Uplo, n int, ap, d, e, tau []float32) bool {
+func Ssptrd(ul byte, n int, ap, d, e, tau []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -20192,14 +18757,11 @@ func Ssptrd(ul blas.Uplo, n int, ap, d, e, tau []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrd.f.
-func Dsptrd(ul blas.Uplo, n int, ap, d, e, tau []float64) bool {
+func Dsptrd(ul byte, n int, ap, d, e, tau []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -20221,14 +18783,11 @@ func Dsptrd(ul blas.Uplo, n int, ap, d, e, tau []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptrf.f.
-func Ssptrf(ul blas.Uplo, n int, ap []float32, ipiv []int32) bool {
+func Ssptrf(ul byte, n int, ap []float32, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -20242,14 +18801,11 @@ func Ssptrf(ul blas.Uplo, n int, ap []float32, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrf.f.
-func Dsptrf(ul blas.Uplo, n int, ap []float64, ipiv []int32) bool {
+func Dsptrf(ul byte, n int, ap []float64, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -20263,14 +18819,11 @@ func Dsptrf(ul blas.Uplo, n int, ap []float64, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csptrf.f.
-func Csptrf(ul blas.Uplo, n int, ap []complex64, ipiv []int32) bool {
+func Csptrf(ul byte, n int, ap []complex64, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -20284,14 +18837,11 @@ func Csptrf(ul blas.Uplo, n int, ap []complex64, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsptrf.f.
-func Zsptrf(ul blas.Uplo, n int, ap []complex128, ipiv []int32) bool {
+func Zsptrf(ul byte, n int, ap []complex128, ipiv []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -20305,14 +18855,11 @@ func Zsptrf(ul blas.Uplo, n int, ap []complex128, ipiv []int32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptri.f.
-func Ssptri(ul blas.Uplo, n int, ap []float32, ipiv []int32, work []float32) bool {
+func Ssptri(ul byte, n int, ap []float32, ipiv []int32, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -20330,14 +18877,11 @@ func Ssptri(ul blas.Uplo, n int, ap []float32, ipiv []int32, work []float32) boo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptri.f.
-func Dsptri(ul blas.Uplo, n int, ap []float64, ipiv []int32, work []float64) bool {
+func Dsptri(ul byte, n int, ap []float64, ipiv []int32, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -20355,14 +18899,11 @@ func Dsptri(ul blas.Uplo, n int, ap []float64, ipiv []int32, work []float64) boo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csptri.f.
-func Csptri(ul blas.Uplo, n int, ap []complex64, ipiv []int32, work []complex64) bool {
+func Csptri(ul byte, n int, ap []complex64, ipiv []int32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -20380,14 +18921,11 @@ func Csptri(ul blas.Uplo, n int, ap []complex64, ipiv []int32, work []complex64)
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsptri.f.
-func Zsptri(ul blas.Uplo, n int, ap []complex128, ipiv []int32, work []complex128) bool {
+func Zsptri(ul byte, n int, ap []complex128, ipiv []int32, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -20405,14 +18943,11 @@ func Zsptri(ul blas.Uplo, n int, ap []complex128, ipiv []int32, work []complex12
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptrs.f.
-func Ssptrs(ul blas.Uplo, n, nrhs int, ap []float32, ipiv []int32, b []float32, ldb int) bool {
+func Ssptrs(ul byte, n, nrhs int, ap []float32, ipiv []int32, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -20430,14 +18965,11 @@ func Ssptrs(ul blas.Uplo, n, nrhs int, ap []float32, ipiv []int32, b []float32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrs.f.
-func Dsptrs(ul blas.Uplo, n, nrhs int, ap []float64, ipiv []int32, b []float64, ldb int) bool {
+func Dsptrs(ul byte, n, nrhs int, ap []float64, ipiv []int32, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -20455,14 +18987,11 @@ func Dsptrs(ul blas.Uplo, n, nrhs int, ap []float64, ipiv []int32, b []float64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csptrs.f.
-func Csptrs(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
+func Csptrs(ul byte, n, nrhs int, ap []complex64, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -20480,14 +19009,11 @@ func Csptrs(ul blas.Uplo, n, nrhs int, ap []complex64, ipiv []int32, b []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsptrs.f.
-func Zsptrs(ul blas.Uplo, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
+func Zsptrs(ul byte, n, nrhs int, ap []complex128, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -21521,14 +20047,11 @@ func Dstevx(jobz, rng byte, n int, d, e []float64, vl, vu float64, il, iu int, a
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssycon.f.
-func Ssycon(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, anorm float32, rcond, work []float32, iwork []int32) bool {
+func Ssycon(ul byte, n int, a []float32, lda int, ipiv []int32, anorm float32, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -21554,14 +20077,11 @@ func Ssycon(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, anorm float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsycon.f.
-func Dsycon(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, anorm float64, rcond, work []float64, iwork []int32) bool {
+func Dsycon(ul byte, n int, a []float64, lda int, ipiv []int32, anorm float64, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -21587,14 +20107,11 @@ func Dsycon(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, anorm float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csycon.f.
-func Csycon(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
+func Csycon(ul byte, n int, a []complex64, lda int, ipiv []int32, anorm float32, rcond []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -21616,14 +20133,11 @@ func Csycon(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, anorm flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsycon.f.
-func Zsycon(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
+func Zsycon(ul byte, n int, a []complex128, lda int, ipiv []int32, anorm float64, rcond []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -21645,14 +20159,11 @@ func Zsycon(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, anorm fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyequb.f.
-func Ssyequb(ul blas.Uplo, n int, a []float32, lda int, s, scond, amax, work []float32) bool {
+func Ssyequb(ul byte, n int, a []float32, lda int, s, scond, amax, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -21678,14 +20189,11 @@ func Ssyequb(ul blas.Uplo, n int, a []float32, lda int, s, scond, amax, work []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyequb.f.
-func Dsyequb(ul blas.Uplo, n int, a []float64, lda int, s, scond, amax, work []float64) bool {
+func Dsyequb(ul byte, n int, a []float64, lda int, s, scond, amax, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -21711,14 +20219,11 @@ func Dsyequb(ul blas.Uplo, n int, a []float64, lda int, s, scond, amax, work []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyequb.f.
-func Csyequb(ul blas.Uplo, n int, a []complex64, lda int, s, scond, amax []float32, work []complex64) bool {
+func Csyequb(ul byte, n int, a []complex64, lda int, s, scond, amax []float32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -21744,14 +20249,11 @@ func Csyequb(ul blas.Uplo, n int, a []complex64, lda int, s, scond, amax []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyequb.f.
-func Zsyequb(ul blas.Uplo, n int, a []complex128, lda int, s, scond, amax []float64, work []complex128) bool {
+func Zsyequb(ul byte, n int, a []complex128, lda int, s, scond, amax []float64, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -21777,14 +20279,11 @@ func Zsyequb(ul blas.Uplo, n int, a []complex128, lda int, s, scond, amax []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyev.f.
-func Ssyev(jobz byte, ul blas.Uplo, n int, a []float32, lda int, w, work []float32, lwork int) bool {
+func Ssyev(jobz, ul byte, n int, a []float32, lda int, w, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -21802,14 +20301,11 @@ func Ssyev(jobz byte, ul blas.Uplo, n int, a []float32, lda int, w, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyev.f.
-func Dsyev(jobz byte, ul blas.Uplo, n int, a []float64, lda int, w, work []float64, lwork int) bool {
+func Dsyev(jobz, ul byte, n int, a []float64, lda int, w, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -21827,14 +20323,11 @@ func Dsyev(jobz byte, ul blas.Uplo, n int, a []float64, lda int, w, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd.f.
-func Ssyevd(jobz byte, ul blas.Uplo, n int, a []float32, lda int, w, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Ssyevd(jobz, ul byte, n int, a []float32, lda int, w, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -21856,14 +20349,11 @@ func Ssyevd(jobz byte, ul blas.Uplo, n int, a []float32, lda int, w, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevd.f.
-func Dsyevd(jobz byte, ul blas.Uplo, n int, a []float64, lda int, w, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dsyevd(jobz, ul byte, n int, a []float64, lda int, w, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -21885,14 +20375,11 @@ func Dsyevd(jobz byte, ul blas.Uplo, n int, a []float64, lda int, w, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevr.f.
-func Ssyevr(jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, isuppz []int32, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Ssyevr(jobz, rng, ul byte, n int, a []float32, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, isuppz []int32, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -21926,14 +20413,11 @@ func Ssyevr(jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int, vl, vu fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevr.f.
-func Dsyevr(jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, isuppz []int32, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dsyevr(jobz, rng, ul byte, n int, a []float64, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, isuppz []int32, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -21967,14 +20451,11 @@ func Dsyevr(jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int, vl, vu fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevx.f.
-func Ssyevx(jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, lwork int, iwork, ifail []int32) bool {
+func Ssyevx(jobz, rng, ul byte, n int, a []float32, lda int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, lwork int, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22008,14 +20489,11 @@ func Ssyevx(jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int, vl, vu fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevx.f.
-func Dsyevx(jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, lwork int, iwork, ifail []int32) bool {
+func Dsyevx(jobz, rng, ul byte, n int, a []float64, lda int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, lwork int, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22049,14 +20527,11 @@ func Dsyevx(jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int, vl, vu fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygst.f.
-func Ssygst(itype int, ul blas.Uplo, n int, a []float32, lda int, b []float32, ldb int) bool {
+func Ssygst(itype int, ul byte, n int, a []float32, lda int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22070,14 +20545,11 @@ func Ssygst(itype int, ul blas.Uplo, n int, a []float32, lda int, b []float32, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygst.f.
-func Dsygst(itype int, ul blas.Uplo, n int, a []float64, lda int, b []float64, ldb int) bool {
+func Dsygst(itype int, ul byte, n int, a []float64, lda int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22091,14 +20563,11 @@ func Dsygst(itype int, ul blas.Uplo, n int, a []float64, lda int, b []float64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygv.f.
-func Ssygv(itype int, jobz byte, ul blas.Uplo, n int, a []float32, lda int, b []float32, ldb int, w, work []float32, lwork int) bool {
+func Ssygv(itype int, jobz, ul byte, n int, a []float32, lda int, b []float32, ldb int, w, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22120,14 +20589,11 @@ func Ssygv(itype int, jobz byte, ul blas.Uplo, n int, a []float32, lda int, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygv.f.
-func Dsygv(itype int, jobz byte, ul blas.Uplo, n int, a []float64, lda int, b []float64, ldb int, w, work []float64, lwork int) bool {
+func Dsygv(itype int, jobz, ul byte, n int, a []float64, lda int, b []float64, ldb int, w, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22149,14 +20615,11 @@ func Dsygv(itype int, jobz byte, ul blas.Uplo, n int, a []float64, lda int, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygvd.f.
-func Ssygvd(itype int, jobz byte, ul blas.Uplo, n int, a []float32, lda int, b []float32, ldb int, w, work []float32, lwork int, iwork []int32, liwork int) bool {
+func Ssygvd(itype int, jobz, ul byte, n int, a []float32, lda int, b []float32, ldb int, w, work []float32, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22182,14 +20645,11 @@ func Ssygvd(itype int, jobz byte, ul blas.Uplo, n int, a []float32, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygvd.f.
-func Dsygvd(itype int, jobz byte, ul blas.Uplo, n int, a []float64, lda int, b []float64, ldb int, w, work []float64, lwork int, iwork []int32, liwork int) bool {
+func Dsygvd(itype int, jobz, ul byte, n int, a []float64, lda int, b []float64, ldb int, w, work []float64, lwork int, iwork []int32, liwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22215,14 +20675,11 @@ func Dsygvd(itype int, jobz byte, ul blas.Uplo, n int, a []float64, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygvx.f.
-func Ssygvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int, b []float32, ldb int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, lwork int, iwork, ifail []int32) bool {
+func Ssygvx(itype int, jobz, rng, ul byte, n int, a []float32, lda int, b []float32, ldb int, vl, vu float32, il, iu int, abstol float32, m []int32, w, z []float32, ldz int, work []float32, lwork int, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22260,14 +20717,11 @@ func Ssygvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []float32, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygvx.f.
-func Dsygvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int, b []float64, ldb int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, lwork int, iwork, ifail []int32) bool {
+func Dsygvx(itype int, jobz, rng, ul byte, n int, a []float64, lda int, b []float64, ldb int, vl, vu float64, il, iu int, abstol float64, m []int32, w, z []float64, ldz int, work []float64, lwork int, iwork, ifail []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22305,14 +20759,11 @@ func Dsygvx(itype int, jobz, rng byte, ul blas.Uplo, n int, a []float64, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyrfs.f.
-func Ssyrfs(ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Ssyrfs(ul byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22354,14 +20805,11 @@ func Ssyrfs(ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyrfs.f.
-func Dsyrfs(ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dsyrfs(ul byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22403,14 +20851,11 @@ func Dsyrfs(ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyrfs.f.
-func Csyrfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Csyrfs(ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -22452,14 +20897,11 @@ func Csyrfs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyrfs.f.
-func Zsyrfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Zsyrfs(ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -22501,14 +20943,11 @@ func Zsyrfs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysv.f.
-func Ssysv(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int, work []float32, lwork int) bool {
+func Ssysv(ul byte, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22530,14 +20969,11 @@ func Ssysv(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv.f.
-func Dsysv(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int, work []float64, lwork int) bool {
+func Dsysv(ul byte, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22559,14 +20995,11 @@ func Dsysv(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysv.f.
-func Csysv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64, lwork int) bool {
+func Csysv(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -22588,14 +21021,11 @@ func Csysv(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysv.f.
-func Zsysv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128, lwork int) bool {
+func Zsysv(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -22617,14 +21047,11 @@ func Zsysv(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysvx.f.
-func Ssysvx(fact byte, ul blas.Uplo, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, lwork int, iwork []int32) bool {
+func Ssysvx(fact, ul byte, n, nrhs int, a []float32, lda int, af []float32, ldaf int, ipiv []int32, b []float32, ldb int, x []float32, ldx int, rcond, ferr, berr, work []float32, lwork int, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22670,14 +21097,11 @@ func Ssysvx(fact byte, ul blas.Uplo, n, nrhs int, a []float32, lda int, af []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysvx.f.
-func Dsysvx(fact byte, ul blas.Uplo, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, lwork int, iwork []int32) bool {
+func Dsysvx(fact, ul byte, n, nrhs int, a []float64, lda int, af []float64, ldaf int, ipiv []int32, b []float64, ldb int, x []float64, ldx int, rcond, ferr, berr, work []float64, lwork int, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22723,14 +21147,11 @@ func Dsysvx(fact byte, ul blas.Uplo, n, nrhs int, a []float64, lda int, af []flo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysvx.f.
-func Csysvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, lwork int, rwork []float32) bool {
+func Csysvx(fact, ul byte, n, nrhs int, a []complex64, lda int, af []complex64, ldaf int, ipiv []int32, b []complex64, ldb int, x []complex64, ldx int, rcond, ferr, berr []float32, work []complex64, lwork int, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -22776,14 +21197,11 @@ func Csysvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex64, lda int, af []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysvx.f.
-func Zsysvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, lwork int, rwork []float64) bool {
+func Zsysvx(fact, ul byte, n, nrhs int, a []complex128, lda int, af []complex128, ldaf int, ipiv []int32, b []complex128, ldb int, x []complex128, ldx int, rcond, ferr, berr []float64, work []complex128, lwork int, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -22829,14 +21247,11 @@ func Zsysvx(fact byte, ul blas.Uplo, n, nrhs int, a []complex128, lda int, af []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd.f.
-func Ssytrd(ul blas.Uplo, n int, a []float32, lda int, d, e, tau, work []float32, lwork int) bool {
+func Ssytrd(ul byte, n int, a []float32, lda int, d, e, tau, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22862,14 +21277,11 @@ func Ssytrd(ul blas.Uplo, n int, a []float32, lda int, d, e, tau, work []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd.f.
-func Dsytrd(ul blas.Uplo, n int, a []float64, lda int, d, e, tau, work []float64, lwork int) bool {
+func Dsytrd(ul byte, n int, a []float64, lda int, d, e, tau, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22895,14 +21307,11 @@ func Dsytrd(ul blas.Uplo, n int, a []float64, lda int, d, e, tau, work []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf.f.
-func Ssytrf(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []float32, lwork int) bool {
+func Ssytrf(ul byte, n int, a []float32, lda int, ipiv []int32, work []float32, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -22920,14 +21329,11 @@ func Ssytrf(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrf.f.
-func Dsytrf(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []float64, lwork int) bool {
+func Dsytrf(ul byte, n int, a []float64, lda int, ipiv []int32, work []float64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -22945,14 +21351,11 @@ func Dsytrf(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrf.f.
-func Csytrf(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
+func Csytrf(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -22970,14 +21373,11 @@ func Csytrf(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrf.f.
-func Zsytrf(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
+func Zsytrf(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -22995,14 +21395,11 @@ func Zsytrf(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri.f.
-func Ssytri(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []float32) bool {
+func Ssytri(ul byte, n int, a []float32, lda int, ipiv []int32, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -23020,14 +21417,11 @@ func Ssytri(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri.f.
-func Dsytri(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []float64) bool {
+func Dsytri(ul byte, n int, a []float64, lda int, ipiv []int32, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -23045,14 +21439,11 @@ func Dsytri(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []floa
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri.f.
-func Csytri(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
+func Csytri(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -23070,14 +21461,11 @@ func Csytri(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri.f.
-func Zsytri(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
+func Zsytri(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -23095,14 +21483,11 @@ func Zsytri(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs.f.
-func Ssytrs(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int) bool {
+func Ssytrs(ul byte, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -23120,14 +21505,11 @@ func Ssytrs(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs.f.
-func Dsytrs(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int) bool {
+func Dsytrs(ul byte, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -23145,14 +21527,11 @@ func Dsytrs(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []f
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs.f.
-func Csytrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
+func Csytrs(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -23170,14 +21549,11 @@ func Csytrs(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs.f.
-func Zsytrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
+func Zsytrs(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -23195,22 +21571,16 @@ func Zsytrs(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stbcon.f.
-func Stbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []float32, ldab int, rcond, work []float32, iwork []int32) bool {
+func Stbcon(norm, ul, d byte, n, kd int, ab []float32, ldab int, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -23232,22 +21602,16 @@ func Stbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []float32, ldab 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtbcon.f.
-func Dtbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []float64, ldab int, rcond, work []float64, iwork []int32) bool {
+func Dtbcon(norm, ul, d byte, n, kd int, ab []float64, ldab int, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -23269,22 +21633,16 @@ func Dtbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []float64, ldab 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctbcon.f.
-func Ctbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []complex64, ldab int, rcond []float32, work []complex64, rwork []float32) bool {
+func Ctbcon(norm, ul, d byte, n, kd int, ab []complex64, ldab int, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -23306,22 +21664,16 @@ func Ctbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []complex64, lda
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztbcon.f.
-func Ztbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []complex128, ldab int, rcond []float64, work []complex128, rwork []float64) bool {
+func Ztbcon(norm, ul, d byte, n, kd int, ab []complex128, ldab int, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -23343,32 +21695,21 @@ func Ztbcon(norm byte, ul blas.Uplo, d blas.Diag, n, kd int, ab []complex128, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stbrfs.f.
-func Stbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Stbrfs(ul, trans, d byte, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -23402,32 +21743,21 @@ func Stbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtbrfs.f.
-func Dtbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dtbrfs(ul, trans, d byte, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -23461,32 +21791,21 @@ func Dtbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctbrfs.f.
-func Ctbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Ctbrfs(ul, trans, d byte, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -23520,32 +21839,21 @@ func Ctbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztbrfs.f.
-func Ztbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Ztbrfs(ul, trans, d byte, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -23579,32 +21887,21 @@ func Ztbrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stbtrs.f.
-func Stbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
+func Stbtrs(ul, trans, d byte, n, kd, nrhs int, ab []float32, ldab int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float32
 	if len(ab) > 0 {
@@ -23618,32 +21915,21 @@ func Stbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtbtrs.f.
-func Dtbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
+func Dtbtrs(ul, trans, d byte, n, kd, nrhs int, ab []float64, ldab int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *float64
 	if len(ab) > 0 {
@@ -23657,32 +21943,21 @@ func Dtbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctbtrs.f.
-func Ctbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
+func Ctbtrs(ul, trans, d byte, n, kd, nrhs int, ab []complex64, ldab int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex64
 	if len(ab) > 0 {
@@ -23696,32 +21971,21 @@ func Ctbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztbtrs.f.
-func Ztbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
+func Ztbtrs(ul, trans, d byte, n, kd, nrhs int, ab []complex128, ldab int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ab *complex128
 	if len(ab) > 0 {
@@ -23735,50 +21999,31 @@ func Ztbtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, kd, nrhs int, ab
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stfsm.f.
-func Stfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Transpose, d blas.Diag, m, n int, alpha float32, a, b []float32, ldb int) bool {
+func Stfsm(transr, side, ul, trans, d byte, m, n int, alpha float32, a, b []float32, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -23792,50 +22037,31 @@ func Stfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Trans
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtfsm.f.
-func Dtfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Transpose, d blas.Diag, m, n int, alpha float64, a, b []float64, ldb int) bool {
+func Dtfsm(transr, side, ul, trans, d byte, m, n int, alpha float64, a, b []float64, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -23849,50 +22075,31 @@ func Dtfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Trans
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfsm.f.
-func Ctfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Transpose, d blas.Diag, m, n int, alpha complex64, a, b []complex64, ldb int) bool {
+func Ctfsm(transr, side, ul, trans, d byte, m, n int, alpha complex64, a, b []complex64, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -23906,50 +22113,31 @@ func Ctfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Trans
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztfsm.f.
-func Ztfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Transpose, d blas.Diag, m, n int, alpha complex128, a, b []complex128, ldb int) bool {
+func Ztfsm(transr, side, ul, trans, d byte, m, n int, alpha complex128, a, b []complex128, ldb int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -23963,32 +22151,21 @@ func Ztfsm(transr blas.Transpose, side blas.Side, ul blas.Uplo, trans blas.Trans
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stftri.f.
-func Stftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []float32) bool {
+func Stftri(transr, ul, d byte, n int, a []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -23998,32 +22175,21 @@ func Stftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []float32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtftri.f.
-func Dtftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []float64) bool {
+func Dtftri(transr, ul, d byte, n int, a []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -24033,32 +22199,21 @@ func Dtftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []float64
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctftri.f.
-func Ctftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []complex64) bool {
+func Ctftri(transr, ul, d byte, n int, a []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -24068,32 +22223,21 @@ func Ctftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztftri.f.
-func Ztftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []complex128) bool {
+func Ztftri(transr, ul, d byte, n int, a []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -24103,24 +22247,16 @@ func Ztftri(transr blas.Transpose, ul blas.Uplo, d blas.Diag, n int, a []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stfttp.f.
-func Stfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []float32) bool {
+func Stfttp(transr, ul byte, n int, arf, ap []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *float32
 	if len(arf) > 0 {
@@ -24134,24 +22270,16 @@ func Stfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []float32) bool 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtfttp.f.
-func Dtfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []float64) bool {
+func Dtfttp(transr, ul byte, n int, arf, ap []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *float64
 	if len(arf) > 0 {
@@ -24165,24 +22293,16 @@ func Dtfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []float64) bool 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttp.f.
-func Ctfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []complex64) bool {
+func Ctfttp(transr, ul byte, n int, arf, ap []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *complex64
 	if len(arf) > 0 {
@@ -24196,24 +22316,16 @@ func Ctfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []complex64) boo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztfttp.f.
-func Ztfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []complex128) bool {
+func Ztfttp(transr, ul byte, n int, arf, ap []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *complex128
 	if len(arf) > 0 {
@@ -24227,24 +22339,16 @@ func Ztfttp(transr blas.Transpose, ul blas.Uplo, n int, arf, ap []complex128) bo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stfttr.f.
-func Stfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []float32, lda int) bool {
+func Stfttr(transr, ul byte, n int, arf, a []float32, lda int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *float32
 	if len(arf) > 0 {
@@ -24258,24 +22362,16 @@ func Stfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []float32, lda in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtfttr.f.
-func Dtfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []float64, lda int) bool {
+func Dtfttr(transr, ul byte, n int, arf, a []float64, lda int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *float64
 	if len(arf) > 0 {
@@ -24289,24 +22385,16 @@ func Dtfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []float64, lda in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttr.f.
-func Ctfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []complex64, lda int) bool {
+func Ctfttr(transr, ul byte, n int, arf, a []complex64, lda int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *complex64
 	if len(arf) > 0 {
@@ -24320,24 +22408,16 @@ func Ctfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []complex64, lda 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztfttr.f.
-func Ztfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []complex128, lda int) bool {
+func Ztfttr(transr, ul byte, n int, arf, a []complex128, lda int) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _arf *complex128
 	if len(arf) > 0 {
@@ -24351,12 +22431,9 @@ func Ztfttr(transr blas.Transpose, ul blas.Uplo, n int, arf, a []complex128, lda
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgevc.f.
-func Stgevc(side blas.Side, howmny byte, sel []int32, n int, s []float32, lds int, p []float32, ldp int, vl []float32, ldvl int, vr []float32, ldvr, mm int, m []int32, work []float32) bool {
+func Stgevc(side, howmny byte, sel []int32, n int, s []float32, lds int, p []float32, ldp int, vl []float32, ldvl int, vr []float32, ldvr, mm int, m []int32, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -24392,12 +22469,9 @@ func Stgevc(side blas.Side, howmny byte, sel []int32, n int, s []float32, lds in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgevc.f.
-func Dtgevc(side blas.Side, howmny byte, sel []int32, n int, s []float64, lds int, p []float64, ldp int, vl []float64, ldvl int, vr []float64, ldvr, mm int, m []int32, work []float64) bool {
+func Dtgevc(side, howmny byte, sel []int32, n int, s []float64, lds int, p []float64, ldp int, vl []float64, ldvl int, vr []float64, ldvr, mm int, m []int32, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -24433,12 +22507,9 @@ func Dtgevc(side blas.Side, howmny byte, sel []int32, n int, s []float64, lds in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgevc.f.
-func Ctgevc(side blas.Side, howmny byte, sel []int32, n int, s []complex64, lds int, p []complex64, ldp int, vl []complex64, ldvl int, vr []complex64, ldvr, mm int, m []int32, work []complex64, rwork []float32) bool {
+func Ctgevc(side, howmny byte, sel []int32, n int, s []complex64, lds int, p []complex64, ldp int, vl []complex64, ldvl int, vr []complex64, ldvr, mm int, m []int32, work []complex64, rwork []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -24478,12 +22549,9 @@ func Ctgevc(side blas.Side, howmny byte, sel []int32, n int, s []complex64, lds 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgevc.f.
-func Ztgevc(side blas.Side, howmny byte, sel []int32, n int, s []complex128, lds int, p []complex128, ldp int, vl []complex128, ldvl int, vr []complex128, ldvr, mm int, m []int32, work []complex128, rwork []float64) bool {
+func Ztgevc(side, howmny byte, sel []int32, n int, s []complex128, lds int, p []complex128, ldp int, vl []complex128, ldvl int, vr []complex128, ldvr, mm int, m []int32, work []complex128, rwork []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -25211,14 +23279,9 @@ func Ztgsna(job, howmny byte, sel []int32, n int, a []complex128, lda int, b []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsyl.f.
-func Stgsyl(trans blas.Transpose, ijob byte, m, n int, a []float32, lda int, b []float32, ldb int, c []float32, ldc int, d []float32, ldd int, e []float32, lde int, f []float32, ldf int, scale, dif, work []float32, lwork int, iwork []int32) bool {
+func Stgsyl(trans byte, ijob byte, m, n int, a []float32, lda int, b []float32, ldb int, c []float32, ldc int, d []float32, ldd int, e []float32, lde int, f []float32, ldf int, scale, dif, work []float32, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -25266,14 +23329,9 @@ func Stgsyl(trans blas.Transpose, ijob byte, m, n int, a []float32, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsyl.f.
-func Dtgsyl(trans blas.Transpose, ijob byte, m, n int, a []float64, lda int, b []float64, ldb int, c []float64, ldc int, d []float64, ldd int, e []float64, lde int, f []float64, ldf int, scale, dif, work []float64, lwork int, iwork []int32) bool {
+func Dtgsyl(trans byte, ijob byte, m, n int, a []float64, lda int, b []float64, ldb int, c []float64, ldc int, d []float64, ldd int, e []float64, lde int, f []float64, ldf int, scale, dif, work []float64, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -25321,14 +23379,9 @@ func Dtgsyl(trans blas.Transpose, ijob byte, m, n int, a []float64, lda int, b [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsyl.f.
-func Ctgsyl(trans blas.Transpose, ijob byte, m, n int, a []complex64, lda int, b []complex64, ldb int, c []complex64, ldc int, d []complex64, ldd int, e []complex64, lde int, f []complex64, ldf int, scale, dif []float32, work []complex64, lwork int, iwork []int32) bool {
+func Ctgsyl(trans byte, ijob byte, m, n int, a []complex64, lda int, b []complex64, ldb int, c []complex64, ldc int, d []complex64, ldd int, e []complex64, lde int, f []complex64, ldf int, scale, dif []float32, work []complex64, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -25376,14 +23429,9 @@ func Ctgsyl(trans blas.Transpose, ijob byte, m, n int, a []complex64, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsyl.f.
-func Ztgsyl(trans blas.Transpose, ijob byte, m, n int, a []complex128, lda int, b []complex128, ldb int, c []complex128, ldc int, d []complex128, ldd int, e []complex128, lde int, f []complex128, ldf int, scale, dif []float64, work []complex128, lwork int, iwork []int32) bool {
+func Ztgsyl(trans byte, ijob byte, m, n int, a []complex128, lda int, b []complex128, ldb int, c []complex128, ldc int, d []complex128, ldd int, e []complex128, lde int, f []complex128, ldf int, scale, dif []float64, work []complex128, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -25431,22 +23479,16 @@ func Ztgsyl(trans blas.Transpose, ijob byte, m, n int, a []complex128, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpcon.f.
-func Stpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap, rcond, work []float32, iwork []int32) bool {
+func Stpcon(norm, ul, d byte, n int, ap, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -25468,22 +23510,16 @@ func Stpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap, rcond, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtpcon.f.
-func Dtpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap, rcond, work []float64, iwork []int32) bool {
+func Dtpcon(norm, ul, d byte, n int, ap, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -25505,22 +23541,16 @@ func Dtpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap, rcond, work []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctpcon.f.
-func Ctpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap []complex64, rcond []float32, work []complex64, rwork []float32) bool {
+func Ctpcon(norm, ul, d byte, n int, ap []complex64, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -25542,22 +23572,16 @@ func Ctpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap []complex64, rcond [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpcon.f.
-func Ztpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap []complex128, rcond []float64, work []complex128, rwork []float64) bool {
+func Ztpcon(norm, ul, d byte, n int, ap []complex128, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -25579,32 +23603,21 @@ func Ztpcon(norm byte, ul blas.Uplo, d blas.Diag, n int, ap []complex128, rcond 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stprfs.f.
-func Stprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Stprfs(ul, trans, d byte, n, nrhs int, ap, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -25638,32 +23651,21 @@ func Stprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtprfs.f.
-func Dtprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dtprfs(ul, trans, d byte, n, nrhs int, ap, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -25697,32 +23699,21 @@ func Dtprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctprfs.f.
-func Ctprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Ctprfs(ul, trans, d byte, n, nrhs int, ap, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -25756,32 +23747,21 @@ func Ctprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztprfs.f.
-func Ztprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Ztprfs(ul, trans, d byte, n, nrhs int, ap, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -25815,22 +23795,16 @@ func Ztprfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stptri.f.
-func Stptri(ul blas.Uplo, d blas.Diag, n int, ap []float32) bool {
+func Stptri(ul, d byte, n int, ap []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -25840,22 +23814,16 @@ func Stptri(ul blas.Uplo, d blas.Diag, n int, ap []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtptri.f.
-func Dtptri(ul blas.Uplo, d blas.Diag, n int, ap []float64) bool {
+func Dtptri(ul, d byte, n int, ap []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -25865,22 +23833,16 @@ func Dtptri(ul blas.Uplo, d blas.Diag, n int, ap []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctptri.f.
-func Ctptri(ul blas.Uplo, d blas.Diag, n int, ap []complex64) bool {
+func Ctptri(ul, d byte, n int, ap []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -25890,22 +23852,16 @@ func Ctptri(ul blas.Uplo, d blas.Diag, n int, ap []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztptri.f.
-func Ztptri(ul blas.Uplo, d blas.Diag, n int, ap []complex128) bool {
+func Ztptri(ul, d byte, n int, ap []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -25915,32 +23871,21 @@ func Ztptri(ul blas.Uplo, d blas.Diag, n int, ap []complex128) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stptrs.f.
-func Stptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []float32, ldb int) bool {
+func Stptrs(ul, trans, d byte, n, nrhs int, ap, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -25954,32 +23899,21 @@ func Stptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtptrs.f.
-func Dtptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []float64, ldb int) bool {
+func Dtptrs(ul, trans, d byte, n, nrhs int, ap, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -25993,32 +23927,21 @@ func Dtptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctptrs.f.
-func Ctptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []complex64, ldb int) bool {
+func Ctptrs(ul, trans, d byte, n, nrhs int, ap, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -26032,32 +23955,21 @@ func Ctptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztptrs.f.
-func Ztptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b []complex128, ldb int) bool {
+func Ztptrs(ul, trans, d byte, n, nrhs int, ap, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -26071,24 +23983,16 @@ func Ztptrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, ap, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttf.f.
-func Stpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []float32) bool {
+func Stpttf(transr, ul byte, n int, ap, arf []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -26102,24 +24006,16 @@ func Stpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []float32) bool 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtpttf.f.
-func Dtpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []float64) bool {
+func Dtpttf(transr, ul byte, n int, ap, arf []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -26133,24 +24029,16 @@ func Dtpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []float64) bool 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctpttf.f.
-func Ctpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []complex64) bool {
+func Ctpttf(transr, ul byte, n int, ap, arf []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -26164,24 +24052,16 @@ func Ctpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []complex64) boo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpttf.f.
-func Ztpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []complex128) bool {
+func Ztpttf(transr, ul byte, n int, ap, arf []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -26195,14 +24075,11 @@ func Ztpttf(transr blas.Transpose, ul blas.Uplo, n int, ap, arf []complex128) bo
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttr.f.
-func Stpttr(ul blas.Uplo, n int, ap, a []float32, lda int) bool {
+func Stpttr(ul byte, n int, ap, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float32
 	if len(ap) > 0 {
@@ -26216,14 +24093,11 @@ func Stpttr(ul blas.Uplo, n int, ap, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtpttr.f.
-func Dtpttr(ul blas.Uplo, n int, ap, a []float64, lda int) bool {
+func Dtpttr(ul byte, n int, ap, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *float64
 	if len(ap) > 0 {
@@ -26237,14 +24111,11 @@ func Dtpttr(ul blas.Uplo, n int, ap, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctpttr.f.
-func Ctpttr(ul blas.Uplo, n int, ap, a []complex64, lda int) bool {
+func Ctpttr(ul byte, n int, ap, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -26258,14 +24129,11 @@ func Ctpttr(ul blas.Uplo, n int, ap, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpttr.f.
-func Ztpttr(ul blas.Uplo, n int, ap, a []complex128, lda int) bool {
+func Ztpttr(ul byte, n int, ap, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -26279,22 +24147,16 @@ func Ztpttr(ul blas.Uplo, n int, ap, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strcon.f.
-func Strcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []float32, lda int, rcond, work []float32, iwork []int32) bool {
+func Strcon(norm, ul, d byte, n int, a []float32, lda int, rcond, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -26316,22 +24178,16 @@ func Strcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []float32, lda int, r
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrcon.f.
-func Dtrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []float64, lda int, rcond, work []float64, iwork []int32) bool {
+func Dtrcon(norm, ul, d byte, n int, a []float64, lda int, rcond, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -26353,22 +24209,16 @@ func Dtrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []float64, lda int, r
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrcon.f.
-func Ctrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []complex64, lda int, rcond []float32, work []complex64, rwork []float32) bool {
+func Ctrcon(norm, ul, d byte, n int, a []complex64, lda int, rcond []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -26390,22 +24240,16 @@ func Ctrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []complex64, lda int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrcon.f.
-func Ztrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []complex128, lda int, rcond []float64, work []complex128, rwork []float64) bool {
+func Ztrcon(norm, ul, d byte, n int, a []complex128, lda int, rcond []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -26427,12 +24271,9 @@ func Ztrcon(norm byte, ul blas.Uplo, d blas.Diag, n int, a []complex128, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strevc.f.
-func Strevc(side blas.Side, howmny byte, sel []int32, n int, t []float32, ldt int, vl []float32, ldvl int, vr []float32, ldvr, mm int, m []int32, work []float32) bool {
+func Strevc(side, howmny byte, sel []int32, n int, t []float32, ldt int, vl []float32, ldvl int, vr []float32, ldvr, mm int, m []int32, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -26464,12 +24305,9 @@ func Strevc(side blas.Side, howmny byte, sel []int32, n int, t []float32, ldt in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrevc.f.
-func Dtrevc(side blas.Side, howmny byte, sel []int32, n int, t []float64, ldt int, vl []float64, ldvl int, vr []float64, ldvr, mm int, m []int32, work []float64) bool {
+func Dtrevc(side, howmny byte, sel []int32, n int, t []float64, ldt int, vl []float64, ldvl int, vr []float64, ldvr, mm int, m []int32, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -26501,12 +24339,9 @@ func Dtrevc(side blas.Side, howmny byte, sel []int32, n int, t []float64, ldt in
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrevc.f.
-func Ctrevc(side blas.Side, howmny byte, sel []int32, n int, t []complex64, ldt int, vl []complex64, ldvl int, vr []complex64, ldvr, mm int, m []int32, work []complex64, rwork []float32) bool {
+func Ctrevc(side, howmny byte, sel []int32, n int, t []complex64, ldt int, vl []complex64, ldvl int, vr []complex64, ldvr, mm int, m []int32, work []complex64, rwork []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -26542,12 +24377,9 @@ func Ctrevc(side blas.Side, howmny byte, sel []int32, n int, t []complex64, ldt 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrevc.f.
-func Ztrevc(side blas.Side, howmny byte, sel []int32, n int, t []complex128, ldt int, vl []complex128, ldvl int, vr []complex128, ldvr, mm int, m []int32, work []complex128, rwork []float64) bool {
+func Ztrevc(side, howmny byte, sel []int32, n int, t []complex128, ldt int, vl []complex128, ldvl int, vr []complex128, ldvr, mm int, m []int32, work []complex128, rwork []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
@@ -26659,32 +24491,21 @@ func Ztrexc(compq byte, n int, t []complex128, ldt int, q []complex128, ldq, ifs
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strrfs.f.
-func Strrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []float32, lda int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
+func Strrfs(ul, trans, d byte, n, nrhs int, a []float32, lda int, b []float32, ldb int, x []float32, ldx int, ferr, berr, work []float32, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -26718,32 +24539,21 @@ func Strrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrrfs.f.
-func Dtrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []float64, lda int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
+func Dtrrfs(ul, trans, d byte, n, nrhs int, a []float64, lda int, b []float64, ldb int, x []float64, ldx int, ferr, berr, work []float64, iwork []int32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -26777,32 +24587,21 @@ func Dtrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrrfs.f.
-func Ctrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []complex64, lda int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
+func Ctrrfs(ul, trans, d byte, n, nrhs int, a []complex64, lda int, b []complex64, ldb int, x []complex64, ldx int, ferr, berr []float32, work []complex64, rwork []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -26836,32 +24635,21 @@ func Ctrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrrfs.f.
-func Ztrrfs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
+func Ztrrfs(ul, trans, d byte, n, nrhs int, a []complex128, lda int, b []complex128, ldb int, x []complex128, ldx int, ferr, berr []float64, work []complex128, rwork []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -27223,26 +25011,16 @@ func Ztrsna(job, howmny byte, sel []int32, n int, t []complex128, ldt int, vl []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strsyl.f.
-func Strsyl(trana, tranb blas.Transpose, isgn, m, n int, a []float32, lda int, b []float32, ldb int, c []float32, ldc int, scale []float32) bool {
+func Strsyl(trana, tranb byte, isgn, m, n int, a []float32, lda int, b []float32, ldb int, c []float32, ldc int, scale []float32) bool {
 	switch trana {
-	case blas.NoTrans:
-		trana = 'N'
-	case blas.Trans:
-		trana = 'T'
-	case blas.ConjTrans:
-		trana = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad trana")
 	}
 	switch tranb {
-	case blas.NoTrans:
-		tranb = 'N'
-	case blas.Trans:
-		tranb = 'T'
-	case blas.ConjTrans:
-		tranb = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad tranb")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -27264,26 +25042,16 @@ func Strsyl(trana, tranb blas.Transpose, isgn, m, n int, a []float32, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsyl.f.
-func Dtrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []float64, lda int, b []float64, ldb int, c []float64, ldc int, scale []float64) bool {
+func Dtrsyl(trana, tranb byte, isgn, m, n int, a []float64, lda int, b []float64, ldb int, c []float64, ldc int, scale []float64) bool {
 	switch trana {
-	case blas.NoTrans:
-		trana = 'N'
-	case blas.Trans:
-		trana = 'T'
-	case blas.ConjTrans:
-		trana = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad trana")
 	}
 	switch tranb {
-	case blas.NoTrans:
-		tranb = 'N'
-	case blas.Trans:
-		tranb = 'T'
-	case blas.ConjTrans:
-		tranb = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad tranb")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -27305,26 +25073,16 @@ func Dtrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []float64, lda int, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsyl.f.
-func Ctrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []complex64, lda int, b []complex64, ldb int, c []complex64, ldc int, scale []float32) bool {
+func Ctrsyl(trana, tranb byte, isgn, m, n int, a []complex64, lda int, b []complex64, ldb int, c []complex64, ldc int, scale []float32) bool {
 	switch trana {
-	case blas.NoTrans:
-		trana = 'N'
-	case blas.Trans:
-		trana = 'T'
-	case blas.ConjTrans:
-		trana = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad trana")
 	}
 	switch tranb {
-	case blas.NoTrans:
-		tranb = 'N'
-	case blas.Trans:
-		tranb = 'T'
-	case blas.ConjTrans:
-		tranb = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad tranb")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -27346,26 +25104,16 @@ func Ctrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []complex64, lda int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsyl.f.
-func Ztrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []complex128, lda int, b []complex128, ldb int, c []complex128, ldc int, scale []float64) bool {
+func Ztrsyl(trana, tranb byte, isgn, m, n int, a []complex128, lda int, b []complex128, ldb int, c []complex128, ldc int, scale []float64) bool {
 	switch trana {
-	case blas.NoTrans:
-		trana = 'N'
-	case blas.Trans:
-		trana = 'T'
-	case blas.ConjTrans:
-		trana = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad trana")
 	}
 	switch tranb {
-	case blas.NoTrans:
-		tranb = 'N'
-	case blas.Trans:
-		tranb = 'T'
-	case blas.ConjTrans:
-		tranb = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad tranb")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -27387,22 +25135,16 @@ func Ztrsyl(trana, tranb blas.Transpose, isgn, m, n int, a []complex128, lda int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strtri.f.
-func Strtri(ul blas.Uplo, d blas.Diag, n int, a []float32, lda int) bool {
+func Strtri(ul, d byte, n int, a []float32, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -27412,22 +25154,16 @@ func Strtri(ul blas.Uplo, d blas.Diag, n int, a []float32, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrtri.f.
-func Dtrtri(ul blas.Uplo, d blas.Diag, n int, a []float64, lda int) bool {
+func Dtrtri(ul, d byte, n int, a []float64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -27437,22 +25173,16 @@ func Dtrtri(ul blas.Uplo, d blas.Diag, n int, a []float64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrtri.f.
-func Ctrtri(ul blas.Uplo, d blas.Diag, n int, a []complex64, lda int) bool {
+func Ctrtri(ul, d byte, n int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -27462,22 +25192,16 @@ func Ctrtri(ul blas.Uplo, d blas.Diag, n int, a []complex64, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrtri.f.
-func Ztrtri(ul blas.Uplo, d blas.Diag, n int, a []complex128, lda int) bool {
+func Ztrtri(ul, d byte, n int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -27487,32 +25211,21 @@ func Ztrtri(ul blas.Uplo, d blas.Diag, n int, a []complex128, lda int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strtrs.f.
-func Strtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
+func Strtrs(ul, trans, d byte, n, nrhs int, a []float32, lda int, b []float32, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -27526,32 +25239,21 @@ func Strtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrtrs.f.
-func Dtrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
+func Dtrtrs(ul, trans, d byte, n, nrhs int, a []float64, lda int, b []float64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -27565,32 +25267,21 @@ func Dtrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrtrs.f.
-func Ctrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
+func Ctrtrs(ul, trans, d byte, n, nrhs int, a []complex64, lda int, b []complex64, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -27604,32 +25295,21 @@ func Ctrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrtrs.f.
-func Ztrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
+func Ztrtrs(ul, trans, d byte, n, nrhs int, a []complex128, lda int, b []complex128, ldb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
 	switch d {
-	case blas.Unit:
-		d = 'U'
-	case blas.NonUnit:
-		d = 'N'
+	case 'U', 'N':
 	default:
-		panic("lapack: illegal diagonal")
+		panic("lapack: bad diagonal")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -27643,24 +25323,16 @@ func Ztrtrs(ul blas.Uplo, trans blas.Transpose, d blas.Diag, n, nrhs int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strttf.f.
-func Strttf(transr blas.Transpose, ul blas.Uplo, n int, a []float32, lda int, arf []float32) bool {
+func Strttf(transr, ul byte, n int, a []float32, lda int, arf []float32) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -27674,24 +25346,16 @@ func Strttf(transr blas.Transpose, ul blas.Uplo, n int, a []float32, lda int, ar
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrttf.f.
-func Dtrttf(transr blas.Transpose, ul blas.Uplo, n int, a []float64, lda int, arf []float64) bool {
+func Dtrttf(transr, ul byte, n int, a []float64, lda int, arf []float64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -27705,24 +25369,16 @@ func Dtrttf(transr blas.Transpose, ul blas.Uplo, n int, a []float64, lda int, ar
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrttf.f.
-func Ctrttf(transr blas.Transpose, ul blas.Uplo, n int, a []complex64, lda int, arf []complex64) bool {
+func Ctrttf(transr, ul byte, n int, a []complex64, lda int, arf []complex64) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -27736,24 +25392,16 @@ func Ctrttf(transr blas.Transpose, ul blas.Uplo, n int, a []complex64, lda int, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrttf.f.
-func Ztrttf(transr blas.Transpose, ul blas.Uplo, n int, a []complex128, lda int, arf []complex128) bool {
+func Ztrttf(transr, ul byte, n int, a []complex128, lda int, arf []complex128) bool {
 	switch transr {
-	case blas.NoTrans:
-		transr = 'N'
-	case blas.Trans:
-		transr = 'T'
-	case blas.ConjTrans:
-		transr = 'C'
+	case 'N', 'T', 'C':
 	default:
-		panic("lapack: bad trans")
+		panic("lapack: bad transr")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -27767,14 +25415,11 @@ func Ztrttf(transr blas.Transpose, ul blas.Uplo, n int, a []complex128, lda int,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strttp.f.
-func Strttp(ul blas.Uplo, n int, a []float32, lda int, ap []float32) bool {
+func Strttp(ul byte, n int, a []float32, lda int, ap []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -27788,14 +25433,11 @@ func Strttp(ul blas.Uplo, n int, a []float32, lda int, ap []float32) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrttp.f.
-func Dtrttp(ul blas.Uplo, n int, a []float64, lda int, ap []float64) bool {
+func Dtrttp(ul byte, n int, a []float64, lda int, ap []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -27809,14 +25451,11 @@ func Dtrttp(ul blas.Uplo, n int, a []float64, lda int, ap []float64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrttp.f.
-func Ctrttp(ul blas.Uplo, n int, a []complex64, lda int, ap []complex64) bool {
+func Ctrttp(ul byte, n int, a []complex64, lda int, ap []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -27830,14 +25469,11 @@ func Ctrttp(ul blas.Uplo, n int, a []complex64, lda int, ap []complex64) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrttp.f.
-func Ztrttp(ul blas.Uplo, n int, a []complex128, lda int, ap []complex128) bool {
+func Ztrttp(ul byte, n int, a []complex128, lda int, ap []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -28123,14 +25759,11 @@ func Zungrq(m, n, k int, a []complex128, lda int, tau, work []complex128, lwork 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungtr.f.
-func Cungtr(ul blas.Uplo, n int, a []complex64, lda int, tau, work []complex64, lwork int) bool {
+func Cungtr(ul byte, n int, a []complex64, lda int, tau, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -28148,14 +25781,11 @@ func Cungtr(ul blas.Uplo, n int, a []complex64, lda int, tau, work []complex64, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungtr.f.
-func Zungtr(ul blas.Uplo, n int, a []complex128, lda int, tau, work []complex128, lwork int) bool {
+func Zungtr(ul byte, n int, a []complex128, lda int, tau, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -28173,22 +25803,14 @@ func Zungtr(ul blas.Uplo, n int, a []complex128, lda int, tau, work []complex128
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmbr.f.
-func Cunmbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmbr(vect, side, trans byte, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28212,22 +25834,14 @@ func Cunmbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmbr.f.
-func Zunmbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmbr(vect, side, trans byte, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28251,22 +25865,14 @@ func Zunmbr(vect byte, side blas.Side, trans blas.Transpose, m, n, k int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmhr.f.
-func Cunmhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmhr(side, trans byte, m, n, ilo, ihi int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28290,22 +25896,14 @@ func Cunmhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []comple
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmhr.f.
-func Zunmhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmhr(side, trans byte, m, n, ilo, ihi int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28329,22 +25927,14 @@ func Zunmhr(side blas.Side, trans blas.Transpose, m, n, ilo, ihi int, a []comple
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmlq.f.
-func Cunmlq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmlq(side, trans byte, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28368,22 +25958,14 @@ func Cunmlq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmlq.f.
-func Zunmlq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmlq(side, trans byte, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28407,22 +25989,14 @@ func Zunmlq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmql.f.
-func Cunmql(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmql(side, trans byte, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28446,22 +26020,14 @@ func Cunmql(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmql.f.
-func Zunmql(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmql(side, trans byte, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28485,22 +26051,14 @@ func Zunmql(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmqr.f.
-func Cunmqr(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmqr(side, trans byte, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28524,22 +26082,14 @@ func Cunmqr(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmqr.f.
-func Zunmqr(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmqr(side, trans byte, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28563,22 +26113,14 @@ func Zunmqr(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmrq.f.
-func Cunmrq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmrq(side, trans byte, m, n, k int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28602,22 +26144,14 @@ func Cunmrq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex64, ld
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmrq.f.
-func Zunmrq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmrq(side, trans byte, m, n, k int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28641,22 +26175,14 @@ func Zunmrq(side blas.Side, trans blas.Transpose, m, n, k int, a []complex128, l
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmrz.f.
-func Cunmrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmrz(side, trans byte, m, n, k, l int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28680,22 +26206,14 @@ func Cunmrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []complex64,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmrz.f.
-func Zunmrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmrz(side, trans byte, m, n, k, l int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28719,30 +26237,19 @@ func Zunmrz(side blas.Side, trans blas.Transpose, m, n, k, l int, a []complex128
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmtr.f.
-func Cunmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
+func Cunmtr(side, ul, trans byte, m, n int, a []complex64, lda int, tau, c []complex64, ldc int, work []complex64, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28766,30 +26273,19 @@ func Cunmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmtr.f.
-func Zunmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
+func Zunmtr(side, ul, trans byte, m, n int, a []complex128, lda int, tau, c []complex128, ldc int, work []complex128, lwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28813,14 +26309,11 @@ func Zunmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, a []co
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupgtr.f.
-func Cupgtr(ul blas.Uplo, n int, ap, tau, q []complex64, ldq int, work []complex64) bool {
+func Cupgtr(ul byte, n int, ap, tau, q []complex64, ldq int, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex64
 	if len(ap) > 0 {
@@ -28842,14 +26335,11 @@ func Cupgtr(ul blas.Uplo, n int, ap, tau, q []complex64, ldq int, work []complex
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zupgtr.f.
-func Zupgtr(ul blas.Uplo, n int, ap, tau, q []complex128, ldq int, work []complex128) bool {
+func Zupgtr(ul byte, n int, ap, tau, q []complex128, ldq int, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _ap *complex128
 	if len(ap) > 0 {
@@ -28871,30 +26361,19 @@ func Zupgtr(ul blas.Uplo, n int, ap, tau, q []complex128, ldq int, work []comple
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupmtr.f.
-func Cupmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, tau, c []complex64, ldc int, work []complex64) bool {
+func Cupmtr(side, ul, trans byte, m, n int, ap, tau, c []complex64, ldc int, work []complex64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28918,30 +26397,19 @@ func Cupmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, ta
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zupmtr.f.
-func Zupmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, tau, c []complex128, ldc int, work []complex128) bool {
+func Zupmtr(side, ul, trans byte, m, n int, ap, tau, c []complex128, ldc int, work []complex128) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -28965,14 +26433,9 @@ func Zupmtr(side blas.Side, ul blas.Uplo, trans blas.Transpose, m, n int, ap, ta
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cbbcsd.f.
-func Cbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int, theta, phi []float32, u1 []complex64, ldu1 int, u2 []complex64, ldu2 int, v1t []complex64, ldv1t int, v2t []complex64, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, rwork []float32, lrwork int) bool {
+func Cbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans byte, m, p, q int, theta, phi []float32, u1 []complex64, ldu1 int, u2 []complex64, ldu2 int, v1t []complex64, ldv1t int, v2t []complex64, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, rwork []float32, lrwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29040,14 +26503,11 @@ func Cbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheswapr.f.
-func Cheswapr(ul blas.Uplo, n int, a []complex64, i1, i2 int) bool {
+func Cheswapr(ul byte, n int, a []complex64, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29057,14 +26517,11 @@ func Cheswapr(ul blas.Uplo, n int, a []complex64, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri2.f.
-func Chetri2(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
+func Chetri2(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29082,14 +26539,11 @@ func Chetri2(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri2x.f.
-func Chetri2x(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, nb int) bool {
+func Chetri2x(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29107,14 +26561,11 @@ func Chetri2x(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs2.f.
-func Chetrs2(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64) bool {
+func Chetrs2(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29136,14 +26587,11 @@ func Chetrs2(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconv.f.
-func Csyconv(ul blas.Uplo, way byte, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
+func Csyconv(ul, way byte, n int, a []complex64, lda int, ipiv []int32, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29161,14 +26609,11 @@ func Csyconv(ul blas.Uplo, way byte, n int, a []complex64, lda int, ipiv []int32
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyswapr.f.
-func Csyswapr(ul blas.Uplo, n int, a []complex64, i1, i2 int) bool {
+func Csyswapr(ul byte, n int, a []complex64, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29178,14 +26623,11 @@ func Csyswapr(ul blas.Uplo, n int, a []complex64, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri2.f.
-func Csytri2(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
+func Csytri2(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29203,14 +26645,11 @@ func Csytri2(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []c
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri2x.f.
-func Csytri2x(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []complex64, nb int) bool {
+func Csytri2x(ul byte, n int, a []complex64, lda int, ipiv []int32, work []complex64, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29228,14 +26667,11 @@ func Csytri2x(ul blas.Uplo, n int, a []complex64, lda int, ipiv []int32, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs2.f.
-func Csytrs2(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64) bool {
+func Csytrs2(ul byte, n, nrhs int, a []complex64, lda int, ipiv []int32, b []complex64, ldb int, work []complex64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex64
 	if len(a) > 0 {
@@ -29257,14 +26693,9 @@ func Csytrs2(ul blas.Uplo, n, nrhs int, a []complex64, lda int, ipiv []int32, b 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunbdb.f.
-func Cunbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []complex64, ldx11 int, x12 []complex64, ldx12 int, x21 []complex64, ldx21 int, x22 []complex64, ldx22 int, theta, phi []float32, taup1, taup2, tauq1, tauq2, work []complex64, lwork int) bool {
+func Cunbdb(trans, signs byte, m, p, q int, x11 []complex64, ldx11 int, x12 []complex64, ldx12 int, x21 []complex64, ldx21 int, x22 []complex64, ldx22 int, theta, phi []float32, taup1, taup2, tauq1, tauq2, work []complex64, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29316,14 +26747,9 @@ func Cunbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []complex64, ldx1
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cuncsd.f.
-func Cuncsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, signs byte, m, p, q int, x11 []complex64, ldx11 int, x12 []complex64, ldx12 int, x21 []complex64, ldx21 int, x22 []complex64, ldx22 int, theta []float32, u1 []complex64, ldu1 int, u2 []complex64, ldu2 int, v1t []complex64, ldv1t int, v2t []complex64, ldv2t int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32) bool {
+func Cuncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs byte, m, p, q int, x11 []complex64, ldx11 int, x12 []complex64, ldx12 int, x21 []complex64, ldx21 int, x22 []complex64, ldx22 int, theta []float32, u1 []complex64, ldu1 int, u2 []complex64, ldu2 int, v1t []complex64, ldv1t int, v2t []complex64, ldv2t int, work []complex64, lwork int, rwork []float32, lrwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29420,14 +26846,9 @@ func Cuncsd2by1(jobu1, jobu2, jobv1t byte, m, p, q int, x11 []complex64, ldx11 i
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbbcsd.f.
-func Dbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int, theta, phi, u1 []float64, ldu1 int, u2 []float64, ldu2 int, v1t []float64, ldv1t int, v2t []float64, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work []float64, lwork int) bool {
+func Dbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans byte, m, p, q int, theta, phi, u1 []float64, ldu1 int, u2 []float64, ldu2 int, v1t []float64, ldv1t int, v2t []float64, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work []float64, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29495,14 +26916,9 @@ func Dbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb.f.
-func Dorbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []float64, ldx11 int, x12 []float64, ldx12 int, x21 []float64, ldx21 int, x22 []float64, ldx22 int, theta, phi, taup1, taup2, tauq1, tauq2, work []float64, lwork int) bool {
+func Dorbdb(trans, signs byte, m, p, q int, x11 []float64, ldx11 int, x12 []float64, ldx12 int, x21 []float64, ldx21 int, x22 []float64, ldx22 int, theta, phi, taup1, taup2, tauq1, tauq2, work []float64, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29554,14 +26970,9 @@ func Dorbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []float64, ldx11 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorcsd.f.
-func Dorcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, signs byte, m, p, q int, x11 []float64, ldx11 int, x12 []float64, ldx12 int, x21 []float64, ldx21 int, x22 []float64, ldx22 int, theta, u1 []float64, ldu1 int, u2 []float64, ldu2 int, v1t []float64, ldv1t int, v2t []float64, ldv2t int, work []float64, lwork int, iwork []int32) bool {
+func Dorcsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs byte, m, p, q int, x11 []float64, ldx11 int, x12 []float64, ldx12 int, x21 []float64, ldx21 int, x22 []float64, ldx22 int, theta, u1 []float64, ldu1 int, u2 []float64, ldu2 int, v1t []float64, ldv1t int, v2t []float64, ldv2t int, work []float64, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29650,14 +27061,11 @@ func Dorcsd2by1(jobu1, jobu2, jobv1t byte, m, p, q int, x11 []float64, ldx11 int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyconv.f.
-func Dsyconv(ul blas.Uplo, way byte, n int, a []float64, lda int, ipiv []int32, work []float64) bool {
+func Dsyconv(ul, way byte, n int, a []float64, lda int, ipiv []int32, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -29675,14 +27083,11 @@ func Dsyconv(ul blas.Uplo, way byte, n int, a []float64, lda int, ipiv []int32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyswapr.f.
-func Dsyswapr(ul blas.Uplo, n int, a []float64, i1, i2 int) bool {
+func Dsyswapr(ul byte, n int, a []float64, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -29692,14 +27097,11 @@ func Dsyswapr(ul blas.Uplo, n int, a []float64, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2.f.
-func Dsytri2(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []complex128, lwork int) bool {
+func Dsytri2(ul byte, n int, a []float64, lda int, ipiv []int32, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -29717,14 +27119,11 @@ func Dsytri2(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2x.f.
-func Dsytri2x(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []float64, nb int) bool {
+func Dsytri2x(ul byte, n int, a []float64, lda int, ipiv []int32, work []float64, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -29742,14 +27141,11 @@ func Dsytri2x(ul blas.Uplo, n int, a []float64, lda int, ipiv []int32, work []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs2.f.
-func Dsytrs2(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int, work []float64) bool {
+func Dsytrs2(ul byte, n, nrhs int, a []float64, lda int, ipiv []int32, b []float64, ldb int, work []float64) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float64
 	if len(a) > 0 {
@@ -29771,14 +27167,9 @@ func Dsytrs2(ul blas.Uplo, n, nrhs int, a []float64, lda int, ipiv []int32, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbbcsd.f.
-func Sbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int, theta, phi, u1 []float32, ldu1 int, u2 []float32, ldu2 int, v1t []float32, ldv1t int, v2t []float32, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work []float32, lwork int) bool {
+func Sbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans byte, m, p, q int, theta, phi, u1 []float32, ldu1 int, u2 []float32, ldu2 int, v1t []float32, ldv1t int, v2t []float32, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work []float32, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29846,14 +27237,9 @@ func Sbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb.f.
-func Sorbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []float32, ldx11 int, x12 []float32, ldx12 int, x21 []float32, ldx21 int, x22 []float32, ldx22 int, theta, phi, taup1, taup2, tauq1, tauq2, work []float32, lwork int) bool {
+func Sorbdb(trans, signs byte, m, p, q int, x11 []float32, ldx11 int, x12 []float32, ldx12 int, x21 []float32, ldx21 int, x22 []float32, ldx22 int, theta, phi, taup1, taup2, tauq1, tauq2, work []float32, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -29905,14 +27291,9 @@ func Sorbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []float32, ldx11 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorcsd.f.
-func Sorcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, signs byte, m, p, q int, x11 []float32, ldx11 int, x12 []float32, ldx12 int, x21 []float32, ldx21 int, x22 []float32, ldx22 int, theta, u1 []float32, ldu1 int, u2 []float32, ldu2 int, v1t []float32, ldv1t int, v2t []float32, ldv2t int, work []float32, lwork int, iwork []int32) bool {
+func Sorcsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs byte, m, p, q int, x11 []float32, ldx11 int, x12 []float32, ldx12 int, x21 []float32, ldx21 int, x22 []float32, ldx22 int, theta, u1 []float32, ldu1 int, u2 []float32, ldu2 int, v1t []float32, ldv1t int, v2t []float32, ldv2t int, work []float32, lwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30001,14 +27382,11 @@ func Sorcsd2by1(jobu1, jobu2, jobv1t byte, m, p, q int, x11 []float32, ldx11 int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyconv.f.
-func Ssyconv(ul blas.Uplo, way byte, n int, a []float32, lda int, ipiv []int32, work []float32) bool {
+func Ssyconv(ul, way byte, n int, a []float32, lda int, ipiv []int32, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -30026,14 +27404,11 @@ func Ssyconv(ul blas.Uplo, way byte, n int, a []float32, lda int, ipiv []int32, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyswapr.f.
-func Ssyswapr(ul blas.Uplo, n int, a []float32, i1, i2 int) bool {
+func Ssyswapr(ul byte, n int, a []float32, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -30043,14 +27418,11 @@ func Ssyswapr(ul blas.Uplo, n int, a []float32, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri2.f.
-func Ssytri2(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []complex64, lwork int) bool {
+func Ssytri2(ul byte, n int, a []float32, lda int, ipiv []int32, work []complex64, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -30068,14 +27440,11 @@ func Ssytri2(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri2x.f.
-func Ssytri2x(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []float32, nb int) bool {
+func Ssytri2x(ul byte, n int, a []float32, lda int, ipiv []int32, work []float32, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -30093,14 +27462,11 @@ func Ssytri2x(ul blas.Uplo, n int, a []float32, lda int, ipiv []int32, work []fl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs2.f.
-func Ssytrs2(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int, work []float32) bool {
+func Ssytrs2(ul byte, n, nrhs int, a []float32, lda int, ipiv []int32, b []float32, ldb int, work []float32) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *float32
 	if len(a) > 0 {
@@ -30122,14 +27488,9 @@ func Ssytrs2(ul blas.Uplo, n, nrhs int, a []float32, lda int, ipiv []int32, b []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbbcsd.f.
-func Zbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int, theta, phi []float64, u1 []complex128, ldu1 int, u2 []complex128, ldu2 int, v1t []complex128, ldv1t int, v2t []complex128, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, rwork []float64, lrwork int) bool {
+func Zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans byte, m, p, q int, theta, phi []float64, u1 []complex128, ldu1 int, u2 []complex128, ldu2 int, v1t []complex128, ldv1t int, v2t []complex128, ldv2t int, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, rwork []float64, lrwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30197,14 +27558,11 @@ func Zbbcsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, m, p, q int
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheswapr.f.
-func Zheswapr(ul blas.Uplo, n int, a []complex128, i1, i2 int) bool {
+func Zheswapr(ul byte, n int, a []complex128, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30214,14 +27572,11 @@ func Zheswapr(ul blas.Uplo, n int, a []complex128, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri2.f.
-func Zhetri2(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
+func Zhetri2(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30239,14 +27594,11 @@ func Zhetri2(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri2x.f.
-func Zhetri2x(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, nb int) bool {
+func Zhetri2x(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30264,14 +27616,11 @@ func Zhetri2x(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs2.f.
-func Zhetrs2(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128) bool {
+func Zhetrs2(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30293,14 +27642,11 @@ func Zhetrs2(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyconv.f.
-func Zsyconv(ul blas.Uplo, way byte, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
+func Zsyconv(ul, way byte, n int, a []complex128, lda int, ipiv []int32, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30318,14 +27664,11 @@ func Zsyconv(ul blas.Uplo, way byte, n int, a []complex128, lda int, ipiv []int3
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyswapr.f.
-func Zsyswapr(ul blas.Uplo, n int, a []complex128, i1, i2 int) bool {
+func Zsyswapr(ul byte, n int, a []complex128, i1, i2 int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30335,14 +27678,11 @@ func Zsyswapr(ul blas.Uplo, n int, a []complex128, i1, i2 int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri2.f.
-func Zsytri2(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
+func Zsytri2(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, lwork int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30360,14 +27700,11 @@ func Zsytri2(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri2x.f.
-func Zsytri2x(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work []complex128, nb int) bool {
+func Zsytri2x(ul byte, n int, a []complex128, lda int, ipiv []int32, work []complex128, nb int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30385,14 +27722,11 @@ func Zsytri2x(ul blas.Uplo, n int, a []complex128, lda int, ipiv []int32, work [
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs2.f.
-func Zsytrs2(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128) bool {
+func Zsytrs2(ul byte, n, nrhs int, a []complex128, lda int, ipiv []int32, b []complex128, ldb int, work []complex128) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _a *complex128
 	if len(a) > 0 {
@@ -30414,14 +27748,9 @@ func Zsytrs2(ul blas.Uplo, n, nrhs int, a []complex128, lda int, ipiv []int32, b
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunbdb.f.
-func Zunbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []complex128, ldx11 int, x12 []complex128, ldx12 int, x21 []complex128, ldx21 int, x22 []complex128, ldx22 int, theta, phi []float64, taup1, taup2, tauq1, tauq2, work []complex128, lwork int) bool {
+func Zunbdb(trans, signs byte, m, p, q int, x11 []complex128, ldx11 int, x12 []complex128, ldx12 int, x21 []complex128, ldx21 int, x22 []complex128, ldx22 int, theta, phi []float64, taup1, taup2, tauq1, tauq2, work []complex128, lwork int) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30473,14 +27802,9 @@ func Zunbdb(trans blas.Transpose, signs byte, m, p, q int, x11 []complex128, ldx
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zuncsd.f.
-func Zuncsd(jobu1, jobu2, jobv1t, jobv2t byte, trans blas.Transpose, signs byte, m, p, q int, x11 []complex128, ldx11 int, x12 []complex128, ldx12 int, x21 []complex128, ldx21 int, x22 []complex128, ldx22 int, theta []float64, u1 []complex128, ldu1 int, u2 []complex128, ldu2 int, v1t []complex128, ldv1t int, v2t []complex128, ldv2t int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32) bool {
+func Zuncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs byte, m, p, q int, x11 []complex128, ldx11 int, x12 []complex128, ldx12 int, x21 []complex128, ldx21 int, x22 []complex128, ldx22 int, theta []float64, u1 []complex128, ldu1 int, u2 []complex128, ldu2 int, v1t []complex128, ldv1t int, v2t []complex128, ldv2t int, work []complex128, lwork int, rwork []float64, lrwork int, iwork []int32) bool {
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30577,22 +27901,14 @@ func Zuncsd2by1(jobu1, jobu2, jobv1t byte, m, p, q int, x11 []complex128, ldx11 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgemqrt.f.
-func Sgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []float32, ldv int, t []float32, ldt int, c []float32, ldc int, work []float32) bool {
+func Sgemqrt(side, trans byte, m, n, k, nb int, v []float32, ldv int, t []float32, ldt int, c []float32, ldc int, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30616,22 +27932,14 @@ func Sgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []float32,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgemqrt.f.
-func Dgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []float64, ldv int, t []float64, ldt int, c []float64, ldc int, work []float64) bool {
+func Dgemqrt(side, trans byte, m, n, k, nb int, v []float64, ldv int, t []float64, ldt int, c []float64, ldc int, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30655,22 +27963,14 @@ func Dgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []float64,
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgemqrt.f.
-func Cgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []complex64, ldv int, t []complex64, ldt int, c []complex64, ldc int, work []complex64) bool {
+func Cgemqrt(side, trans byte, m, n, k, nb int, v []complex64, ldv int, t []complex64, ldt int, c []complex64, ldc int, work []complex64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30694,22 +27994,14 @@ func Cgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []complex6
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgemqrt.f.
-func Zgemqrt(side blas.Side, trans blas.Transpose, m, n, k, nb int, v []complex128, ldv int, t []complex128, ldt int, c []complex128, ldc int, work []complex128) bool {
+func Zgemqrt(side, trans byte, m, n, k, nb int, v []complex128, ldv int, t []complex128, ldt int, c []complex128, ldc int, work []complex128) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30905,22 +28197,14 @@ func Zgeqrt3(m, n int, a []complex128, lda int, t []complex128, ldt int) bool {
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmqrt.f.
-func Stpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []float32, ldv int, t []float32, ldt int, a []float32, lda int, b []float32, ldb int, work []float32) bool {
+func Stpmqrt(side, trans byte, m, n, k, l, nb int, v []float32, ldv int, t []float32, ldt int, a []float32, lda int, b []float32, ldb int, work []float32) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30948,22 +28232,14 @@ func Stpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtpmqrt.f.
-func Dtpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []float64, ldv int, t []float64, ldt int, a []float64, lda int, b []float64, ldb int, work []float64) bool {
+func Dtpmqrt(side, trans byte, m, n, k, l, nb int, v []float64, ldv int, t []float64, ldt int, a []float64, lda int, b []float64, ldb int, work []float64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -30991,22 +28267,14 @@ func Dtpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []float
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctpmqrt.f.
-func Ctpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []complex64, ldv int, t []complex64, ldt int, a []complex64, lda int, b []complex64, ldb int, work []complex64) bool {
+func Ctpmqrt(side, trans byte, m, n, k, l, nb int, v []complex64, ldv int, t []complex64, ldt int, a []complex64, lda int, b []complex64, ldb int, work []complex64) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31034,22 +28302,14 @@ func Ctpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []compl
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpmqrt.f.
-func Ztpmqrt(side blas.Side, trans blas.Transpose, m, n, k, l, nb int, v []complex128, ldv int, t []complex128, ldt int, a []complex128, lda int, b []complex128, ldb int, work []complex128) bool {
+func Ztpmqrt(side, trans byte, m, n, k, l, nb int, v []complex128, ldv int, t []complex128, ldt int, a []complex128, lda int, b []complex128, ldb int, work []complex128) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31229,22 +28489,14 @@ func Ztpqrt2(m, n, l int, a []complex128, lda int, b []complex128, ldb int, t []
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stprfb.f.
-func Stprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, l int, v []float32, ldv int, t []float32, ldt int, a []float32, lda int, b []float32, ldb int, work []float32, ldwork int) bool {
+func Stprfb(side, trans, direct, storev byte, m, n, k, l int, v []float32, ldv int, t []float32, ldt int, a []float32, lda int, b []float32, ldb int, work []float32, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31272,22 +28524,14 @@ func Stprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtprfb.f.
-func Dtprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, l int, v []float64, ldv int, t []float64, ldt int, a []float64, lda int, b []float64, ldb int, work []float64, ldwork int) bool {
+func Dtprfb(side, trans, direct, storev byte, m, n, k, l int, v []float64, ldv int, t []float64, ldt int, a []float64, lda int, b []float64, ldb int, work []float64, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31315,22 +28559,14 @@ func Dtprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctprfb.f.
-func Ctprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, l int, v []complex64, ldv int, t []complex64, ldt int, a []complex64, lda int, b []complex64, ldb int, work []complex64, ldwork int) bool {
+func Ctprfb(side, trans, direct, storev byte, m, n, k, l int, v []complex64, ldv int, t []complex64, ldt int, a []complex64, lda int, b []complex64, ldb int, work []complex64, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31358,22 +28594,14 @@ func Ctprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztprfb.f.
-func Ztprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, l int, v []complex128, ldv int, t []complex128, ldt int, a []complex128, lda int, b []complex128, ldb int, work []complex128, ldwork int) bool {
+func Ztprfb(side, trans, direct, storev byte, m, n, k, l int, v []complex128, ldv int, t []complex128, ldt int, a []complex128, lda int, b []complex128, ldb int, work []complex128, ldwork int) bool {
 	switch side {
-	case blas.Left:
-		side = 'L'
-	case blas.Right:
-		side = 'R'
+	case 'L', 'R':
 	default:
 		panic("lapack: bad side")
 	}
 	switch trans {
-	case blas.NoTrans:
-		trans = 'N'
-	case blas.Trans:
-		trans = 'T'
-	case blas.ConjTrans:
-		trans = 'C'
+	case 'N', 'T', 'C':
 	default:
 		panic("lapack: bad trans")
 	}
@@ -31401,14 +28629,11 @@ func Ztprfb(side blas.Side, trans blas.Transpose, direct, storev byte, m, n, k, 
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyr.f.
-func Csyr(ul blas.Uplo, n int, alpha complex64, x []complex64, incx int, a []complex64, lda int) bool {
+func Csyr(ul byte, n int, alpha complex64, x []complex64, incx int, a []complex64, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _x *complex64
 	if len(x) > 0 {
@@ -31422,14 +28647,11 @@ func Csyr(ul blas.Uplo, n int, alpha complex64, x []complex64, incx int, a []com
 }
 
 // See http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyr.f.
-func Zsyr(ul blas.Uplo, n int, alpha complex128, x []complex128, incx int, a []complex128, lda int) bool {
+func Zsyr(ul byte, n int, alpha complex128, x []complex128, incx int, a []complex128, lda int) bool {
 	switch ul {
-	case blas.Upper:
-		ul = 'U'
-	case blas.Lower:
-		ul = 'L'
+	case 'U', 'L':
 	default:
-		panic("lapack: illegal triangle")
+		panic("lapack: bad triangle")
 	}
 	var _x *complex128
 	if len(x) > 0 {
