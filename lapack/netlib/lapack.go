@@ -425,13 +425,13 @@ func (Implementation) Dlarft(direct lapack.Direct, store lapack.StoreV, n, k int
 //  lapack.MaxAbs: the maximum absolute value of an element.
 //  lapack.MaxColumnSum: the maximum column sum of the absolute values of the entries.
 //  lapack.MaxRowSum: the maximum row sum of the absolute values of the entries.
-//  lapack.NormFrob: the square root of the sum of the squares of the entries.
+//  lapack.Frobenius: the square root of the sum of the squares of the entries.
 // If norm == lapack.MaxColumnSum, work must be of length n, and this function will panic otherwise.
 // There are no restrictions on work for the other matrix norms.
 func (impl Implementation) Dlange(norm lapack.MatrixNorm, m, n int, a []float64, lda int, work []float64) float64 {
 	checkMatrix(m, n, a, lda)
 	switch norm {
-	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.NormFrob, lapack.MaxAbs:
+	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.Frobenius, lapack.MaxAbs:
 	default:
 		panic(badNorm)
 	}
@@ -447,7 +447,7 @@ func (impl Implementation) Dlange(norm lapack.MatrixNorm, m, n int, a []float64,
 func (impl Implementation) Dlansy(norm lapack.MatrixNorm, uplo blas.Uplo, n int, a []float64, lda int, work []float64) float64 {
 	checkMatrix(n, n, a, lda)
 	switch norm {
-	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.NormFrob, lapack.MaxAbs:
+	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.Frobenius, lapack.MaxAbs:
 	default:
 		panic(badNorm)
 	}
@@ -466,7 +466,7 @@ func (impl Implementation) Dlansy(norm lapack.MatrixNorm, uplo blas.Uplo, n int,
 func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag blas.Diag, m, n int, a []float64, lda int, work []float64) float64 {
 	checkMatrix(m, n, a, lda)
 	switch norm {
-	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.NormFrob, lapack.MaxAbs:
+	case lapack.MaxRowSum, lapack.MaxColumnSum, lapack.Frobenius, lapack.MaxAbs:
 	default:
 		panic(badNorm)
 	}
@@ -1181,7 +1181,7 @@ const noSVDO = "dgesvd: not coded for overwrite"
 // jobU and jobVT are options for computing the singular vectors. The behavior
 // is as follows
 //  jobU == lapack.SVDAll       All m columns of U are returned in u
-//  jobU == lapack.SVDInPlace   The first min(m,n) columns are returned in u
+//  jobU == lapack.SVDStore     The first min(m,n) columns are returned in u
 //  jobU == lapack.SVDOverwrite The first min(m,n) columns of U are written into a
 //  jobU == lapack.SVDNone      The columns of U are not computed.
 // The behavior is the same for jobVT and the rows of V^T. At most one of jobU
@@ -1195,12 +1195,12 @@ const noSVDO = "dgesvd: not coded for overwrite"
 // values in decreasing order.
 //
 // u contains the left singular vectors on exit, stored column-wise. If
-// jobU == lapack.SVDAll, u is of size m×m. If jobU == lapack.SVDInPlace u is
+// jobU == lapack.SVDAll, u is of size m×m. If jobU == lapack.SVDStore u is
 // of size m×min(m,n). If jobU == lapack.SVDOverwrite or lapack.SVDNone, u is
 // not used.
 //
 // vt contains the left singular vectors on exit, stored rowwise. If
-// jobV == lapack.SVDAll, vt is of size n×m. If jobVT == lapack.SVDInPlace vt is
+// jobV == lapack.SVDAll, vt is of size n×m. If jobVT == lapack.SVDStore vt is
 // of size min(m,n)×n. If jobVT == lapack.SVDOverwrite or lapack.SVDNone, vt is
 // not used.
 //
@@ -1215,12 +1215,12 @@ func (impl Implementation) Dgesvd(jobU, jobVT lapack.SVDJob, m, n int, a []float
 	checkMatrix(m, n, a, lda)
 	if jobU == lapack.SVDAll {
 		checkMatrix(m, m, u, ldu)
-	} else if jobU == lapack.SVDInPlace {
+	} else if jobU == lapack.SVDStore {
 		checkMatrix(m, min(m, n), u, ldu)
 	}
 	if jobVT == lapack.SVDAll {
 		checkMatrix(n, n, vt, ldvt)
-	} else if jobVT == lapack.SVDInPlace {
+	} else if jobVT == lapack.SVDStore {
 		checkMatrix(min(m, n), n, vt, ldvt)
 	}
 	if jobU == lapack.SVDOverwrite && jobVT == lapack.SVDOverwrite {
