@@ -3,18 +3,17 @@
 // license that can be found in the LICENSE file.
 
 //go:generate go run generate_blas.go
-
-// Ensure changes made to netlib/blas are reflected in gonum/blas/native where relevant.
+//go:generate go run generate_errors.go
 
 /*
 Package netlib provides bindings to a C BLAS library. This wrapper interface
 panics when the input arguments are invalid as per the standard, for example
-if a vector increment is zero. Please note that the treatment of NaN values
+if a vector increment is zero. Note that the treatment of NaN values
 is not specified, and differs among the BLAS implementations.
-github.com/gonum/blas/blas64 provides helpful wrapper functions to the BLAS
+gonum.org/v1/gonum/blas/blas64 provides helpful wrapper functions to the BLAS
 interface. The rest of this text describes the layout of the data for the input types.
 
-Please note that in the function documentation, x[i] refers to the i^th element
+Note that in the function documentation, x[i] refers to the i^th element
 of the vector, which will be different from the i^th element of the slice if
 incX != 1.
 
