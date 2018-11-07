@@ -523,7 +523,7 @@ func rkShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 
 func scalShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 	switch d.Name {
-	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal":
+	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal":
 	default:
 		return true
 	}
@@ -680,7 +680,7 @@ func vectorShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	switch d.Name {
 	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv",
 		"cblas_sgemv", "cblas_dgemv", "cblas_cgemv", "cblas_zgemv",
-		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal",
+		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal",
 		"cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax",
 		"cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
 		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum":

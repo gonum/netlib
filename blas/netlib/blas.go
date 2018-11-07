@@ -1353,7 +1353,10 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 	if incX == 0 {
 		panic("blas: zero x index increment")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if incX < 0 {
+		return
+	}
+	if incX > 0 && (n-1)*incX >= len(x) {
 		panic("blas: x index out of range")
 	}
 	if n == 0 {
