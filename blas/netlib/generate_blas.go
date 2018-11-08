@@ -253,8 +253,8 @@ func goSignature(buf *bytes.Buffer, d binding.Declaration, docs map[string][]*as
 
 func parameterChecks(buf *bytes.Buffer, d binding.Declaration, rules []func(*bytes.Buffer, binding.Declaration, binding.Parameter) bool) {
 	done := make(map[int]bool)
-	for _, p := range d.Parameters() {
-		for i, r := range rules {
+	for i, r := range rules {
+		for _, p := range d.Parameters() {
 			if done[i] {
 				continue
 			}
@@ -289,10 +289,12 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	uplo,
 	diag,
 	side,
-
 	shape,
-	apShape,
 	zeroInc,
+
+	noWork,
+
+	apShape,
 	sidedShape,
 	mvShape,
 	rkShape,
@@ -304,8 +306,6 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	othersShape,
 
 	address,
-
-	noWork,
 }
 
 func amaxShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
