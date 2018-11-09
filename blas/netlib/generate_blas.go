@@ -290,6 +290,7 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	diag,
 	side,
 	shape,
+	leadingDim,
 	zeroInc,
 
 	noWork,
@@ -368,24 +369,13 @@ func gemmShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bo
 		return false // Come back later.
 	}
 
-	fmt.Fprint(buf, `	var rowA, colA, rowB, colB int
-	if tA == C.CblasNoTrans {
-		rowA, colA = m, k
-	} else {
-		rowA, colA = k, m
-	}
-	if tB == C.CblasNoTrans {
-		rowB, colB = k, n
-	} else {
-		rowB, colB = n, k
-	}
-	if lda*(rowA-1)+colA > len(a) || lda < max(1, colA) {
+	fmt.Fprint(buf, `	if lda*(rowA-1)+colA > len(a) {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(rowB-1)+colB > len(b) || ldb < max(1, colB) {
+	if ldb*(rowB-1)+colB > len(b) {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
+	if ldc*(m-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
@@ -489,13 +479,6 @@ func rkShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 		return false // Come back later.
 	}
 
-	fmt.Fprint(buf, `	var row, col int
-	if t == C.CblasNoTrans {
-		row, col = n, k
-	} else {
-		row, col = k, n
-	}
-`)
 	has := make(map[string]bool)
 	for _, p := range d.Parameters() {
 		if p.Kind() != cc.Ptr {
@@ -505,14 +488,14 @@ func rkShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 	}
 	for _, label := range []string{"a", "b"} {
 		if has[label] {
-			fmt.Fprintf(buf, `	if ld%[1]s*(row-1)+col > len(%[1]s) || ld%[1]s < max(1, col) {
+			fmt.Fprintf(buf, `	if ld%[1]s*(row-1)+col > len(%[1]s) {
 		panic("blas: index of %[1]s out of range")
 	}
 `, label)
 		}
 	}
 	if has["c"] {
-		fmt.Fprint(buf, `	if ldc*(n-1)+n > len(c) || ldc < max(1, n) {
+		fmt.Fprint(buf, `	if ldc*(n-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
@@ -593,16 +576,10 @@ func sidedShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 	}
 
 	if hasA && hasB {
-		fmt.Fprint(buf, `	var k int
-	if s == C.CblasLeft {
-		k = m
-	} else {
-		k = n
-	}
-	if lda*(k-1)+k > len(a) || lda < max(1, k) {
+		fmt.Fprint(buf, `	if lda*(k-1)+k > len(a) {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) || ldb < max(1, n) {
+	if ldb*(m-1)+n > len(b) {
 		panic("blas: index of b out of range")
 	}
 `)
@@ -610,7 +587,7 @@ func sidedShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 		return true
 	}
 	if hasC {
-		fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) || ldc < max(1, n) {
+		fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
@@ -729,6 +706,111 @@ func vectorShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	return true
 }
 
+func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+	pname := binding.LowerCaseFirst(p.Name())
+	if !strings.HasPrefix(pname, "ld") {
+		return false
+	}
+
+	if pname == "ldc" {
+		// C matrix has always n columns.
+		fmt.Fprintf(buf, `	if ldc < max(1, n) {
+		panic("blas: bad ldc")
+	}
+`)
+		return false
+	}
+
+	has := make(map[string]bool)
+	for _, p := range d.Parameters() {
+		has[shorten(binding.LowerCaseFirst(p.Name()))] = true
+	}
+
+	switch d.Name {
+	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
+		if pname == "lda" {
+			fmt.Fprint(buf, `	var rowA, colA, rowB, colB int
+	if tA == C.CblasNoTrans {
+		rowA, colA = m, k
+	} else {
+		rowA, colA = k, m
+	}
+	if tB == C.CblasNoTrans {
+		rowB, colB = k, n
+	} else {
+		rowB, colB = n, k
+	}
+	if lda < max(1, colA) {
+		panic("blas: bad lda")
+	}
+`)
+		} else {
+			fmt.Fprint(buf, `	if ldb < max(1, colB) {
+		panic("blas: bad ldb")
+	}
+`)
+		}
+		return false
+
+	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
+		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
+		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
+		if pname == "lda" {
+			fmt.Fprint(buf, `	var row, col int
+	if t == C.CblasNoTrans {
+		row, col = n, k
+	} else {
+		row, col = k, n
+	}
+`)
+		}
+		fmt.Fprintf(buf, `	if %[1]s < max(1, col) {
+		panic("blas: bad %[1]s")
+	}
+`, pname)
+		return false
+
+	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv":
+		fmt.Fprintf(buf, `	if lda < kL+kU+1 {
+		panic("blas: bad lda")
+	}
+`)
+		return false
+	}
+
+	switch {
+	case has["k"]:
+		// cblas_stbmv cblas_dtbmv cblas_ctbmv cblas_ztbmv
+		// cblas_stbsv cblas_dtbsv cblas_ctbsv cblas_ztbsv
+		// cblas_ssbmv cblas_dsbmv cblas_chbmv cblas_zhbmv
+		fmt.Fprintf(buf, `	if lda < k+1 {
+		panic("blas: bad lda")
+	}
+`)
+	case has["s"] && pname == "lda":
+		// cblas_ssymm cblas_dsymm cblas_csymm cblas_zsymm
+		// cblas_strmm cblas_dtrmm cblas_ctrmm cblas_ztrmm
+		// cblas_strsm cblas_dtrsm cblas_ctrsm cblas_ztrsm
+		// cblas_chemm cblas_zhemm
+		fmt.Fprintf(buf, `	var k int
+	if s == C.CblasLeft {
+		k = m
+	} else {
+		k = n
+	}
+	if lda < max(1, k) {
+		panic("blas: bad lda")
+	}
+`)
+	default:
+		fmt.Fprintf(buf, `	if %[1]s < max(1, n) {
+		panic("blas: bad %[1]s")
+	}
+`, pname)
+	}
+	return false
+}
+
 func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 	switch n := binding.LowerCaseFirst(p.Name()); n {
 	case "incX":
@@ -769,22 +851,22 @@ func othersShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 
 	switch {
 	case has["kL"] && has["kU"]:
-		fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) || lda < kL+kU+1 {
+		fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
 		panic("blas: index of a out of range")
 	}
 `)
 	case has["m"]:
-		fmt.Fprintf(buf, `	if lda*(m-1)+n > len(a) || lda < max(1, n) {
+		fmt.Fprintf(buf, `	if lda*(m-1)+n > len(a) {
 		panic("blas: index of a out of range")
 	}
 `)
 	case has["k"]:
-		fmt.Fprintf(buf, `	if lda*(n-1)+k+1 > len(a) || lda < k+1 {
+		fmt.Fprintf(buf, `	if lda*(n-1)+k+1 > len(a) {
 		panic("blas: index of a out of range")
 	}
 `)
 	default:
-		fmt.Fprintf(buf, `	if lda*(n-1)+n > len(a) || lda < max(1, n) {
+		fmt.Fprintf(buf, `	if lda*(n-1)+n > len(a) {
 		panic("blas: index of a out of range")
 	}
 `)
