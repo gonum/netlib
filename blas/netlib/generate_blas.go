@@ -320,10 +320,7 @@ func amaxShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bo
 		return false // Come back later.
 	}
 
-	fmt.Fprint(buf, `	if n == 0 || incX < 0 {
-		return -1
-	}
-	if incX > 0 && (n-1)*incX >= len(x) {
+	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
 		panic("blas: x index out of range")
 	}
 `)
@@ -411,36 +408,57 @@ func mvShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
 }
 
 func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	var hasN, hasLda, hasLdb bool
-	for _, p := range d.Parameters() {
-		switch shorten(binding.LowerCaseFirst(p.Name())) {
-		case "n":
-			hasN = true
-		case "lda":
-			hasLda = true
-		case "ldb":
-			hasLdb = true
-		}
-	}
-	if !hasN || hasLda || hasLdb {
-		return true
-	}
-
 	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
 		return false // Come back later.
 	}
 
+	switch d.Name {
+	case "cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
+		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum":
+		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		return 0
+	}
+`)
+		return true
+
+	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal":
+		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		return
+	}
+`)
+		return true
+
+	case "cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
+		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		return -1
+	}
+`)
+		return true
+	}
+
 	var value string
 	switch d.Return.String() {
-	case "int":
-		value = " -1"
 	case "float", "double":
 		value = " 0"
 	}
-	fmt.Fprintf(buf, `	if n == 0 {
+	var hasM bool
+	for _, p := range d.Parameters() {
+		if shorten(binding.LowerCaseFirst(p.Name())) == "m" {
+			hasM = true
+		}
+	}
+	if !hasM {
+		fmt.Fprintf(buf, `	if n == 0 {
 		return%s
 	}
 `, value)
+	} else {
+		fmt.Fprintf(buf, `	if m == 0 || n == 0 {
+		return
+	}
+`)
+	}
+
 	return true
 }
 
@@ -456,10 +474,7 @@ func nrmSumShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		return false // Come back later.
 	}
 
-	fmt.Fprint(buf, `	if incX < 0 {
-		return 0
-	}
-	if incX > 0 && (n-1)*incX >= len(x) {
+	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
 		panic("blas: x index out of range")
 	}
 `)
@@ -515,10 +530,7 @@ func scalShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bo
 		return false // Come back later.
 	}
 
-	fmt.Fprint(buf, `	if incX < 0 {
-		return
-	}
-	if incX > 0 && (n-1)*incX >= len(x) {
+	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
 		panic("blas: x index out of range")
 	}
 `)
@@ -823,7 +835,6 @@ func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool
 		panic("blas: zero y index increment")
 	}
 `)
-		return true
 	}
 	return false
 }
