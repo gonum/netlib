@@ -292,51 +292,9 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	shape,
 	leadingDim,
 	zeroInc,
-
 	noWork,
-
-	apShape,
-	sidedShape,
-	mvShape,
-	rkShape,
-	gemmShape,
-	scalShape,
-	amaxShape,
-	nrmSumShape,
-	vectorShape,
-	othersShape,
-
+	sliceLength,
 	address,
-}
-
-func amaxShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
-	default:
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
-		panic("blas: x index out of range")
-	}
-`)
-	return true
-}
-
-func apShape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
-	n := binding.LowerCaseFirst(p.Name())
-	if n != "ap" {
-		return false
-	}
-	fmt.Fprint(buf, `	if n*(n+1)/2 > len(ap) {
-		panic("blas: index of ap out of range")
-	}
-`)
-	return true
 }
 
 func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
@@ -350,58 +308,6 @@ func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		d = C.CblasUnit
 	default:
 		panic("blas: illegal diagonal")
-	}
-`)
-	return true
-}
-
-func gemmShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
-	default:
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	fmt.Fprint(buf, `	if lda*(rowA-1)+colA > len(a) {
-		panic("blas: index of a out of range")
-	}
-	if ldb*(rowB-1)+colB > len(b) {
-		panic("blas: index of b out of range")
-	}
-	if ldc*(m-1)+n > len(c) {
-		panic("blas: index of c out of range")
-	}
-`)
-	return true
-}
-
-func mvShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv",
-		"cblas_sgemv", "cblas_dgemv", "cblas_cgemv", "cblas_zgemv":
-	default:
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	fmt.Fprint(buf, `	var lenX, lenY int
-	if tA == C.CblasNoTrans {
-		lenX, lenY = n, m
-	} else {
-		lenX, lenY = m, n
-	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
-		panic("blas: x index out of range")
-	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
-		panic("blas: y index out of range")
 	}
 `)
 	return true
@@ -462,79 +368,175 @@ func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool 
 	return true
 }
 
-func nrmSumShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
-		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum":
+func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+	pname := shorten(binding.LowerCaseFirst(p.Name()))
+	switch pname {
+	case "a", "b", "c", "ap", "x", "y":
 	default:
-		return true
+		return false
 	}
 
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
-		panic("blas: x index out of range")
+	if pname == "ap" {
+		fmt.Fprint(buf, `	if n*(n+1)/2 > len(ap) {
+		panic("blas: index of ap out of range")
 	}
 `)
-	return true
-}
-
-func rkShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
-		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
-		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
-	default:
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
+		return false
 	}
 
 	has := make(map[string]bool)
 	for _, p := range d.Parameters() {
-		if p.Kind() != cc.Ptr {
-			continue
-		}
 		has[shorten(binding.LowerCaseFirst(p.Name()))] = true
 	}
-	for _, label := range []string{"a", "b"} {
-		if has[label] {
-			fmt.Fprintf(buf, `	if ld%[1]s*(row-1)+col > len(%[1]s) {
-		panic("blas: index of %[1]s out of range")
-	}
-`, label)
+
+	if pname == "c" {
+		if p.Type().Kind() != cc.Ptr {
+			// srot or drot
+			return false
 		}
+		if has["m"] {
+			fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) {
+		panic("blas: index of c out of range")
 	}
-	if has["c"] {
+`)
+			return false
+		}
 		fmt.Fprint(buf, `	if ldc*(n-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
+		return false
 	}
 
-	return true
-}
-
-func scalShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 	switch d.Name {
-	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal":
-	default:
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
+	case "cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
+		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum",
+		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal",
+		"cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
+		fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
 		panic("blas: x index out of range")
 	}
 `)
-	return true
+		return false
+
+	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
+		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
+		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
+		switch pname {
+		case "a":
+			fmt.Fprintf(buf, `	if lda*(row-1)+col > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		case "b":
+			fmt.Fprintf(buf, `	if ldb*(row-1)+col > len(b) {
+		panic("blas: index of b out of range")
+	}
+`)
+		}
+		return false
+
+	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
+		switch pname {
+		case "a":
+			fmt.Fprint(buf, `	if lda*(rowA-1)+colA > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		case "b":
+			fmt.Fprint(buf, `	if ldb*(rowB-1)+colB > len(b) {
+		panic("blas: index of b out of range")
+	}
+`)
+		}
+		return false
+
+	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv",
+		"cblas_sgemv", "cblas_dgemv", "cblas_cgemv", "cblas_zgemv":
+		switch pname {
+		case "x":
+			fmt.Fprint(buf, `	var lenX, lenY int
+	if tA == C.CblasNoTrans {
+		lenX, lenY = n, m
+	} else {
+		lenX, lenY = m, n
+	}
+	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+		panic("blas: x index out of range")
+	}
+`)
+		case "y":
+			fmt.Fprint(buf, `	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+		panic("blas: y index out of range")
+	}
+`)
+		case "a":
+			if has["kL"] {
+				fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+			} else {
+				fmt.Fprint(buf, `	if lda*(m-1)+n > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+			}
+		}
+		return false
+	}
+
+	switch pname {
+	case "x":
+		var label string
+		if has["m"] {
+			label = "m"
+		} else {
+			label = "n"
+		}
+		fmt.Fprintf(buf, `	if (incX > 0 && (%[1]s-1)*incX >= len(x)) || (incX < 0 && (1-%[1]s)*incX >= len(x)) {
+		panic("blas: x index out of range")
+	}
+`, label)
+
+	case "y":
+		fmt.Fprint(buf, `	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+		panic("blas: y index out of range")
+	}
+`)
+
+	case "a":
+		switch {
+		case has["s"]:
+			fmt.Fprintf(buf, `	if lda*(k-1)+k > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		case has["k"]:
+			fmt.Fprintf(buf, `	if lda*(n-1)+k+1 > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		case has["m"]:
+			fmt.Fprint(buf, `	if lda*(m-1)+n > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		default:
+			fmt.Fprint(buf, `	if lda*(n-1)+n > len(a) {
+		panic("blas: index of a out of range")
+	}
+`)
+		}
+
+	case "b":
+		fmt.Fprint(buf, `	if ldb*(m-1)+n > len(b) {
+		panic("blas: index of b out of range")
+	}
+`)
+	}
+
+	return false
 }
 
 func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
@@ -562,49 +564,6 @@ func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		panic("blas: illegal side")
 	}
 `)
-	return true
-}
-
-func sidedShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	var hasS, hasA, hasB, hasC bool
-	for _, p := range d.Parameters() {
-		switch shorten(binding.LowerCaseFirst(p.Name())) {
-		case "s":
-			hasS = true
-		case "a":
-			hasA = true
-		case "b":
-			hasB = true
-		case "c":
-			hasC = true
-		}
-	}
-	if !hasS {
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	if hasA && hasB {
-		fmt.Fprint(buf, `	if lda*(k-1)+k > len(a) {
-		panic("blas: index of a out of range")
-	}
-	if ldb*(m-1)+n > len(b) {
-		panic("blas: index of b out of range")
-	}
-`)
-	} else {
-		return true
-	}
-	if hasC {
-		fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) {
-		panic("blas: index of c out of range")
-	}
-`)
-	}
-
 	return true
 }
 
@@ -662,59 +621,6 @@ func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		panic("blas: illegal triangle")
 	}
 `)
-	return true
-}
-
-func vectorShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv",
-		"cblas_sgemv", "cblas_dgemv", "cblas_cgemv", "cblas_zgemv",
-		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal",
-		"cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax",
-		"cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
-		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum":
-		return true
-	}
-
-	var hasN, hasM, hasIncX, hasIncY bool
-	for _, p := range d.Parameters() {
-		switch shorten(binding.LowerCaseFirst(p.Name())) {
-		case "n":
-			hasN = true
-		case "m":
-			hasM = true
-		case "incX":
-			hasIncX = true
-		case "incY":
-			hasIncY = true
-		}
-	}
-	if !hasN && !hasM {
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	var label string
-	if hasM {
-		label = "m"
-	} else {
-		label = "n"
-	}
-	if hasIncX {
-		fmt.Fprintf(buf, `	if (incX > 0 && (%[1]s-1)*incX >= len(x)) || (incX < 0 && (1-%[1]s)*incX >= len(x)) {
-		panic("blas: x index out of range")
-	}
-`, label)
-	}
-	if hasIncY {
-		fmt.Fprint(buf, `	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
-		panic("blas: y index out of range")
-	}
-`)
-	}
 	return true
 }
 
@@ -837,53 +743,6 @@ func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool
 `)
 	}
 	return false
-}
-
-func othersShape(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
-	switch d.Name {
-	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm",
-		"cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
-		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
-		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
-		return true
-	}
-
-	has := make(map[string]bool)
-	for _, p := range d.Parameters() {
-		has[shorten(binding.LowerCaseFirst(p.Name()))] = true
-	}
-	if !has["a"] || has["s"] {
-		return true
-	}
-
-	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
-	}
-
-	switch {
-	case has["kL"] && has["kU"]:
-		fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
-		panic("blas: index of a out of range")
-	}
-`)
-	case has["m"]:
-		fmt.Fprintf(buf, `	if lda*(m-1)+n > len(a) {
-		panic("blas: index of a out of range")
-	}
-`)
-	case has["k"]:
-		fmt.Fprintf(buf, `	if lda*(n-1)+k+1 > len(a) {
-		panic("blas: index of a out of range")
-	}
-`)
-	default:
-		fmt.Fprintf(buf, `	if lda*(n-1)+n > len(a) {
-		panic("blas: index of a out of range")
-	}
-`)
-	}
-
-	return true
 }
 
 var addrTypes = map[string]string{
