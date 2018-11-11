@@ -304,7 +304,7 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	case blas.ConjTrans:
 		%[1]s = C.CblasConjTrans
 	default:
-		panic("blas: illegal transpose")
+		panic(badTranspose)
 	}
 `, n)
 		case strings.HasPrefix(d.Name, "cblas_cs"), strings.HasPrefix(d.Name, "cblas_zs"):
@@ -314,7 +314,7 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	case blas.Trans:
 		%[1]s = C.CblasTrans
 	default:
-		panic("blas: illegal transpose")
+		panic(badTranspose)
 	}
 `, n)
 		default:
@@ -326,7 +326,7 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	case blas.ConjTrans:
 		%[1]s = C.CblasConjTrans
 	default:
-		panic("blas: illegal transpose")
+		panic(badTranspose)
 	}
 `, n)
 		}
@@ -343,7 +343,7 @@ func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	case blas.Lower:
 		ul = C.CblasLower
 	default:
-		panic("blas: illegal triangle")
+		panic(badUplo)
 	}
 `)
 }
@@ -358,7 +358,7 @@ func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	case blas.Unit:
 		d = C.CblasUnit
 	default:
-		panic("blas: illegal diagonal")
+		panic(badDiag)
 	}
 `)
 	return
@@ -374,7 +374,7 @@ func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	case blas.Right:
 		s = C.CblasRight
 	default:
-		panic("blas: illegal side")
+		panic(badSide)
 	}
 `)
 }
@@ -383,7 +383,7 @@ func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	switch n := binding.LowerCaseFirst(p.Name()); n {
 	case "m", "n", "k", "kL", "kU":
 		fmt.Fprintf(buf, `	if %[1]s < 0 {
-		panic("blas: %[1]s < 0")
+		panic(%[1]sLT0)
 	}
 `, n)
 	}
@@ -398,7 +398,7 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	if pname == "ldc" {
 		// C matrix has always n columns.
 		fmt.Fprintf(buf, `	if ldc < max(1, n) {
-		panic("blas: bad ldc")
+		panic(badLdC)
 	}
 `)
 		return
@@ -424,12 +424,12 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 		rowB, colB = n, k
 	}
 	if lda < max(1, colA) {
-		panic("blas: bad lda")
+		panic(badLdA)
 	}
 `)
 		} else {
 			fmt.Fprint(buf, `	if ldb < max(1, colB) {
-		panic("blas: bad ldb")
+		panic(badLdB)
 	}
 `)
 		}
@@ -447,15 +447,15 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	}
 `)
 		}
-		fmt.Fprintf(buf, `	if %[1]s < max(1, col) {
-		panic("blas: bad %[1]s")
+		fmt.Fprintf(buf, `	if %s < max(1, col) {
+		panic(bad%s)
 	}
-`, pname)
+`, pname, ldToPanicString(pname))
 		return
 
 	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv":
 		fmt.Fprintf(buf, `	if lda < kL+kU+1 {
-		panic("blas: bad lda")
+		panic(badLdA)
 	}
 `)
 		return
@@ -467,7 +467,7 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 		// cblas_stbsv cblas_dtbsv cblas_ctbsv cblas_ztbsv
 		// cblas_ssbmv cblas_dsbmv cblas_chbmv cblas_zhbmv
 		fmt.Fprintf(buf, `	if lda < k+1 {
-		panic("blas: bad lda")
+		panic(badLdA)
 	}
 `)
 	case has["s"] && pname == "lda":
@@ -482,14 +482,14 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 		k = n
 	}
 	if lda < max(1, k) {
-		panic("blas: bad lda")
+		panic(badLdA)
 	}
 `)
 	default:
-		fmt.Fprintf(buf, `	if %[1]s < max(1, n) {
-		panic("blas: bad %[1]s")
+		fmt.Fprintf(buf, `	if %s < max(1, n) {
+		panic(bad%s)
 	}
-`, pname)
+`, pname, ldToPanicString(pname))
 	}
 }
 
@@ -497,12 +497,12 @@ func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	switch n := binding.LowerCaseFirst(p.Name()); n {
 	case "incX":
 		fmt.Fprintf(buf, `	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 `)
 	case "incY":
 		fmt.Fprintf(buf, `	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 `)
 	}
@@ -572,7 +572,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 
 	if pname == "ap" {
 		fmt.Fprint(buf, `	if len(ap) < n*(n+1)/2 {
-		panic("blas: index of ap out of range")
+		panic(shortAP)
 	}
 `)
 		return
@@ -590,13 +590,13 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		}
 		if has["m"] {
 			fmt.Fprint(buf, `	if len(c) < ldc*(m-1)+n {
-		panic("blas: index of c out of range")
+		panic(shortC)
 	}
 `)
 			return
 		}
 		fmt.Fprint(buf, `	if len(c) < ldc*(n-1)+n {
-		panic("blas: index of c out of range")
+		panic(shortC)
 	}
 `)
 		return
@@ -608,7 +608,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal",
 		"cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
 		fmt.Fprint(buf, `	if len(x) <= (n-1)*incX {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 `)
 		return
@@ -619,12 +619,12 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		switch pname {
 		case "a":
 			fmt.Fprintf(buf, `	if len(a) < lda*(row-1)+col {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		case "b":
 			fmt.Fprintf(buf, `	if len(b) < ldb*(row-1)+col {
-		panic("blas: index of b out of range")
+		panic(shortB)
 	}
 `)
 		}
@@ -634,12 +634,12 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		switch pname {
 		case "a":
 			fmt.Fprint(buf, `	if len(a) < lda*(rowA-1)+colA {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		case "b":
 			fmt.Fprint(buf, `	if len(b) < ldb*(rowB-1)+colB {
-		panic("blas: index of b out of range")
+		panic(shortB)
 	}
 `)
 		}
@@ -656,23 +656,23 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		lenX, lenY = m, n
 	}
 	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 `)
 		case "y":
 			fmt.Fprint(buf, `	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
 `)
 		case "a":
 			if has["kL"] {
 				fmt.Fprintf(buf, `	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 			} else {
 				fmt.Fprint(buf, `	if len(a) < lda*(m-1)+n {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 			}
@@ -689,13 +689,13 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 			label = "n"
 		}
 		fmt.Fprintf(buf, `	if (incX > 0 && len(x) <= (%[1]s-1)*incX) || (incX < 0 && len(x) <= (1-%[1]s)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 `, label)
 
 	case "y":
 		fmt.Fprint(buf, `	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
 `)
 
@@ -703,29 +703,29 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		switch {
 		case has["s"]:
 			fmt.Fprintf(buf, `	if len(a) < lda*(k-1)+k {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		case has["k"]:
 			fmt.Fprintf(buf, `	if len(a) < lda*(n-1)+k+1 {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		case has["m"]:
 			fmt.Fprint(buf, `	if len(a) < lda*(m-1)+n {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		default:
 			fmt.Fprint(buf, `	if len(a) < lda*(n-1)+n {
-		panic("blas: index of a out of range")
+		panic(shortA)
 	}
 `)
 		}
 
 	case "b":
 		fmt.Fprint(buf, `	if len(b) < ldb*(m-1)+n {
-		panic("blas: index of b out of range")
+		panic(shortB)
 	}
 `)
 	}
@@ -765,6 +765,19 @@ func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 `, n, t)
 	}
 	return
+}
+
+func ldToPanicString(ld string) string {
+	switch ld {
+	case "lda":
+		return "LdA"
+	case "ldb":
+		return "LdB"
+	case "ldc":
+		return "LdC"
+	default:
+		panic("unexpected ld")
+	}
 }
 
 const handwritten = `// Code generated by "go generate gonum.org/v1/netlib/blas/netlib" from {{.}}; DO NOT EDIT.
@@ -840,25 +853,25 @@ func (Implementation) Srotmg(d1 float32, d2 float32, b1 float32, b2 float32) (p 
 }
 func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int, p blas.SrotmParams) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if p.Flag < blas.Identity || p.Flag > blas.Diagonal {
-		panic("blas: illegal blas.Flag value")
+		panic(badFlag)
 	}
 	if n == 0 {
 		return
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *float32
 	if len(x) > 0 {
@@ -885,25 +898,25 @@ func (Implementation) Drotmg(d1 float64, d2 float64, b1 float64, b2 float64) (p 
 }
 func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int, p blas.DrotmParams) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if p.Flag < blas.Identity || p.Flag > blas.Diagonal {
-		panic("blas: illegal blas.Flag value")
+		panic(badFlag)
 	}
 	if n == 0 {
 		return
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *float64
 	if len(x) > 0 {
@@ -921,22 +934,22 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 }
 func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY int) (dotu complex64) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if n == 0 {
 		return 0
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *complex64
 	if len(x) > 0 {
@@ -951,22 +964,22 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 }
 func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY int) (dotc complex64) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if n == 0 {
 		return 0
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *complex64
 	if len(x) > 0 {
@@ -981,22 +994,22 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 }
 func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, incY int) (dotu complex128) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if n == 0 {
 		return 0
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *complex128
 	if len(x) > 0 {
@@ -1011,22 +1024,22 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 }
 func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, incY int) (dotc complex128) {
 	if n < 0 {
-		panic("blas: n < 0")
+		panic(nLT0)
 	}
 	if incX == 0 {
-		panic("blas: zero x index increment")
+		panic(zeroIncX)
 	}
 	if incY == 0 {
-		panic("blas: zero y index increment")
+		panic(zeroIncY)
 	}
 	if n == 0 {
 		return 0
 	}
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
-		panic("blas: x index out of range")
+		panic(shortX)
 	}
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
-		panic("blas: y index out of range")
+		panic(shortY)
 	}
         var _x *complex128
 	if len(x) > 0 {
