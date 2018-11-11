@@ -85,10 +85,10 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -130,10 +130,10 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -163,10 +163,10 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex64
@@ -193,10 +193,10 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex64
@@ -223,10 +223,10 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex128
@@ -253,10 +253,10 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex128
@@ -290,10 +290,10 @@ func (Implementation) Sdsdot(n int, alpha float32, x []float32, incX int, y []fl
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -324,10 +324,10 @@ func (Implementation) Dsdot(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -358,10 +358,10 @@ func (Implementation) Sdot(n int, x []float32, incX int, y []float32, incY int) 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -392,10 +392,10 @@ func (Implementation) Ddot(n int, x []float64, incX int, y []float64, incY int) 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -424,7 +424,7 @@ func (Implementation) Snrm2(n int, x []float32, incX int) float32 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float32
@@ -449,7 +449,7 @@ func (Implementation) Sasum(n int, x []float32, incX int) float32 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float32
@@ -474,7 +474,7 @@ func (Implementation) Dnrm2(n int, x []float64, incX int) float64 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float64
@@ -499,7 +499,7 @@ func (Implementation) Dasum(n int, x []float64, incX int) float64 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float64
@@ -521,7 +521,7 @@ func (Implementation) Scnrm2(n int, x []complex64, incX int) float32 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex64
@@ -543,7 +543,7 @@ func (Implementation) Scasum(n int, x []complex64, incX int) float32 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex64
@@ -568,7 +568,7 @@ func (Implementation) Dznrm2(n int, x []complex128, incX int) float64 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex128
@@ -593,7 +593,7 @@ func (Implementation) Dzasum(n int, x []complex128, incX int) float64 {
 	if n == 0 || incX < 0 {
 		return 0
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex128
@@ -618,7 +618,7 @@ func (Implementation) Isamax(n int, x []float32, incX int) int {
 	if n == 0 || incX < 0 {
 		return -1
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float32
@@ -643,7 +643,7 @@ func (Implementation) Idamax(n int, x []float64, incX int) int {
 	if n == 0 || incX < 0 {
 		return -1
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float64
@@ -665,7 +665,7 @@ func (Implementation) Icamax(n int, x []complex64, incX int) int {
 	if n == 0 || incX < 0 {
 		return -1
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex64
@@ -689,7 +689,7 @@ func (Implementation) Izamax(n int, x []complex128, incX int) int {
 	if n == 0 || incX < 0 {
 		return -1
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex128
@@ -716,10 +716,10 @@ func (Implementation) Sswap(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -750,10 +750,10 @@ func (Implementation) Scopy(n int, x []float32, incX int, y []float32, incY int)
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -784,10 +784,10 @@ func (Implementation) Saxpy(n int, alpha float32, x []float32, incX int, y []flo
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -818,10 +818,10 @@ func (Implementation) Dswap(n int, x []float64, incX int, y []float64, incY int)
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -852,10 +852,10 @@ func (Implementation) Dcopy(n int, x []float64, incX int, y []float64, incY int)
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -886,10 +886,10 @@ func (Implementation) Daxpy(n int, alpha float64, x []float64, incX int, y []flo
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -918,10 +918,10 @@ func (Implementation) Cswap(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex64
@@ -950,10 +950,10 @@ func (Implementation) Ccopy(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex64
@@ -982,10 +982,10 @@ func (Implementation) Caxpy(n int, alpha complex64, x []complex64, incX int, y [
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex64
@@ -1015,10 +1015,10 @@ func (Implementation) Zswap(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex128
@@ -1048,10 +1048,10 @@ func (Implementation) Zcopy(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex128
@@ -1082,10 +1082,10 @@ func (Implementation) Zaxpy(n int, alpha complex128, x []complex128, incX int, y
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *complex128
@@ -1117,10 +1117,10 @@ func (Implementation) Srot(n int, x []float32, incX int, y []float32, incY int, 
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float32
@@ -1152,10 +1152,10 @@ func (Implementation) Drot(n int, x []float64, incX int, y []float64, incY int, 
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _x *float64
@@ -1184,7 +1184,7 @@ func (Implementation) Sscal(n int, alpha float32, x []float32, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float32
@@ -1209,7 +1209,7 @@ func (Implementation) Dscal(n int, alpha float64, x []float64, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *float64
@@ -1231,7 +1231,7 @@ func (Implementation) Cscal(n int, alpha complex64, x []complex64, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex64
@@ -1255,7 +1255,7 @@ func (Implementation) Zscal(n int, alpha complex128, x []complex128, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex128
@@ -1277,7 +1277,7 @@ func (Implementation) Csscal(n int, alpha float32, x []complex64, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex64
@@ -1301,7 +1301,7 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 	if n == 0 || incX < 0 {
 		return
 	}
-	if (n-1)*incX >= len(x) {
+	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 	var _x *complex128
@@ -1346,7 +1346,7 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -1355,10 +1355,10 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float32
@@ -1418,7 +1418,7 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -1427,10 +1427,10 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float32
@@ -1493,10 +1493,10 @@ func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float32
@@ -1558,10 +1558,10 @@ func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float32
@@ -1617,10 +1617,10 @@ func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *float32
@@ -1685,10 +1685,10 @@ func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float32
@@ -1757,10 +1757,10 @@ func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float32
@@ -1822,10 +1822,10 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *float32
@@ -1874,7 +1874,7 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -1883,10 +1883,10 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float64
@@ -1946,7 +1946,7 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -1955,10 +1955,10 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float64
@@ -2021,10 +2021,10 @@ func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float64
@@ -2086,10 +2086,10 @@ func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float64
@@ -2145,10 +2145,10 @@ func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *float64
@@ -2213,10 +2213,10 @@ func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float64
@@ -2285,10 +2285,10 @@ func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *float64
@@ -2350,10 +2350,10 @@ func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *float64
@@ -2398,7 +2398,7 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -2407,10 +2407,10 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex64
@@ -2465,7 +2465,7 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -2474,10 +2474,10 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex64
@@ -2536,10 +2536,10 @@ func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex64
@@ -2597,10 +2597,10 @@ func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex64
@@ -2652,10 +2652,10 @@ func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *complex64
@@ -2710,10 +2710,10 @@ func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex64
@@ -2771,10 +2771,10 @@ func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex64
@@ -2826,10 +2826,10 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *complex64
@@ -2879,7 +2879,7 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -2888,10 +2888,10 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex128
@@ -2952,7 +2952,7 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 	var lenX, lenY int
@@ -2961,10 +2961,10 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex128
@@ -3028,10 +3028,10 @@ func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex128
@@ -3095,10 +3095,10 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex128
@@ -3156,10 +3156,10 @@ func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *complex128
@@ -3225,10 +3225,10 @@ func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex128
@@ -3298,10 +3298,10 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _a *complex128
@@ -3365,10 +3365,10 @@ func (Implementation) Ztpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
 	var _ap *complex128
@@ -3412,13 +3412,13 @@ func (Implementation) Ssymv(ul blas.Uplo, n int, alpha float32, a []float32, lda
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float32
@@ -3469,13 +3469,13 @@ func (Implementation) Ssbmv(ul blas.Uplo, n, k int, alpha float32, a []float32, 
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float32
@@ -3520,13 +3520,13 @@ func (Implementation) Sspmv(ul blas.Uplo, n int, alpha float32, ap, x []float32,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _ap *float32
@@ -3568,13 +3568,13 @@ func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []f
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float32
@@ -3618,10 +3618,10 @@ func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float32
@@ -3659,10 +3659,10 @@ func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *float32
@@ -3705,13 +3705,13 @@ func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float32
@@ -3756,13 +3756,13 @@ func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *float32
@@ -3810,13 +3810,13 @@ func (Implementation) Dsymv(ul blas.Uplo, n int, alpha float64, a []float64, lda
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float64
@@ -3867,13 +3867,13 @@ func (Implementation) Dsbmv(ul blas.Uplo, n, k int, alpha float64, a []float64, 
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *float64
@@ -3918,13 +3918,13 @@ func (Implementation) Dspmv(ul blas.Uplo, n int, alpha float64, ap, x []float64,
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _ap *float64
@@ -3966,13 +3966,13 @@ func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []f
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float64
@@ -4016,10 +4016,10 @@ func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float64
@@ -4057,10 +4057,10 @@ func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *float64
@@ -4103,13 +4103,13 @@ func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *float64
@@ -4154,13 +4154,13 @@ func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *float64
@@ -4204,13 +4204,13 @@ func (Implementation) Chemv(ul blas.Uplo, n int, alpha complex64, a []complex64,
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex64
@@ -4257,13 +4257,13 @@ func (Implementation) Chbmv(ul blas.Uplo, n, k int, alpha complex64, a []complex
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex64
@@ -4304,13 +4304,13 @@ func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []comple
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _ap *complex64
@@ -4349,13 +4349,13 @@ func (Implementation) Cgeru(m, n int, alpha complex64, x []complex64, incX int, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex64
@@ -4394,13 +4394,13 @@ func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex64
@@ -4441,10 +4441,10 @@ func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex64
@@ -4478,10 +4478,10 @@ func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, in
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *complex64
@@ -4521,13 +4521,13 @@ func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex64
@@ -4568,13 +4568,13 @@ func (Implementation) Chpr2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *complex64
@@ -4623,13 +4623,13 @@ func (Implementation) Zhemv(ul blas.Uplo, n int, alpha complex128, a []complex12
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex128
@@ -4681,13 +4681,13 @@ func (Implementation) Zhbmv(ul blas.Uplo, n, k int, alpha complex128, a []comple
 	if n == 0 {
 		return
 	}
-	if lda*(n-1)+k+1 > len(a) {
+	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _a *complex128
@@ -4733,13 +4733,13 @@ func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []compl
 	if n == 0 {
 		return
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 	var _ap *complex128
@@ -4782,13 +4782,13 @@ func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex128
@@ -4831,13 +4831,13 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 	if m == 0 || n == 0 {
 		return
 	}
-	if (incX > 0 && (m-1)*incX >= len(x)) || (incX < 0 && (1-m)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (m-1)*incX) || (incX < 0 && len(x) <= (1-m)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(m-1)+n > len(a) {
+	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex128
@@ -4883,10 +4883,10 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex128
@@ -4925,10 +4925,10 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *complex128
@@ -4973,13 +4973,13 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if lda*(n-1)+n > len(a) {
+	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 	var _x *complex128
@@ -5025,13 +5025,13 @@ func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex12
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
-	if n*(n+1)/2 > len(ap) {
+	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 	var _x *complex128
@@ -5112,13 +5112,13 @@ func (Implementation) Sgemm(tA, tB blas.Transpose, m, n, k int, alpha float32, a
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(rowA-1)+colA > len(a) {
+	if len(a) < lda*(rowA-1)+colA {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(rowB-1)+colB > len(b) {
+	if len(b) < ldb*(rowB-1)+colB {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float32
@@ -5184,13 +5184,13 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float32
@@ -5255,10 +5255,10 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float32
@@ -5322,13 +5322,13 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float32
@@ -5410,10 +5410,10 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *float32
@@ -5497,10 +5497,10 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *float32
@@ -5577,13 +5577,13 @@ func (Implementation) Dgemm(tA, tB blas.Transpose, m, n, k int, alpha float64, a
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(rowA-1)+colA > len(a) {
+	if len(a) < lda*(rowA-1)+colA {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(rowB-1)+colB > len(b) {
+	if len(b) < ldb*(rowB-1)+colB {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float64
@@ -5649,13 +5649,13 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float64
@@ -5720,10 +5720,10 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float64
@@ -5787,13 +5787,13 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *float64
@@ -5875,10 +5875,10 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *float64
@@ -5962,10 +5962,10 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *float64
@@ -6034,13 +6034,13 @@ func (Implementation) Cgemm(tA, tB blas.Transpose, m, n, k int, alpha complex64,
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(rowA-1)+colA > len(a) {
+	if len(a) < lda*(rowA-1)+colA {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(rowB-1)+colB > len(b) {
+	if len(b) < ldb*(rowB-1)+colB {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6101,13 +6101,13 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6165,10 +6165,10 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6225,13 +6225,13 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6307,10 +6307,10 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *complex64
@@ -6382,10 +6382,10 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *complex64
@@ -6454,13 +6454,13 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(rowA-1)+colA > len(a) {
+	if len(a) < lda*(rowA-1)+colA {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(rowB-1)+colB > len(b) {
+	if len(b) < ldb*(rowB-1)+colB {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -6521,13 +6521,13 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -6585,10 +6585,10 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -6645,13 +6645,13 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -6727,10 +6727,10 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *complex128
@@ -6802,10 +6802,10 @@ func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 	var _a *complex128
@@ -6862,13 +6862,13 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6926,10 +6926,10 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -6986,13 +6986,13 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex64
@@ -7053,13 +7053,13 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	if m == 0 || n == 0 {
 		return
 	}
-	if lda*(k-1)+k > len(a) {
+	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(m-1)+n > len(b) {
+	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(m-1)+n > len(c) {
+	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -7117,10 +7117,10 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
@@ -7177,13 +7177,13 @@ func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	if n == 0 {
 		return
 	}
-	if lda*(row-1)+col > len(a) {
+	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
-	if ldb*(row-1)+col > len(b) {
+	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
-	if ldc*(n-1)+n > len(c) {
+	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 	var _a *complex128
