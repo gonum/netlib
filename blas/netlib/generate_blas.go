@@ -251,14 +251,10 @@ func goSignature(buf *bytes.Buffer, d binding.Declaration, docs map[string][]*as
 	}
 }
 
-func parameterChecks(buf *bytes.Buffer, d binding.Declaration, rules []func(*bytes.Buffer, binding.Declaration, binding.Parameter) bool) {
-	done := make(map[int]bool)
-	for i, r := range rules {
+func parameterChecks(buf *bytes.Buffer, d binding.Declaration, rules []func(*bytes.Buffer, binding.Declaration, binding.Parameter)) {
+	for _, r := range rules {
 		for _, p := range d.Parameters() {
-			if done[i] {
-				continue
-			}
-			done[i] = r(buf, d, p)
+			r(buf, d, p)
 		}
 	}
 }
@@ -284,7 +280,7 @@ func cgoCall(buf *bytes.Buffer, d binding.Declaration) {
 	buf.WriteString(")\n")
 }
 
-var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Parameter) bool{
+var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Parameter){
 	trans,
 	uplo,
 	diag,
@@ -297,9 +293,9 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	address,
 }
 
-func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
+func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	if p.Name() != "Diag" {
-		return false
+		return
 	}
 	fmt.Fprint(buf, `	switch d {
 	case blas.NonUnit:
@@ -310,12 +306,12 @@ func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		panic("blas: illegal diagonal")
 	}
 `)
-	return true
+	return
 }
 
-func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	if d.CParameters[len(d.CParameters)-1] != p.Parameter {
-		return false // Come back later.
+		return // Come back later.
 	}
 
 	switch d.Name {
@@ -325,21 +321,21 @@ func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool 
 		return 0
 	}
 `)
-		return true
+		return
 
 	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal":
 		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
 		return
 	}
 `)
-		return true
+		return
 
 	case "cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
 		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
 		return -1
 	}
 `)
-		return true
+		return
 	}
 
 	var value string
@@ -364,16 +360,14 @@ func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool 
 	}
 `)
 	}
-
-	return true
 }
 
-func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	pname := shorten(binding.LowerCaseFirst(p.Name()))
 	switch pname {
 	case "a", "b", "c", "ap", "x", "y":
 	default:
-		return false
+		return
 	}
 
 	if pname == "ap" {
@@ -381,7 +375,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		panic("blas: index of ap out of range")
 	}
 `)
-		return false
+		return
 	}
 
 	has := make(map[string]bool)
@@ -392,20 +386,20 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	if pname == "c" {
 		if p.Type().Kind() != cc.Ptr {
 			// srot or drot
-			return false
+			return
 		}
 		if has["m"] {
 			fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
-			return false
+			return
 		}
 		fmt.Fprint(buf, `	if ldc*(n-1)+n > len(c) {
 		panic("blas: index of c out of range")
 	}
 `)
-		return false
+		return
 	}
 
 	switch d.Name {
@@ -417,7 +411,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		panic("blas: x index out of range")
 	}
 `)
-		return false
+		return
 
 	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
 		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
@@ -434,7 +428,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	}
 `)
 		}
-		return false
+		return
 
 	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
 		switch pname {
@@ -449,7 +443,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	}
 `)
 		}
-		return false
+		return
 
 	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv",
 		"cblas_sgemv", "cblas_dgemv", "cblas_cgemv", "cblas_zgemv":
@@ -483,7 +477,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 `)
 			}
 		}
-		return false
+		return
 	}
 
 	switch pname {
@@ -536,24 +530,22 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 `)
 	}
 
-	return false
+	return
 }
 
-func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
+func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	switch n := binding.LowerCaseFirst(p.Name()); n {
 	case "m", "n", "k", "kL", "kU":
 		fmt.Fprintf(buf, `	if %[1]s < 0 {
 		panic("blas: %[1]s < 0")
 	}
 `, n)
-		return false
 	}
-	return false
 }
 
-func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
+func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	if p.Name() != "Side" {
-		return false
+		return
 	}
 	fmt.Fprint(buf, `	switch s {
 	case blas.Left:
@@ -564,10 +556,9 @@ func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		panic("blas: illegal side")
 	}
 `)
-	return true
 }
 
-func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	switch n := shorten(binding.LowerCaseFirst(p.Name())); n {
 	case "t", "tA", "tB":
 		switch {
@@ -605,12 +596,11 @@ func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
 `, n)
 		}
 	}
-	return false
 }
 
-func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
+func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	if p.Name() != "Uplo" {
-		return false
+		return
 	}
 	fmt.Fprint(buf, `	switch ul {
 	case blas.Upper:
@@ -621,13 +611,12 @@ func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
 		panic("blas: illegal triangle")
 	}
 `)
-	return true
 }
 
-func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	pname := binding.LowerCaseFirst(p.Name())
 	if !strings.HasPrefix(pname, "ld") {
-		return false
+		return
 	}
 
 	if pname == "ldc" {
@@ -636,7 +625,7 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 		panic("blas: bad ldc")
 	}
 `)
-		return false
+		return
 	}
 
 	has := make(map[string]bool)
@@ -668,7 +657,7 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 	}
 `)
 		}
-		return false
+		return
 
 	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
 		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
@@ -686,14 +675,14 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 		panic("blas: bad %[1]s")
 	}
 `, pname)
-		return false
+		return
 
 	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv":
 		fmt.Fprintf(buf, `	if lda < kL+kU+1 {
 		panic("blas: bad lda")
 	}
 `)
-		return false
+		return
 	}
 
 	switch {
@@ -726,10 +715,9 @@ func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) b
 	}
 `, pname)
 	}
-	return false
 }
 
-func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool {
+func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	switch n := binding.LowerCaseFirst(p.Name()); n {
 	case "incX":
 		fmt.Fprintf(buf, `	if incX == 0 {
@@ -742,7 +730,7 @@ func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) bool
 	}
 `)
 	}
-	return false
+	return
 }
 
 var addrTypes = map[string]string{
@@ -752,13 +740,13 @@ var addrTypes = map[string]string{
 	"double": "float64",
 }
 
-func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool {
+func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	n := shorten(binding.LowerCaseFirst(p.Name()))
 	blasName := strings.TrimPrefix(d.Name, prefix)
 	switch n {
 	case "a", "b", "c", "ap", "x", "y":
 	default:
-		return false
+		return
 	}
 	if p.Type().Kind() == cc.Ptr {
 		t := addrTypes[strings.TrimPrefix(p.Type().Element().String(), "const ")]
@@ -776,7 +764,7 @@ func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) bool
         }
 `, n, t)
 	}
-	return false
+	return
 }
 
 const handwritten = `// Code generated by "go generate gonum.org/v1/netlib/blas/netlib" from {{.}}; DO NOT EDIT.
