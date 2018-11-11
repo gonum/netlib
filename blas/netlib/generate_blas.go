@@ -571,7 +571,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	}
 
 	if pname == "ap" {
-		fmt.Fprint(buf, `	if n*(n+1)/2 > len(ap) {
+		fmt.Fprint(buf, `	if len(ap) < n*(n+1)/2 {
 		panic("blas: index of ap out of range")
 	}
 `)
@@ -589,13 +589,13 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 			return
 		}
 		if has["m"] {
-			fmt.Fprint(buf, `	if ldc*(m-1)+n > len(c) {
+			fmt.Fprint(buf, `	if len(c) < ldc*(m-1)+n {
 		panic("blas: index of c out of range")
 	}
 `)
 			return
 		}
-		fmt.Fprint(buf, `	if ldc*(n-1)+n > len(c) {
+		fmt.Fprint(buf, `	if len(c) < ldc*(n-1)+n {
 		panic("blas: index of c out of range")
 	}
 `)
@@ -607,7 +607,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum",
 		"cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal",
 		"cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
-		fmt.Fprint(buf, `	if (n-1)*incX >= len(x) {
+		fmt.Fprint(buf, `	if len(x) <= (n-1)*incX {
 		panic("blas: x index out of range")
 	}
 `)
@@ -618,12 +618,12 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
 		switch pname {
 		case "a":
-			fmt.Fprintf(buf, `	if lda*(row-1)+col > len(a) {
+			fmt.Fprintf(buf, `	if len(a) < lda*(row-1)+col {
 		panic("blas: index of a out of range")
 	}
 `)
 		case "b":
-			fmt.Fprintf(buf, `	if ldb*(row-1)+col > len(b) {
+			fmt.Fprintf(buf, `	if len(b) < ldb*(row-1)+col {
 		panic("blas: index of b out of range")
 	}
 `)
@@ -633,12 +633,12 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
 		switch pname {
 		case "a":
-			fmt.Fprint(buf, `	if lda*(rowA-1)+colA > len(a) {
+			fmt.Fprint(buf, `	if len(a) < lda*(rowA-1)+colA {
 		panic("blas: index of a out of range")
 	}
 `)
 		case "b":
-			fmt.Fprint(buf, `	if ldb*(rowB-1)+colB > len(b) {
+			fmt.Fprint(buf, `	if len(b) < ldb*(rowB-1)+colB {
 		panic("blas: index of b out of range")
 	}
 `)
@@ -655,23 +655,23 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	} else {
 		lenX, lenY = m, n
 	}
-	if (incX > 0 && (lenX-1)*incX >= len(x)) || (incX < 0 && (1-lenX)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (lenX-1)*incX) || (incX < 0 && len(x) <= (1-lenX)*incX) {
 		panic("blas: x index out of range")
 	}
 `)
 		case "y":
-			fmt.Fprint(buf, `	if (incY > 0 && (lenY-1)*incY >= len(y)) || (incY < 0 && (1-lenY)*incY >= len(y)) {
+			fmt.Fprint(buf, `	if (incY > 0 && len(y) <= (lenY-1)*incY) || (incY < 0 && len(y) <= (1-lenY)*incY) {
 		panic("blas: y index out of range")
 	}
 `)
 		case "a":
 			if has["kL"] {
-				fmt.Fprintf(buf, `	if lda*(min(m, n+kL)-1)+kL+kU+1 > len(a) {
+				fmt.Fprintf(buf, `	if len(a) < lda*(min(m, n+kL)-1)+kL+kU+1 {
 		panic("blas: index of a out of range")
 	}
 `)
 			} else {
-				fmt.Fprint(buf, `	if lda*(m-1)+n > len(a) {
+				fmt.Fprint(buf, `	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 `)
@@ -688,13 +688,13 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		} else {
 			label = "n"
 		}
-		fmt.Fprintf(buf, `	if (incX > 0 && (%[1]s-1)*incX >= len(x)) || (incX < 0 && (1-%[1]s)*incX >= len(x)) {
+		fmt.Fprintf(buf, `	if (incX > 0 && len(x) <= (%[1]s-1)*incX) || (incX < 0 && len(x) <= (1-%[1]s)*incX) {
 		panic("blas: x index out of range")
 	}
 `, label)
 
 	case "y":
-		fmt.Fprint(buf, `	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+		fmt.Fprint(buf, `	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
 `)
@@ -702,29 +702,29 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	case "a":
 		switch {
 		case has["s"]:
-			fmt.Fprintf(buf, `	if lda*(k-1)+k > len(a) {
+			fmt.Fprintf(buf, `	if len(a) < lda*(k-1)+k {
 		panic("blas: index of a out of range")
 	}
 `)
 		case has["k"]:
-			fmt.Fprintf(buf, `	if lda*(n-1)+k+1 > len(a) {
+			fmt.Fprintf(buf, `	if len(a) < lda*(n-1)+k+1 {
 		panic("blas: index of a out of range")
 	}
 `)
 		case has["m"]:
-			fmt.Fprint(buf, `	if lda*(m-1)+n > len(a) {
+			fmt.Fprint(buf, `	if len(a) < lda*(m-1)+n {
 		panic("blas: index of a out of range")
 	}
 `)
 		default:
-			fmt.Fprint(buf, `	if lda*(n-1)+n > len(a) {
+			fmt.Fprint(buf, `	if len(a) < lda*(n-1)+n {
 		panic("blas: index of a out of range")
 	}
 `)
 		}
 
 	case "b":
-		fmt.Fprint(buf, `	if ldb*(m-1)+n > len(b) {
+		fmt.Fprint(buf, `	if len(b) < ldb*(m-1)+n {
 		panic("blas: index of b out of range")
 	}
 `)
@@ -854,10 +854,10 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *float32
@@ -899,10 +899,10 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if n == 0 {
 		return
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *float64
@@ -932,10 +932,10 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *complex64
@@ -962,10 +962,10 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *complex64
@@ -992,10 +992,10 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *complex128
@@ -1022,10 +1022,10 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if n == 0 {
 		return 0
 	}
-	if (incX > 0 && (n-1)*incX >= len(x)) || (incX < 0 && (1-n)*incX >= len(x)) {
+	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic("blas: x index out of range")
 	}
-	if (incY > 0 && (n-1)*incY >= len(y)) || (incY < 0 && (1-n)*incY >= len(y)) {
+	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic("blas: y index out of range")
 	}
         var _x *complex128
