@@ -293,6 +293,61 @@ var parameterCheckRules = []func(*bytes.Buffer, binding.Declaration, binding.Par
 	address,
 }
 
+func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
+	switch n := shorten(binding.LowerCaseFirst(p.Name())); n {
+	case "t", "tA", "tB":
+		switch {
+		case strings.HasPrefix(d.Name, "cblas_ch"), strings.HasPrefix(d.Name, "cblas_zh"):
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = C.CblasNoTrans
+	case blas.ConjTrans:
+		%[1]s = C.CblasConjTrans
+	default:
+		panic("blas: illegal transpose")
+	}
+`, n)
+		case strings.HasPrefix(d.Name, "cblas_cs"), strings.HasPrefix(d.Name, "cblas_zs"):
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = C.CblasNoTrans
+	case blas.Trans:
+		%[1]s = C.CblasTrans
+	default:
+		panic("blas: illegal transpose")
+	}
+`, n)
+		default:
+			fmt.Fprintf(buf, `	switch %[1]s {
+	case blas.NoTrans:
+		%[1]s = C.CblasNoTrans
+	case blas.Trans:
+		%[1]s = C.CblasTrans
+	case blas.ConjTrans:
+		%[1]s = C.CblasConjTrans
+	default:
+		panic("blas: illegal transpose")
+	}
+`, n)
+		}
+	}
+}
+
+func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
+	if p.Name() != "Uplo" {
+		return
+	}
+	fmt.Fprint(buf, `	switch ul {
+	case blas.Upper:
+		ul = C.CblasUpper
+	case blas.Lower:
+		ul = C.CblasLower
+	default:
+		panic("blas: illegal triangle")
+	}
+`)
+}
+
 func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 	if p.Name() != "Diag" {
 		return
@@ -306,6 +361,151 @@ func diag(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
 		panic("blas: illegal diagonal")
 	}
 `)
+	return
+}
+
+func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
+	if p.Name() != "Side" {
+		return
+	}
+	fmt.Fprint(buf, `	switch s {
+	case blas.Left:
+		s = C.CblasLeft
+	case blas.Right:
+		s = C.CblasRight
+	default:
+		panic("blas: illegal side")
+	}
+`)
+}
+
+func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
+	switch n := binding.LowerCaseFirst(p.Name()); n {
+	case "m", "n", "k", "kL", "kU":
+		fmt.Fprintf(buf, `	if %[1]s < 0 {
+		panic("blas: %[1]s < 0")
+	}
+`, n)
+	}
+}
+
+func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
+	pname := binding.LowerCaseFirst(p.Name())
+	if !strings.HasPrefix(pname, "ld") {
+		return
+	}
+
+	if pname == "ldc" {
+		// C matrix has always n columns.
+		fmt.Fprintf(buf, `	if ldc < max(1, n) {
+		panic("blas: bad ldc")
+	}
+`)
+		return
+	}
+
+	has := make(map[string]bool)
+	for _, p := range d.Parameters() {
+		has[shorten(binding.LowerCaseFirst(p.Name()))] = true
+	}
+
+	switch d.Name {
+	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
+		if pname == "lda" {
+			fmt.Fprint(buf, `	var rowA, colA, rowB, colB int
+	if tA == C.CblasNoTrans {
+		rowA, colA = m, k
+	} else {
+		rowA, colA = k, m
+	}
+	if tB == C.CblasNoTrans {
+		rowB, colB = k, n
+	} else {
+		rowB, colB = n, k
+	}
+	if lda < max(1, colA) {
+		panic("blas: bad lda")
+	}
+`)
+		} else {
+			fmt.Fprint(buf, `	if ldb < max(1, colB) {
+		panic("blas: bad ldb")
+	}
+`)
+		}
+		return
+
+	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
+		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
+		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
+		if pname == "lda" {
+			fmt.Fprint(buf, `	var row, col int
+	if t == C.CblasNoTrans {
+		row, col = n, k
+	} else {
+		row, col = k, n
+	}
+`)
+		}
+		fmt.Fprintf(buf, `	if %[1]s < max(1, col) {
+		panic("blas: bad %[1]s")
+	}
+`, pname)
+		return
+
+	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv":
+		fmt.Fprintf(buf, `	if lda < kL+kU+1 {
+		panic("blas: bad lda")
+	}
+`)
+		return
+	}
+
+	switch {
+	case has["k"]:
+		// cblas_stbmv cblas_dtbmv cblas_ctbmv cblas_ztbmv
+		// cblas_stbsv cblas_dtbsv cblas_ctbsv cblas_ztbsv
+		// cblas_ssbmv cblas_dsbmv cblas_chbmv cblas_zhbmv
+		fmt.Fprintf(buf, `	if lda < k+1 {
+		panic("blas: bad lda")
+	}
+`)
+	case has["s"] && pname == "lda":
+		// cblas_ssymm cblas_dsymm cblas_csymm cblas_zsymm
+		// cblas_strmm cblas_dtrmm cblas_ctrmm cblas_ztrmm
+		// cblas_strsm cblas_dtrsm cblas_ctrsm cblas_ztrsm
+		// cblas_chemm cblas_zhemm
+		fmt.Fprintf(buf, `	var k int
+	if s == C.CblasLeft {
+		k = m
+	} else {
+		k = n
+	}
+	if lda < max(1, k) {
+		panic("blas: bad lda")
+	}
+`)
+	default:
+		fmt.Fprintf(buf, `	if %[1]s < max(1, n) {
+		panic("blas: bad %[1]s")
+	}
+`, pname)
+	}
+}
+
+func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
+	switch n := binding.LowerCaseFirst(p.Name()); n {
+	case "incX":
+		fmt.Fprintf(buf, `	if incX == 0 {
+		panic("blas: zero x index increment")
+	}
+`)
+	case "incY":
+		fmt.Fprintf(buf, `	if incY == 0 {
+		panic("blas: zero y index increment")
+	}
+`)
+	}
 	return
 }
 
@@ -530,206 +730,6 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 `)
 	}
 
-	return
-}
-
-func shape(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
-	switch n := binding.LowerCaseFirst(p.Name()); n {
-	case "m", "n", "k", "kL", "kU":
-		fmt.Fprintf(buf, `	if %[1]s < 0 {
-		panic("blas: %[1]s < 0")
-	}
-`, n)
-	}
-}
-
-func side(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
-	if p.Name() != "Side" {
-		return
-	}
-	fmt.Fprint(buf, `	switch s {
-	case blas.Left:
-		s = C.CblasLeft
-	case blas.Right:
-		s = C.CblasRight
-	default:
-		panic("blas: illegal side")
-	}
-`)
-}
-
-func trans(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
-	switch n := shorten(binding.LowerCaseFirst(p.Name())); n {
-	case "t", "tA", "tB":
-		switch {
-		case strings.HasPrefix(d.Name, "cblas_ch"), strings.HasPrefix(d.Name, "cblas_zh"):
-			fmt.Fprintf(buf, `	switch %[1]s {
-	case blas.NoTrans:
-		%[1]s = C.CblasNoTrans
-	case blas.ConjTrans:
-		%[1]s = C.CblasConjTrans
-	default:
-		panic("blas: illegal transpose")
-	}
-`, n)
-		case strings.HasPrefix(d.Name, "cblas_cs"), strings.HasPrefix(d.Name, "cblas_zs"):
-			fmt.Fprintf(buf, `	switch %[1]s {
-	case blas.NoTrans:
-		%[1]s = C.CblasNoTrans
-	case blas.Trans:
-		%[1]s = C.CblasTrans
-	default:
-		panic("blas: illegal transpose")
-	}
-`, n)
-		default:
-			fmt.Fprintf(buf, `	switch %[1]s {
-	case blas.NoTrans:
-		%[1]s = C.CblasNoTrans
-	case blas.Trans:
-		%[1]s = C.CblasTrans
-	case blas.ConjTrans:
-		%[1]s = C.CblasConjTrans
-	default:
-		panic("blas: illegal transpose")
-	}
-`, n)
-		}
-	}
-}
-
-func uplo(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
-	if p.Name() != "Uplo" {
-		return
-	}
-	fmt.Fprint(buf, `	switch ul {
-	case blas.Upper:
-		ul = C.CblasUpper
-	case blas.Lower:
-		ul = C.CblasLower
-	default:
-		panic("blas: illegal triangle")
-	}
-`)
-}
-
-func leadingDim(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
-	pname := binding.LowerCaseFirst(p.Name())
-	if !strings.HasPrefix(pname, "ld") {
-		return
-	}
-
-	if pname == "ldc" {
-		// C matrix has always n columns.
-		fmt.Fprintf(buf, `	if ldc < max(1, n) {
-		panic("blas: bad ldc")
-	}
-`)
-		return
-	}
-
-	has := make(map[string]bool)
-	for _, p := range d.Parameters() {
-		has[shorten(binding.LowerCaseFirst(p.Name()))] = true
-	}
-
-	switch d.Name {
-	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
-		if pname == "lda" {
-			fmt.Fprint(buf, `	var rowA, colA, rowB, colB int
-	if tA == C.CblasNoTrans {
-		rowA, colA = m, k
-	} else {
-		rowA, colA = k, m
-	}
-	if tB == C.CblasNoTrans {
-		rowB, colB = k, n
-	} else {
-		rowB, colB = n, k
-	}
-	if lda < max(1, colA) {
-		panic("blas: bad lda")
-	}
-`)
-		} else {
-			fmt.Fprint(buf, `	if ldb < max(1, colB) {
-		panic("blas: bad ldb")
-	}
-`)
-		}
-		return
-
-	case "cblas_ssyrk", "cblas_dsyrk", "cblas_csyrk", "cblas_zsyrk",
-		"cblas_ssyr2k", "cblas_dsyr2k", "cblas_csyr2k", "cblas_zsyr2k",
-		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
-		if pname == "lda" {
-			fmt.Fprint(buf, `	var row, col int
-	if t == C.CblasNoTrans {
-		row, col = n, k
-	} else {
-		row, col = k, n
-	}
-`)
-		}
-		fmt.Fprintf(buf, `	if %[1]s < max(1, col) {
-		panic("blas: bad %[1]s")
-	}
-`, pname)
-		return
-
-	case "cblas_sgbmv", "cblas_dgbmv", "cblas_cgbmv", "cblas_zgbmv":
-		fmt.Fprintf(buf, `	if lda < kL+kU+1 {
-		panic("blas: bad lda")
-	}
-`)
-		return
-	}
-
-	switch {
-	case has["k"]:
-		// cblas_stbmv cblas_dtbmv cblas_ctbmv cblas_ztbmv
-		// cblas_stbsv cblas_dtbsv cblas_ctbsv cblas_ztbsv
-		// cblas_ssbmv cblas_dsbmv cblas_chbmv cblas_zhbmv
-		fmt.Fprintf(buf, `	if lda < k+1 {
-		panic("blas: bad lda")
-	}
-`)
-	case has["s"] && pname == "lda":
-		// cblas_ssymm cblas_dsymm cblas_csymm cblas_zsymm
-		// cblas_strmm cblas_dtrmm cblas_ctrmm cblas_ztrmm
-		// cblas_strsm cblas_dtrsm cblas_ctrsm cblas_ztrsm
-		// cblas_chemm cblas_zhemm
-		fmt.Fprintf(buf, `	var k int
-	if s == C.CblasLeft {
-		k = m
-	} else {
-		k = n
-	}
-	if lda < max(1, k) {
-		panic("blas: bad lda")
-	}
-`)
-	default:
-		fmt.Fprintf(buf, `	if %[1]s < max(1, n) {
-		panic("blas: bad %[1]s")
-	}
-`, pname)
-	}
-}
-
-func zeroInc(buf *bytes.Buffer, _ binding.Declaration, p binding.Parameter) {
-	switch n := binding.LowerCaseFirst(p.Name()); n {
-	case "incX":
-		fmt.Fprintf(buf, `	if incX == 0 {
-		panic("blas: zero x index increment")
-	}
-`)
-	case "incY":
-		fmt.Fprintf(buf, `	if incY == 0 {
-		panic("blas: zero y index increment")
-	}
-`)
-	}
 	return
 }
 
