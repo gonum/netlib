@@ -761,9 +761,9 @@ func address(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 			}
 		}
 		fmt.Fprintf(buf, `	var _%[1]s *%[2]s
-        if len(%[1]s) > 0 {
-                _%[1]s = &%[1]s[0]
-        }
+	if len(%[1]s) > 0 {
+		_%[1]s = &%[1]s[0]
+	}
 `, n, t)
 	}
 	return
@@ -875,11 +875,11 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *float32
+	var _x *float32
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *float32
+	var _y *float32
 	if len(y) > 0 {
 		_y = &y[0]
 	}
@@ -920,11 +920,11 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *float64
+	var _x *float64
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *float64
+	var _y *float64
 	if len(y) > 0 {
 		_y = &y[0]
 	}
@@ -953,11 +953,11 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *complex64
+	var _x *complex64
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *complex64
+	var _y *complex64
 	if len(y) > 0 {
 		_y = &y[0]
 	}
@@ -983,11 +983,11 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *complex64
+	var _x *complex64
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *complex64
+	var _y *complex64
 	if len(y) > 0 {
 		_y = &y[0]
 	}
@@ -1013,11 +1013,11 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *complex128
+	var _x *complex128
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *complex128
+	var _y *complex128
 	if len(y) > 0 {
 		_y = &y[0]
 	}
@@ -1043,11 +1043,11 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if (incY > 0 && len(y) <= (n-1)*incY) || (incY < 0 && len(y) <= (1-n)*incY) {
 		panic(shortY)
 	}
-        var _x *complex128
+	var _x *complex128
 	if len(x) > 0 {
 		_x = &x[0]
 	}
-        var _y *complex128
+	var _y *complex128
 	if len(y) > 0 {
 		_y = &y[0]
 	}
