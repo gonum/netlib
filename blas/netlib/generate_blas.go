@@ -618,6 +618,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 		"cblas_cherk", "cblas_zherk", "cblas_cher2k", "cblas_zher2k":
 		switch pname {
 		case "a":
+			// row and col have already been declared in leadingDim.
 			fmt.Fprintf(buf, `	if len(a) < lda*(row-1)+col {
 		panic(shortA)
 	}
@@ -633,6 +634,7 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 	case "cblas_sgemm", "cblas_dgemm", "cblas_cgemm", "cblas_zgemm":
 		switch pname {
 		case "a":
+			// rowA and colA have already been declared in leadingDim.
 			fmt.Fprint(buf, `	if len(a) < lda*(rowA-1)+colA {
 		panic(shortA)
 	}
