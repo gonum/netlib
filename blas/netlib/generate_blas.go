@@ -517,23 +517,35 @@ func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 	switch d.Name {
 	case "cblas_snrm2", "cblas_dnrm2", "cblas_scnrm2", "cblas_dznrm2",
 		"cblas_sasum", "cblas_dasum", "cblas_scasum", "cblas_dzasum":
-		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		fmt.Fprint(buf, `
+	// Quick return if possible.
+	if n == 0 || incX < 0 {
 		return 0
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 `)
 		return
 
 	case "cblas_sscal", "cblas_dscal", "cblas_cscal", "cblas_zscal", "cblas_csscal", "cblas_zdscal":
-		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		fmt.Fprint(buf, `
+	// Quick return if possible.
+	if n == 0 || incX < 0 {
 		return
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 `)
 		return
 
 	case "cblas_isamax", "cblas_idamax", "cblas_icamax", "cblas_izamax":
-		fmt.Fprint(buf, `	if n == 0 || incX < 0 {
+		fmt.Fprint(buf, `
+	// Quick return if possible.
+	if n == 0 || incX < 0 {
 		return -1
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 `)
 		return
 	}
@@ -550,14 +562,22 @@ func noWork(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) {
 		}
 	}
 	if !hasM {
-		fmt.Fprintf(buf, `	if n == 0 {
+		fmt.Fprintf(buf, `
+	// Quick return if possible.
+	if n == 0 {
 		return%s
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 `, value)
 	} else {
-		fmt.Fprintf(buf, `	if m == 0 || n == 0 {
+		fmt.Fprintf(buf, `
+	// Quick return if possible.
+	if m == 0 || n == 0 {
 		return
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 `)
 	}
 }
@@ -866,9 +886,13 @@ func (Implementation) Srotm(n int, x []float32, incX int, y []float32, incY int,
 	if p.Flag < blas.Identity || p.Flag > blas.Diagonal {
 		panic(badFlag)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
@@ -911,9 +935,13 @@ func (Implementation) Drotm(n int, x []float64, incX int, y []float64, incY int,
 	if p.Flag < blas.Identity || p.Flag > blas.Diagonal {
 		panic(badFlag)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
@@ -944,9 +972,13 @@ func (Implementation) Cdotu(n int, x []complex64, incX int, y []complex64, incY 
 	if incY == 0 {
 		panic(zeroIncY)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return 0
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
@@ -974,9 +1006,13 @@ func (Implementation) Cdotc(n int, x []complex64, incX int, y []complex64, incY 
 	if incY == 0 {
 		panic(zeroIncY)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return 0
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
@@ -1004,9 +1040,13 @@ func (Implementation) Zdotu(n int, x []complex128, incX int, y []complex128, inc
 	if incY == 0 {
 		panic(zeroIncY)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return 0
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
@@ -1034,9 +1074,13 @@ func (Implementation) Zdotc(n int, x []complex128, incX int, y []complex128, inc
 	if incY == 0 {
 		panic(zeroIncY)
 	}
+
+	// Quick return if possible.
 	if n == 0 {
 		return 0
 	}
+
+	// For zero matrix size the following slice length checks are trivially satisfied.
 	if (incX > 0 && len(x) <= (n-1)*incX) || (incX < 0 && len(x) <= (1-n)*incX) {
 		panic(shortX)
 	}
