@@ -6903,6 +6903,12 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	C.cblas_ctrsm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
+// Zgemm performs one of the matrix-matrix operations
+//  C = alpha * op(A) * op(B) + beta * C
+// where op(X) is one of
+//  op(X) = X  or  op(X) = X^T  or  op(X) = X^H,
+// alpha and beta are scalars, and A, B and C are matrices, with op(A) an m×k matrix,
+// op(B) a k×n matrix and C an m×n matrix.
 func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:530:6 void cblas_zgemm ...
 
@@ -6986,6 +6992,11 @@ func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128
 	C.cblas_zgemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_TRANSPOSE(tB), C.int(m), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zsymm performs one of the matrix-matrix operations
+//  C = alpha*A*B + beta*C  if side == blas.Left
+//  C = alpha*B*A + beta*C  if side == blas.Right
+// where alpha and beta are scalars, A is an m×m or n×n symmetric matrix and B
+// and C are m×n matrices.
 func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:535:6 void cblas_zsymm ...
 
@@ -7057,6 +7068,11 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	C.cblas_zsymm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zsyrk performs one of the symmetric rank-k operations
+//  C = alpha*A*A^T + beta*C  if trans == blas.NoTrans
+//  C = alpha*A^T*A + beta*C  if trans == blas.Trans
+// where alpha and beta are scalars, C is an n×n symmetric matrix and A is
+// an n×k matrix in the first case and a k×n matrix in the second case.
 func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:540:6 void cblas_zsyrk ...
 
@@ -7118,6 +7134,11 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 	C.cblas_zsyrk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zsyr2k performs one of the symmetric rank-2k operations
+//  C = alpha*A*B^T + alpha*B*A^T + beta*C  if trans == blas.NoTrans
+//  C = alpha*A^T*B + alpha*B^T*A + beta*C  if trans == blas.Trans
+// where alpha and beta are scalars, C is an n×n symmetric matrix and A and B
+// are n×k matrices in the first case and k×n matrices in the second case.
 func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:544:6 void cblas_zsyr2k ...
 
@@ -7189,6 +7210,14 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	C.cblas_zsyr2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Ztrmm performs one of the matrix-matrix operations
+//  B = alpha * op(A) * B  if side == blas.Left,
+//  B = alpha * B * op(A)  if side == blas.Right,
+// where alpha is a scalar, B is an m×n matrix, A is a unit, or non-unit,
+// upper or lower triangular matrix and op(A) is one of
+//  op(A) = A    if trans == blas.NoTrans,
+//  op(A) = A^T  if trans == blas.Trans,
+//  op(A) = A^H  if trans == blas.ConjTrans.
 func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:549:6 void cblas_ztrmm ...
 
@@ -7268,6 +7297,15 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 	C.cblas_ztrmm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(tA), C.enum_CBLAS_DIAG(d), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb))
 }
 
+// Ztrsm solves one of the matrix equations
+//  op(A) * X = alpha * B  if side == blas.Left,
+//  X * op(A) = alpha * B  if side == blas.Right,
+// where alpha is a scalar, X and B are m×n matrices, A is a unit or
+// non-unit, upper or lower triangular matrix and op(A) is one of
+//  op(A) = A    if transA == blas.NoTrans,
+//  op(A) = A^T  if transA == blas.Trans,
+//  op(A) = A^H  if transA == blas.ConjTrans.
+// On return the matrix X is overwritten on B.
 func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:554:6 void cblas_ztrsm ...
 
@@ -7550,6 +7588,12 @@ func (Implementation) Cher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 	C.cblas_cher2k(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), C.float(beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zhemm performs one of the matrix-matrix operations
+//  C = alpha*A*B + beta*C  if side == blas.Left
+//  C = alpha*B*A + beta*C  if side == blas.Right
+// where alpha and beta are scalars, A is an m×m or n×n hermitian matrix and B
+// and C are m×n matrices. The imaginary parts of the diagonal elements of A are
+// assumed to be zero.
 func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
 	// declared at cblas.h:578:6 void cblas_zhemm ...
 
@@ -7621,6 +7665,14 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 	C.cblas_zhemm(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_SIDE(s), C.enum_CBLAS_UPLO(ul), C.int(m), C.int(n), unsafe.Pointer(&alpha), unsafe.Pointer(_a), C.int(lda), unsafe.Pointer(_b), C.int(ldb), unsafe.Pointer(&beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zherk performs one of the hermitian rank-k operations
+//  C = alpha*A*A^H + beta*C  if trans == blas.NoTrans
+//  C = alpha*A^H*A + beta*C  if trans == blas.ConjTrans
+// where alpha and beta are real scalars, C is an n×n hermitian matrix and A is
+// an n×k matrix in the first case and a k×n matrix in the second case.
+//
+// The imaginary parts of the diagonal elements of C are assumed to be zero, and
+// on return they will be set to zero.
 func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128, ldc int) {
 	// declared at cblas.h:583:6 void cblas_zherk ...
 
@@ -7682,6 +7734,14 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 	C.cblas_zherk(C.enum_CBLAS_ORDER(rowMajor), C.enum_CBLAS_UPLO(ul), C.enum_CBLAS_TRANSPOSE(t), C.int(n), C.int(k), C.double(alpha), unsafe.Pointer(_a), C.int(lda), C.double(beta), unsafe.Pointer(_c), C.int(ldc))
 }
 
+// Zher2k performs one of the hermitian rank-2k operations
+//  C = alpha*A*B^H + conj(alpha)*B*A^H + beta*C  if trans == blas.NoTrans
+//  C = alpha*A^H*B + conj(alpha)*B^H*A + beta*C  if trans == blas.ConjTrans
+// where alpha and beta are scalars with beta real, C is an n×n hermitian matrix
+// and A and B are n×k matrices in the first case and k×n matrices in the second case.
+//
+// The imaginary parts of the diagonal elements of C are assumed to be zero, and
+// on return they will be set to zero.
 func (Implementation) Zher2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta float64, c []complex128, ldc int) {
 	// declared at cblas.h:587:6 void cblas_zher2k ...
 
