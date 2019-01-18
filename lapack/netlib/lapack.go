@@ -616,6 +616,33 @@ func (impl Implementation) Dpotrf(ul blas.Uplo, n int, a []float64, lda int) (ok
 	return lapacke.Dpotrf(byte(ul), n, a, lda)
 }
 
+// Dpotri computes the inverse of a real symmetric positive definite matrix A
+// using its Cholesky factorization.
+//
+// On entry, a contains the triangular factor U or L from the Cholesky
+// factorization A = U^T*U or A = L*L^T, as computed by Dpotrf.
+// On return, a contains the upper or lower triangle of the (symmetric)
+// inverse of A, overwriting the input factor U or L.
+func (impl Implementation) Dpotri(uplo blas.Uplo, n int, a []float64, lda int) (ok bool) {
+	switch {
+	case uplo != blas.Upper && uplo != blas.Lower:
+		panic(badUplo)
+	case n < 0:
+		panic(nLT0)
+	case lda < max(1, n):
+		panic(badLdA)
+	case len(a) < (n-1)*lda+n:
+		panic("lapack: a has insufficient length")
+	}
+
+	// Quick return if possible.
+	if n == 0 {
+		return true
+	}
+
+	return lapacke.Dpotri(byte(uplo), n, a, lda)
+}
+
 // Dpotrs solves a system of n linear equations A*X = B where A is an n×n
 // symmetric positive definite matrix and B is an n×nrhs matrix. The matrix A is
 // represented by its Cholesky factorization
