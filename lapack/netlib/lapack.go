@@ -995,20 +995,34 @@ func (impl Implementation) Dgelq2(m, n int, a []float64, lda int, tau, work []fl
 //
 // tau must have length at least min(m,n), and this function will panic otherwise.
 func (impl Implementation) Dgelqf(m, n int, a []float64, lda int, tau, work []float64, lwork int) {
-	if lwork == -1 {
-		work[0] = float64(m)
-		return
-	}
-	checkMatrix(m, n, a, lda)
-	if len(work) < lwork {
+	switch {
+	case m < 0:
+		panic(mLT0)
+	case n < 0:
+		panic(nLT0)
+	case lda < max(1, n):
+		panic(badLdA)
+	case lwork < max(1, m) && lwork != -1:
+		panic(badWork)
+	case len(work) < max(1, lwork):
 		panic(shortWork)
 	}
-	if lwork < m {
-		panic(badWork)
+
+	k := min(m, n)
+	if k == 0 {
+		work[0] = 1
+		return
 	}
-	if len(tau) < min(m, n) {
-		panic(badTau)
+
+	if lwork != -1 {
+		if len(a) < (m-1)*lda+n {
+			panic("lapack: insufficient length of a")
+		}
+		if len(tau) < k {
+			panic(badTau)
+		}
 	}
+
 	lapacke.Dgelqf(m, n, a, lda, tau, work, lwork)
 }
 
