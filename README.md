@@ -1,4 +1,4 @@
-Gonum NETLIB  [![Build Status](https://travis-ci.org/gonum/netlib.svg?branch=master)](https://travis-ci.org/gonum/netlib)  [![Coverage Status](https://coveralls.io/repos/gonum/netlib/badge.svg?branch=master&service=github)](https://coveralls.io/github/gonum/netlib?branch=master) [![GoDoc](https://godoc.org/gonum.org/v1/netlib?status.svg)](https://godoc.org/gonum.org/v1/netlib)
+Gonum NETLIB  [![Build Status](https://travis-ci.org/gonum/netlib.svg?branch=master)](https://travis-ci.org/gonum/netlib)  [![codecov.io](https://codecov.io/gh/gonum/netlib/branch/master/graph/badge.svg)](https://codecov.io/gh/gonum/netlib) [![coveralls.io](https://coveralls.io/repos/gonum/netlib/badge.svg?branch=master&service=github)](https://coveralls.io/github/gonum/netlib?branch=master) [![GoDoc](https://godoc.org/gonum.org/v1/netlib?status.svg)](https://godoc.org/gonum.org/v1/netlib)
 ======
 
 Wrapper packages providing an interface to the NETLIB C BLAS and LAPACKE implementations.
