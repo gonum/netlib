@@ -18,7 +18,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/cznic/cc"
+	"modernc.org/cc"
 
 	"gonum.org/v1/netlib/internal/binding"
 )

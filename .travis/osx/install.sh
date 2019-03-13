@@ -9,7 +9,7 @@ go get gonum.org/v1/gonum/lapack
 go get gonum.org/v1/gonum/floats
 
 # Repositories for code generation.
-go get github.com/cznic/cc
+go get modernc.org/cc
 go get gonum.org/v1/netlib/internal/binding
 
 # travis compiles commands in script and then executes in bash.  By adding
