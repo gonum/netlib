@@ -15,8 +15,8 @@ import (
 	"text/template"
 	"unsafe"
 
-	"github.com/cznic/cc"
-	"github.com/cznic/xc"
+	"modernc.org/cc"
+	"modernc.org/xc"
 )
 
 func model() *cc.Model {
