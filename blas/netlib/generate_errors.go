@@ -7,6 +7,8 @@
 package main
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -14,15 +16,20 @@ import (
 	"go/token"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
-const errorFile = "../../../gonum/blas/gonum/errors.go"
+const (
+	srcModule = "gonum.org/v1/gonum"
+	errorFile = "blas/gonum/errors.go"
+)
 
 func main() {
-	path, err := filepath.Abs(errorFile)
+	path, err := pathTo(srcModule, errorFile)
 	if err != nil {
-		log.Fatalf("no absolute path for %q: %v", errorFile, err)
+		log.Fatalf("no source for %q: %v", errorFile, err)
 	}
 
 	fset := token.NewFileSet()
@@ -58,6 +65,30 @@ func main() {
 	}
 	p.Fprint(o, fset, f.Decls)
 	fmt.Fprintln(o)
+}
+
+// pathTo returns the path to file within the given module. If running
+// in module mode, this will look within the module in $GOPATH/pkg/mod
+// at the correct version, otherwise it will find the version installed
+// at $GOPATH/src/module/file.
+func pathTo(module, file string) (string, error) {
+	gopath, ok := os.LookupEnv("GOPATH")
+	if !ok {
+		return "", errors.New("no $GOPATH")
+	}
+
+	cmd := exec.Command("go", "list", "-m", module)
+	var buf, stderr bytes.Buffer
+	cmd.Stdout = &buf
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		// TODO(kortschak): Make this an error when go1.10 support is dropped.
+		log.Printf("module aware go list failed with stderr output %q: %v", stderr.String(), err)
+		return filepath.Join(gopath, "src", module, file), nil
+	}
+	version := strings.TrimSpace(strings.Join(strings.Split(buf.String(), " "), "@"))
+	return filepath.Join(gopath, "pkg", "mod", version, file), nil
 }
 
 const (
