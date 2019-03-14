@@ -29,11 +29,14 @@ if [ ! -e ${CACHE_DIR}/last_commit_id ]; then
     git clone --depth=1 git://github.com/xianyi/OpenBLAS
 
     pushd OpenBLAS
-    echo OpenBLAS version:$(git rev-parse HEAD)
     make FC=gfortran &> /dev/null && make PREFIX=${CACHE_DIR} install
     echo $(git rev-parse HEAD) > ${CACHE_DIR}/last_commit_id
     popd
 fi
+
+# Instrument the build state
+echo OpenBLAS version:$(cat ${CACHE_DIR}/last_commit_id)
+cat /proc/cpuinfo
 
 # copy the cache files into /usr
 sudo cp -r ${CACHE_DIR}/* /usr/
