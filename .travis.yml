@@ -4,9 +4,9 @@ language: go
 
 # Versions of go that are explicitly supported by gonum.
 go:
- - 1.9.x
- - 1.10.x
+ - 1.12.x
  - 1.11.x
+ - 1.10.x
  - master
 
 go_import_path: gonum.org/v1/netlib
@@ -16,7 +16,9 @@ os:
  - osx
 
 env:
-  matrix:
+ global:
+  - GO111MODULE=on
+ matrix:
   - BLAS_LIB=OpenBLAS
   # Does not currently link correctly.  Note that there is an issue with drotgm in ATLAS.
   # - BLAS_LIB=ATLAS
