@@ -13,8 +13,9 @@ golang.org/x/sys v0.0.0-20190312061237-fead79001313/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20190206041539-40960b6deb8e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20190312151545-0bb0c0a6e846/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
-gonum.org/v1/gonum v0.0.0-20190312223110-e28f136e01a8 h1:ydI/ZIWZ7BIeR4qs4epCV2Pw1owzB9je1qxtb9Od8Bc=
-gonum.org/v1/gonum v0.0.0-20190312223110-e28f136e01a8/go.mod h1:jevfED4GnIEnJrWW55YmY9DMhajHcnkqVnEXmEtMyNI=
+gonum.org/v1/gonum v0.0.0-20190327053044-9996f1428eb6 h1:J2E8+RF2MJbp5ElkVuqonc7ZcRO/eeU5vWMNCt0YgFY=
+gonum.org/v1/gonum v0.0.0-20190327053044-9996f1428eb6/go.mod h1:2ltnJ7xHfj0zHS40VVPYEAAMTa3ZGguvHGBSJeRWqE0=
+gonum.org/v1/netlib v0.0.0-20190313105609-8cb42192e0e0/go.mod h1:wa6Ws7BG/ESfp6dHfk7C6KdzKA7wR7u/rKwOGE66zvw=
 modernc.org/cc v1.0.0 h1:nPibNuDEx6tvYrUAtvDTTw98rx5juGsa5zuDnKwEEQQ=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0 h1:wWpDlbK8ejRfSyi0frMyhilD3JBvtcx2AdGDnU+JtsE=
