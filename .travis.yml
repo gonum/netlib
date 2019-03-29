@@ -63,12 +63,12 @@ cache:
 
 # Install the appropriate blas library (if any) and associated gonum software.
 install:
- - travis_wait 20 source ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/install.sh
+ - travis_wait 20 ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/install.sh
 
 script:
  - ${TRAVIS_BUILD_DIR}/.travis/check-imports.sh
  - ${TRAVIS_BUILD_DIR}/.travis/check-copyright.sh
- - source ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/test.sh
+ - ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/test.sh
  - test -z "$(gofmt -d .)"
  # This is run last since it alters the tree.
  - ${TRAVIS_BUILD_DIR}/.travis/check-generate.sh
