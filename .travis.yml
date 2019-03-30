@@ -49,6 +49,8 @@ matrix:
     env: BLAS_LIB=OpenBLAS
 
 before_install:
+ # Required for format check.
+ - go get golang.org/x/tools/cmd/goimports
  # Required for code get checks.
  - go mod download gonum.org/v1/gonum || true
  # Required for imports check.
@@ -66,9 +68,9 @@ install:
  - travis_wait 20 ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/install.sh
 
 script:
- - ${TRAVIS_BUILD_DIR}/.travis/check-imports.sh
  - ${TRAVIS_BUILD_DIR}/.travis/check-copyright.sh
+ - ${TRAVIS_BUILD_DIR}/.travis/check-imports.sh
+ - ${TRAVIS_BUILD_DIR}/.travis/check-formatting.sh
  - ${TRAVIS_BUILD_DIR}/.travis/$TRAVIS_OS_NAME/$BLAS_LIB/test.sh
- - test -z "$(gofmt -d .)"
  # This is run last since it alters the tree.
  - ${TRAVIS_BUILD_DIR}/.travis/check-generate.sh
