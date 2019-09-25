@@ -4,9 +4,9 @@ language: go
 
 # Versions of go that are explicitly supported by gonum.
 go:
+ - 1.13.x
  - 1.12.x
  - 1.11.x
- - 1.10.x
  - master
 
 go_import_path: gonum.org/v1/netlib
@@ -30,6 +30,8 @@ cache:
  directories:
   - $HOME/.cache/go-build
   - $HOME/gopath/pkg/mod
+  # Persist the compiled OpenBLAS library between CI calls.
+  - .travis/OpenBLAS.cache
 
 git:
  depth: 1
@@ -57,11 +59,6 @@ before_install:
  - go get gonum.org/v1/tools/cmd/check-imports
  # Required for copyright header check.
  - go get gonum.org/v1/tools/cmd/check-copyright
-
-# Cache used to persist the compiled BLAS library between CI calls.
-cache:
-  directories:
-  - .travis/OpenBLAS.cache
 
 # Install the appropriate blas library (if any) and associated gonum software.
 install:
