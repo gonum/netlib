@@ -1512,8 +1512,8 @@ func (Implementation) Zdscal(n int, alpha float64, x []complex128, incX int) {
 }
 
 // Sgemv computes
-//  y = alpha * A * x + beta * y    if tA = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if tA = blas.Trans or blas.ConjTrans
+//  y = alpha * A * x + beta * y   if tA = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if tA = blas.Trans or blas.ConjTrans
 // where A is an m×n dense matrix, x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
 	// declared at cblas.h:171:6 void cblas_sgemv ...
@@ -1581,8 +1581,8 @@ func (Implementation) Sgemv(tA blas.Transpose, m, n int, alpha float32, a []floa
 }
 
 // Sgbmv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if tA == blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if tA == blas.Trans or blas.ConjTrans
+//  y = alpha * A * x + beta * y   if tA == blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if tA == blas.Trans or blas.ConjTrans
 // where A is an m×n band matrix with kL sub-diagonals and kU super-diagonals,
 // x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
@@ -1657,8 +1657,8 @@ func (Implementation) Sgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float32, 
 }
 
 // Strmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix, and x is a vector.
 func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:181:6 void cblas_strmv ...
@@ -1723,8 +1723,8 @@ func (Implementation) Strmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Stbmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular band matrix with k+1 diagonals, and x is a vector.
 func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float32, lda int, x []float32, incX int) {
 	// declared at cblas.h:185:6 void cblas_stbmv ...
@@ -1792,8 +1792,8 @@ func (Implementation) Stbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Stpmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix in packed format, and x is a vector.
 func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float32, incX int) {
 	// declared at cblas.h:189:6 void cblas_stpmv ...
@@ -1855,8 +1855,8 @@ func (Implementation) Stpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Strsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix, and x and b are vectors.
 //
 // At entry to the function, x contains the values of b, and the result is
@@ -1927,8 +1927,8 @@ func (Implementation) Strsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Stbsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or tA == blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or tA == blas.ConjTrans
 // where A is an n×n triangular band matrix with k+1 diagonals,
 // and x and b are vectors.
 //
@@ -2003,8 +2003,8 @@ func (Implementation) Stbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Stpsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix in packed format, and x and b are vectors.
 //
 // At entry to the function, x contains the values of b, and the result is
@@ -2072,8 +2072,8 @@ func (Implementation) Stpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Dgemv computes
-//  y = alpha * A * x + beta * y    if tA = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if tA = blas.Trans or blas.ConjTrans
+//  y = alpha * A * x + beta * y   if tA = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if tA = blas.Trans or blas.ConjTrans
 // where A is an m×n dense matrix, x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
 	// declared at cblas.h:204:6 void cblas_dgemv ...
@@ -2141,8 +2141,8 @@ func (Implementation) Dgemv(tA blas.Transpose, m, n int, alpha float64, a []floa
 }
 
 // Dgbmv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if tA == blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if tA == blas.Trans or blas.ConjTrans
+//  y = alpha * A * x + beta * y   if tA == blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if tA == blas.Trans or blas.ConjTrans
 // where A is an m×n band matrix with kL sub-diagonals and kU super-diagonals,
 // x and y are vectors, and alpha and beta are scalars.
 func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
@@ -2217,8 +2217,8 @@ func (Implementation) Dgbmv(tA blas.Transpose, m, n, kL, kU int, alpha float64, 
 }
 
 // Dtrmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix, and x is a vector.
 func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:214:6 void cblas_dtrmv ...
@@ -2283,8 +2283,8 @@ func (Implementation) Dtrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Dtbmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular band matrix with k+1 diagonals, and x is a vector.
 func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []float64, lda int, x []float64, incX int) {
 	// declared at cblas.h:218:6 void cblas_dtbmv ...
@@ -2352,8 +2352,8 @@ func (Implementation) Dtbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Dtpmv performs one of the matrix-vector operations
-//  x = A * x    if tA == blas.NoTrans
-//  x = A^T * x  if tA == blas.Trans or blas.ConjTrans
+//  x = A * x   if tA == blas.NoTrans
+//  x = Aᵀ * x  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix in packed format, and x is a vector.
 func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []float64, incX int) {
 	// declared at cblas.h:222:6 void cblas_dtpmv ...
@@ -2415,8 +2415,8 @@ func (Implementation) Dtpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Dtrsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix, and x and b are vectors.
 //
 // At entry to the function, x contains the values of b, and the result is
@@ -2487,8 +2487,8 @@ func (Implementation) Dtrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Dtbsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or tA == blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or tA == blas.ConjTrans
 // where A is an n×n triangular band matrix with k+1 diagonals,
 // and x and b are vectors.
 //
@@ -2563,8 +2563,8 @@ func (Implementation) Dtbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Dtpsv solves one of the systems of equations
-//  A * x = b    if tA == blas.NoTrans
-//  A^T * x = b  if tA == blas.Trans or blas.ConjTrans
+//  A * x = b   if tA == blas.NoTrans
+//  Aᵀ * x = b  if tA == blas.Trans or blas.ConjTrans
 // where A is an n×n triangular matrix in packed format, and x and b are vectors.
 //
 // At entry to the function, x contains the values of b, and the result is
@@ -2632,9 +2632,9 @@ func (Implementation) Dtpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Cgemv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
-//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+//  y = alpha * A * x + beta * y   if trans = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if trans = blas.Trans
+//  y = alpha * Aᴴ * x + beta * y  if trans = blas.ConjTrans
 // where alpha and beta are scalars, x and y are vectors, and A is an m×n dense matrix.
 //
 // Complex64 implementations are autogenerated and not directly tested.
@@ -2704,9 +2704,9 @@ func (Implementation) Cgemv(tA blas.Transpose, m, n int, alpha complex64, a []co
 }
 
 // Cgbmv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
-//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+//  y = alpha * A * x + beta * y   if trans = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if trans = blas.Trans
+//  y = alpha * Aᴴ * x + beta * y  if trans = blas.ConjTrans
 // where alpha and beta are scalars, x and y are vectors, and A is an m×n band matrix
 // with kL sub-diagonals and kU super-diagonals.
 //
@@ -2783,9 +2783,9 @@ func (Implementation) Cgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex64
 }
 
 // Ctrmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is a vector, and A is an n×n triangular matrix.
 //
 // Complex64 implementations are autogenerated and not directly tested.
@@ -2852,9 +2852,9 @@ func (Implementation) Ctrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ctbmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is an n element vector and A is an n×n triangular band matrix, with
 // (k+1) diagonals.
 //
@@ -2925,9 +2925,9 @@ func (Implementation) Ctbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Ctpmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is an n element vector and A is an n×n triangular matrix, supplied in
 // packed form.
 //
@@ -2992,9 +2992,9 @@ func (Implementation) Ctpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ctrsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular matrix.
 //
 // On entry, x contains the values of b, and the solution is
@@ -3067,9 +3067,9 @@ func (Implementation) Ctrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ctbsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular band matrix
 // with (k+1) diagonals.
 //
@@ -3146,9 +3146,9 @@ func (Implementation) Ctbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Ctpsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular matrix in
 // packed form.
 //
@@ -3219,9 +3219,9 @@ func (Implementation) Ctpsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Zgemv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
-//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+//  y = alpha * A * x + beta * y   if trans = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if trans = blas.Trans
+//  y = alpha * Aᴴ * x + beta * y  if trans = blas.ConjTrans
 // where alpha and beta are scalars, x and y are vectors, and A is an m×n dense matrix.
 func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
 	// declared at cblas.h:270:6 void cblas_zgemv ...
@@ -3289,9 +3289,9 @@ func (Implementation) Zgemv(tA blas.Transpose, m, n int, alpha complex128, a []c
 }
 
 // Zgbmv performs one of the matrix-vector operations
-//  y = alpha * A * x + beta * y    if trans = blas.NoTrans
-//  y = alpha * A^T * x + beta * y  if trans = blas.Trans
-//  y = alpha * A^H * x + beta * y  if trans = blas.ConjTrans
+//  y = alpha * A * x + beta * y   if trans = blas.NoTrans
+//  y = alpha * Aᵀ * x + beta * y  if trans = blas.Trans
+//  y = alpha * Aᴴ * x + beta * y  if trans = blas.ConjTrans
 // where alpha and beta are scalars, x and y are vectors, and A is an m×n band matrix
 // with kL sub-diagonals and kU super-diagonals.
 func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
@@ -3366,9 +3366,9 @@ func (Implementation) Zgbmv(tA blas.Transpose, m, n, kL, kU int, alpha complex12
 }
 
 // Ztrmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is a vector, and A is an n×n triangular matrix.
 func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, a []complex128, lda int, x []complex128, incX int) {
 	// declared at cblas.h:280:6 void cblas_ztrmv ...
@@ -3433,9 +3433,9 @@ func (Implementation) Ztrmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ztbmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is an n element vector and A is an n×n triangular band matrix, with
 // (k+1) diagonals.
 func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k int, a []complex128, lda int, x []complex128, incX int) {
@@ -3504,9 +3504,9 @@ func (Implementation) Ztbmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Ztpmv performs one of the matrix-vector operations
-//  x = A * x    if trans = blas.NoTrans
-//  x = A^T * x  if trans = blas.Trans
-//  x = A^H * x  if trans = blas.ConjTrans
+//  x = A * x   if trans = blas.NoTrans
+//  x = Aᵀ * x  if trans = blas.Trans
+//  x = Aᴴ * x  if trans = blas.ConjTrans
 // where x is an n element vector and A is an n×n triangular matrix, supplied in
 // packed form.
 func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int, ap, x []complex128, incX int) {
@@ -3569,9 +3569,9 @@ func (Implementation) Ztpmv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ztrsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular matrix.
 //
 // On entry, x contains the values of b, and the solution is
@@ -3642,9 +3642,9 @@ func (Implementation) Ztrsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n int,
 }
 
 // Ztbsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular band matrix
 // with (k+1) diagonals.
 //
@@ -3719,9 +3719,9 @@ func (Implementation) Ztbsv(ul blas.Uplo, tA blas.Transpose, d blas.Diag, n, k i
 }
 
 // Ztpsv solves one of the systems of equations
-//  A * x = b    if trans == blas.NoTrans
-//  A^T * x = b  if trans == blas.Trans
-//  A^H * x = b  if trans == blas.ConjTrans
+//  A * x = b   if trans == blas.NoTrans
+//  Aᵀ * x = b  if trans == blas.Trans
+//  Aᴴ * x = b  if trans == blas.ConjTrans
 // where b and x are n element vectors and A is an n×n triangular matrix in
 // packed form.
 //
@@ -3964,7 +3964,7 @@ func (Implementation) Sspmv(ul blas.Uplo, n int, alpha float32, ap, x []float32,
 }
 
 // Sger performs the rank-one operation
-//  A += alpha * x * y^T
+//  A += alpha * x * yᵀ
 // where A is an m×n dense matrix, x and y are vectors, and alpha is a scalar.
 func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []float32, incY int, a []float32, lda int) {
 	// declared at cblas.h:319:6 void cblas_sger ...
@@ -4016,7 +4016,7 @@ func (Implementation) Sger(m, n int, alpha float32, x []float32, incX int, y []f
 }
 
 // Ssyr performs the symmetric rank-one update
-//  A += alpha * x * x^T
+//  A += alpha * x * xᵀ
 // where A is an n×n symmetric matrix, and x is a vector.
 func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX int, a []float32, lda int) {
 	// declared at cblas.h:322:6 void cblas_ssyr ...
@@ -4063,7 +4063,7 @@ func (Implementation) Ssyr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 }
 
 // Sspr performs the symmetric rank-one operation
-//  A += alpha * x * x^T
+//  A += alpha * x * xᵀ
 // where A is an n×n symmetric matrix in packed format, x is a vector, and
 // alpha is a scalar.
 func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX int, ap []float32) {
@@ -4108,7 +4108,7 @@ func (Implementation) Sspr(ul blas.Uplo, n int, alpha float32, x []float32, incX
 }
 
 // Ssyr2 performs the symmetric rank-two update
-//  A += alpha * x * y^T + alpha * y * x^T
+//  A += alpha * x * yᵀ + alpha * y * xᵀ
 // where A is an n×n symmetric matrix, x and y are vectors, and alpha is a scalar.
 func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, incX int, y []float32, incY int, a []float32, lda int) {
 	// declared at cblas.h:328:6 void cblas_ssyr2 ...
@@ -4165,7 +4165,7 @@ func (Implementation) Ssyr2(ul blas.Uplo, n int, alpha float32, x []float32, inc
 }
 
 // Sspr2 performs the symmetric rank-2 update
-//  A += alpha * x * y^T + alpha * y * x^T
+//  A += alpha * x * yᵀ + alpha * y * xᵀ
 // where A is an n×n symmetric matrix in packed format, x and y are vectors,
 // and alpha is a scalar.
 func (Implementation) Sspr2(ul blas.Uplo, n int, alpha float32, x []float32, incX int, y []float32, incY int, ap []float32) {
@@ -4394,7 +4394,7 @@ func (Implementation) Dspmv(ul blas.Uplo, n int, alpha float64, ap, x []float64,
 }
 
 // Dger performs the rank-one operation
-//  A += alpha * x * y^T
+//  A += alpha * x * yᵀ
 // where A is an m×n dense matrix, x and y are vectors, and alpha is a scalar.
 func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []float64, incY int, a []float64, lda int) {
 	// declared at cblas.h:348:6 void cblas_dger ...
@@ -4446,7 +4446,7 @@ func (Implementation) Dger(m, n int, alpha float64, x []float64, incX int, y []f
 }
 
 // Dsyr performs the symmetric rank-one update
-//  A += alpha * x * x^T
+//  A += alpha * x * xᵀ
 // where A is an n×n symmetric matrix, and x is a vector.
 func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX int, a []float64, lda int) {
 	// declared at cblas.h:351:6 void cblas_dsyr ...
@@ -4493,7 +4493,7 @@ func (Implementation) Dsyr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 }
 
 // Dspr performs the symmetric rank-one operation
-//  A += alpha * x * x^T
+//  A += alpha * x * xᵀ
 // where A is an n×n symmetric matrix in packed format, x is a vector, and
 // alpha is a scalar.
 func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX int, ap []float64) {
@@ -4538,7 +4538,7 @@ func (Implementation) Dspr(ul blas.Uplo, n int, alpha float64, x []float64, incX
 }
 
 // Dsyr2 performs the symmetric rank-two update
-//  A += alpha * x * y^T + alpha * y * x^T
+//  A += alpha * x * yᵀ + alpha * y * xᵀ
 // where A is an n×n symmetric matrix, x and y are vectors, and alpha is a scalar.
 func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, incX int, y []float64, incY int, a []float64, lda int) {
 	// declared at cblas.h:357:6 void cblas_dsyr2 ...
@@ -4595,7 +4595,7 @@ func (Implementation) Dsyr2(ul blas.Uplo, n int, alpha float64, x []float64, inc
 }
 
 // Dspr2 performs the symmetric rank-2 update
-//  A += alpha * x * y^T + alpha * y * x^T
+//  A += alpha * x * yᵀ + alpha * y * xᵀ
 // where A is an n×n symmetric matrix in packed format, x and y are vectors,
 // and alpha is a scalar.
 func (Implementation) Dspr2(ul blas.Uplo, n int, alpha float64, x []float64, incX int, y []float64, incY int, ap []float64) {
@@ -4833,7 +4833,7 @@ func (Implementation) Chpmv(ul blas.Uplo, n int, alpha complex64, ap, x []comple
 }
 
 // Cgeru performs the rank-one operation
-//  A += alpha * x * y^T
+//  A += alpha * x * yᵀ
 // where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
 // and y is an n element vector.
 //
@@ -4888,7 +4888,7 @@ func (Implementation) Cgeru(m, n int, alpha complex64, x []complex64, incX int, 
 }
 
 // Cgerc performs the rank-one operation
-//  A += alpha * x * y^H
+//  A += alpha * x * yᴴ
 // where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
 // and y is an n element vector.
 //
@@ -4943,7 +4943,7 @@ func (Implementation) Cgerc(m, n int, alpha complex64, x []complex64, incX int, 
 }
 
 // Cher performs the Hermitian rank-one operation
-//  A += alpha * x * x^H
+//  A += alpha * x * xᴴ
 // where A is an n×n Hermitian matrix, alpha is a real scalar, and x is an n
 // element vector. On entry, the imaginary parts of the diagonal elements of A
 // are ignored and assumed to be zero, on return they will be set to zero.
@@ -4994,7 +4994,7 @@ func (Implementation) Cher(ul blas.Uplo, n int, alpha float32, x []complex64, in
 }
 
 // Chpr performs the Hermitian rank-1 operation
-//  A += alpha * x * x^H
+//  A += alpha * x * xᴴ
 // where alpha is a real scalar, x is a vector, and A is an n×n hermitian matrix
 // in packed form. On entry, the imaginary parts of the diagonal elements are
 // assumed to be zero, and on return they are set to zero.
@@ -5042,7 +5042,7 @@ func (Implementation) Chpr(ul blas.Uplo, n int, alpha float32, x []complex64, in
 }
 
 // Cher2 performs the Hermitian rank-two operation
-//  A += alpha * x * y^H + conj(alpha) * y * x^H
+//  A += alpha * x * yᴴ + conj(alpha) * y * xᴴ
 // where alpha is a scalar, x and y are n element vectors and A is an n×n
 // Hermitian matrix. On entry, the imaginary parts of the diagonal elements are
 // ignored and assumed to be zero. On return they will be set to zero.
@@ -5103,7 +5103,7 @@ func (Implementation) Cher2(ul blas.Uplo, n int, alpha complex64, x []complex64,
 }
 
 // Chpr2 performs the Hermitian rank-2 operation
-//  A += alpha * x * y^H + conj(alpha) * y * x^H
+//  A += alpha * x * yᴴ + conj(alpha) * y * xᴴ
 // where alpha is a complex scalar, x and y are n element vectors, and A is an
 // n×n Hermitian matrix, supplied in packed form. On entry, the imaginary parts
 // of the diagonal elements are assumed to be zero, and on return they are set to zero.
@@ -5338,7 +5338,7 @@ func (Implementation) Zhpmv(ul blas.Uplo, n int, alpha complex128, ap, x []compl
 }
 
 // Zgeru performs the rank-one operation
-//  A += alpha * x * y^T
+//  A += alpha * x * yᵀ
 // where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
 // and y is an n element vector.
 func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
@@ -5391,7 +5391,7 @@ func (Implementation) Zgeru(m, n int, alpha complex128, x []complex128, incX int
 }
 
 // Zgerc performs the rank-one operation
-//  A += alpha * x * y^H
+//  A += alpha * x * yᴴ
 // where A is an m×n dense matrix, alpha is a scalar, x is an m element vector,
 // and y is an n element vector.
 func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, a []complex128, lda int) {
@@ -5444,7 +5444,7 @@ func (Implementation) Zgerc(m, n int, alpha complex128, x []complex128, incX int
 }
 
 // Zher performs the Hermitian rank-one operation
-//  A += alpha * x * x^H
+//  A += alpha * x * xᴴ
 // where A is an n×n Hermitian matrix, alpha is a real scalar, and x is an n
 // element vector. On entry, the imaginary parts of the diagonal elements of A
 // are ignored and assumed to be zero, on return they will be set to zero.
@@ -5493,7 +5493,7 @@ func (Implementation) Zher(ul blas.Uplo, n int, alpha float64, x []complex128, i
 }
 
 // Zhpr performs the Hermitian rank-1 operation
-//  A += alpha * x * x^H
+//  A += alpha * x * xᴴ
 // where alpha is a real scalar, x is a vector, and A is an n×n hermitian matrix
 // in packed form. On entry, the imaginary parts of the diagonal elements are
 // assumed to be zero, and on return they are set to zero.
@@ -5539,7 +5539,7 @@ func (Implementation) Zhpr(ul blas.Uplo, n int, alpha float64, x []complex128, i
 }
 
 // Zher2 performs the Hermitian rank-two operation
-//  A += alpha * x * y^H + conj(alpha) * y * x^H
+//  A += alpha * x * yᴴ + conj(alpha) * y * xᴴ
 // where alpha is a scalar, x and y are n element vectors and A is an n×n
 // Hermitian matrix. On entry, the imaginary parts of the diagonal elements are
 // ignored and assumed to be zero. On return they will be set to zero.
@@ -5598,7 +5598,7 @@ func (Implementation) Zher2(ul blas.Uplo, n int, alpha complex128, x []complex12
 }
 
 // Zhpr2 performs the Hermitian rank-2 operation
-//  A += alpha * x * y^H + conj(alpha) * y * x^H
+//  A += alpha * x * yᴴ + conj(alpha) * y * xᴴ
 // where alpha is a complex scalar, x and y are n element vectors, and A is an
 // n×n Hermitian matrix, supplied in packed form. On entry, the imaginary parts
 // of the diagonal elements are assumed to be zero, and on return they are set to zero.
@@ -5655,9 +5655,9 @@ func (Implementation) Zhpr2(ul blas.Uplo, n int, alpha complex128, x []complex12
 
 // Sgemm performs one of the matrix-matrix operations
 //  C = alpha * A * B + beta * C
-//  C = alpha * A^T * B + beta * C
-//  C = alpha * A * B^T + beta * C
-//  C = alpha * A^T * B^T + beta * C
+//  C = alpha * Aᵀ * B + beta * C
+//  C = alpha * A * Bᵀ + beta * C
+//  C = alpha * Aᵀ * Bᵀ + beta * C
 // where A is an m×k or k×m dense matrix, B is an n×k or k×n dense matrix, C is
 // an m×n matrix, and alpha and beta are scalars. tA and tB specify whether A or
 // B are transposed.
@@ -5821,8 +5821,8 @@ func (Implementation) Ssymm(s blas.Side, ul blas.Uplo, m, n int, alpha float32, 
 }
 
 // Ssyrk performs one of the symmetric rank-k operations
-//  C = alpha * A * A^T + beta * C  if tA == blas.NoTrans
-//  C = alpha * A^T * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
+//  C = alpha * A * Aᵀ + beta * C  if tA == blas.NoTrans
+//  C = alpha * Aᵀ * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
 // where A is an n×k or k×n matrix, C is an n×n symmetric matrix, and alpha and
 // beta are scalars.
 func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []float32, lda int, beta float32, c []float32, ldc int) {
@@ -5889,8 +5889,8 @@ func (Implementation) Ssyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 }
 
 // Ssyr2k performs one of the symmetric rank 2k operations
-//  C = alpha * A * B^T + alpha * B * A^T + beta * C  if tA == blas.NoTrans
-//  C = alpha * A^T * B + alpha * B^T * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
+//  C = alpha * A * Bᵀ + alpha * B * Aᵀ + beta * C  if tA == blas.NoTrans
+//  C = alpha * Aᵀ * B + alpha * Bᵀ * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
 // where A and B are n×k or k×n matrices, C is an n×n symmetric matrix, and
 // alpha and beta are scalars.
 func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
@@ -5967,10 +5967,10 @@ func (Implementation) Ssyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 }
 
 // Strmm performs one of the matrix-matrix operations
-//  B = alpha * A * B    if tA == blas.NoTrans and side == blas.Left
-//  B = alpha * A^T * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
-//  B = alpha * B * A    if tA == blas.NoTrans and side == blas.Right
-//  B = alpha * B * A^T  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
+//  B = alpha * A * B   if tA == blas.NoTrans and side == blas.Left
+//  B = alpha * Aᵀ * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
+//  B = alpha * B * A   if tA == blas.NoTrans and side == blas.Right
+//  B = alpha * B * Aᵀ  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
 // where A is an n×n or m×m triangular matrix, B is an m×n matrix, and alpha is a scalar.
 func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int) {
 	// declared at cblas.h:459:6 void cblas_strmm ...
@@ -6052,10 +6052,10 @@ func (Implementation) Strmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 }
 
 // Strsm solves one of the matrix equations
-//  A * X = alpha * B    if tA == blas.NoTrans and side == blas.Left
-//  A^T * X = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
-//  X * A = alpha * B    if tA == blas.NoTrans and side == blas.Right
-//  X * A^T = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
+//  A * X = alpha * B   if tA == blas.NoTrans and side == blas.Left
+//  Aᵀ * X = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
+//  X * A = alpha * B   if tA == blas.NoTrans and side == blas.Right
+//  X * Aᵀ = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
 // where A is an n×n or m×m triangular matrix, X and B are m×n matrices, and alpha is a
 // scalar.
 //
@@ -6144,9 +6144,9 @@ func (Implementation) Strsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 
 // Dgemm performs one of the matrix-matrix operations
 //  C = alpha * A * B + beta * C
-//  C = alpha * A^T * B + beta * C
-//  C = alpha * A * B^T + beta * C
-//  C = alpha * A^T * B^T + beta * C
+//  C = alpha * Aᵀ * B + beta * C
+//  C = alpha * A * Bᵀ + beta * C
+//  C = alpha * Aᵀ * Bᵀ + beta * C
 // where A is an m×k or k×m dense matrix, B is an n×k or k×n dense matrix, C is
 // an m×n matrix, and alpha and beta are scalars. tA and tB specify whether A or
 // B are transposed.
@@ -6310,8 +6310,8 @@ func (Implementation) Dsymm(s blas.Side, ul blas.Uplo, m, n int, alpha float64, 
 }
 
 // Dsyrk performs one of the symmetric rank-k operations
-//  C = alpha * A * A^T + beta * C  if tA == blas.NoTrans
-//  C = alpha * A^T * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
+//  C = alpha * A * Aᵀ + beta * C  if tA == blas.NoTrans
+//  C = alpha * Aᵀ * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
 // where A is an n×k or k×n matrix, C is an n×n symmetric matrix, and alpha and
 // beta are scalars.
 func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []float64, lda int, beta float64, c []float64, ldc int) {
@@ -6378,8 +6378,8 @@ func (Implementation) Dsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 }
 
 // Dsyr2k performs one of the symmetric rank 2k operations
-//  C = alpha * A * B^T + alpha * B * A^T + beta * C  if tA == blas.NoTrans
-//  C = alpha * A^T * B + alpha * B^T * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
+//  C = alpha * A * Bᵀ + alpha * B * Aᵀ + beta * C  if tA == blas.NoTrans
+//  C = alpha * Aᵀ * B + alpha * Bᵀ * A + beta * C  if tA == blas.Trans or tA == blas.ConjTrans
 // where A and B are n×k or k×n matrices, C is an n×n symmetric matrix, and
 // alpha and beta are scalars.
 func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
@@ -6456,10 +6456,10 @@ func (Implementation) Dsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha flo
 }
 
 // Dtrmm performs one of the matrix-matrix operations
-//  B = alpha * A * B    if tA == blas.NoTrans and side == blas.Left
-//  B = alpha * A^T * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
-//  B = alpha * B * A    if tA == blas.NoTrans and side == blas.Right
-//  B = alpha * B * A^T  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
+//  B = alpha * A * B   if tA == blas.NoTrans and side == blas.Left
+//  B = alpha * Aᵀ * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
+//  B = alpha * B * A   if tA == blas.NoTrans and side == blas.Right
+//  B = alpha * B * Aᵀ  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
 // where A is an n×n or m×m triangular matrix, B is an m×n matrix, and alpha is a scalar.
 func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int) {
 	// declared at cblas.h:489:6 void cblas_dtrmm ...
@@ -6541,10 +6541,10 @@ func (Implementation) Dtrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 }
 
 // Dtrsm solves one of the matrix equations
-//  A * X = alpha * B    if tA == blas.NoTrans and side == blas.Left
-//  A^T * X = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
-//  X * A = alpha * B    if tA == blas.NoTrans and side == blas.Right
-//  X * A^T = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
+//  A * X = alpha * B   if tA == blas.NoTrans and side == blas.Left
+//  Aᵀ * X = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Left
+//  X * A = alpha * B   if tA == blas.NoTrans and side == blas.Right
+//  X * Aᵀ = alpha * B  if tA == blas.Trans or blas.ConjTrans, and side == blas.Right
 // where A is an n×n or m×m triangular matrix, X and B are m×n matrices, and alpha is a
 // scalar.
 //
@@ -6634,7 +6634,7 @@ func (Implementation) Dtrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 // Cgemm performs one of the matrix-matrix operations
 //  C = alpha * op(A) * op(B) + beta * C
 // where op(X) is one of
-//  op(X) = X  or  op(X) = X^T  or  op(X) = X^H,
+//  op(X) = X  or  op(X) = Xᵀ  or  op(X) = Xᴴ,
 // alpha and beta are scalars, and A, B and C are matrices, with op(A) an m×k matrix,
 // op(B) a k×n matrix and C an m×n matrix.
 //
@@ -6801,8 +6801,8 @@ func (Implementation) Csymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 }
 
 // Csyrk performs one of the symmetric rank-k operations
-//  C = alpha*A*A^T + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^T*A + beta*C  if trans == blas.Trans
+//  C = alpha*A*Aᵀ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᵀ*A + beta*C  if trans == blas.Trans
 // where alpha and beta are scalars, C is an n×n symmetric matrix and A is
 // an n×k matrix in the first case and a k×n matrix in the second case.
 //
@@ -6869,8 +6869,8 @@ func (Implementation) Csyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 }
 
 // Csyr2k performs one of the symmetric rank-2k operations
-//  C = alpha*A*B^T + alpha*B*A^T + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^T*B + alpha*B^T*A + beta*C  if trans == blas.Trans
+//  C = alpha*A*Bᵀ + alpha*B*Aᵀ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᵀ*B + alpha*Bᵀ*A + beta*C  if trans == blas.Trans
 // where alpha and beta are scalars, C is an n×n symmetric matrix and A and B
 // are n×k matrices in the first case and k×n matrices in the second case.
 //
@@ -6951,9 +6951,9 @@ func (Implementation) Csyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 //  B = alpha * B * op(A)  if side == blas.Right,
 // where alpha is a scalar, B is an m×n matrix, A is a unit, or non-unit,
 // upper or lower triangular matrix and op(A) is one of
-//  op(A) = A    if trans == blas.NoTrans,
-//  op(A) = A^T  if trans == blas.Trans,
-//  op(A) = A^H  if trans == blas.ConjTrans.
+//  op(A) = A   if trans == blas.NoTrans,
+//  op(A) = Aᵀ  if trans == blas.Trans,
+//  op(A) = Aᴴ  if trans == blas.ConjTrans.
 //
 // Complex64 implementations are autogenerated and not directly tested.
 func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
@@ -7040,9 +7040,9 @@ func (Implementation) Ctrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 //  X * op(A) = alpha * B  if side == blas.Right,
 // where alpha is a scalar, X and B are m×n matrices, A is a unit or
 // non-unit, upper or lower triangular matrix and op(A) is one of
-//  op(A) = A    if transA == blas.NoTrans,
-//  op(A) = A^T  if transA == blas.Trans,
-//  op(A) = A^H  if transA == blas.ConjTrans.
+//  op(A) = A   if transA == blas.NoTrans,
+//  op(A) = Aᵀ  if transA == blas.Trans,
+//  op(A) = Aᴴ  if transA == blas.ConjTrans.
 // On return the matrix X is overwritten on B.
 //
 // Complex64 implementations are autogenerated and not directly tested.
@@ -7128,7 +7128,7 @@ func (Implementation) Ctrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 // Zgemm performs one of the matrix-matrix operations
 //  C = alpha * op(A) * op(B) + beta * C
 // where op(X) is one of
-//  op(X) = X  or  op(X) = X^T  or  op(X) = X^H,
+//  op(X) = X  or  op(X) = Xᵀ  or  op(X) = Xᴴ,
 // alpha and beta are scalars, and A, B and C are matrices, with op(A) an m×k matrix,
 // op(B) a k×n matrix and C an m×n matrix.
 func (Implementation) Zgemm(tA, tB blas.Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -7291,8 +7291,8 @@ func (Implementation) Zsymm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 }
 
 // Zsyrk performs one of the symmetric rank-k operations
-//  C = alpha*A*A^T + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^T*A + beta*C  if trans == blas.Trans
+//  C = alpha*A*Aᵀ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᵀ*A + beta*C  if trans == blas.Trans
 // where alpha and beta are scalars, C is an n×n symmetric matrix and A is
 // an n×k matrix in the first case and a k×n matrix in the second case.
 func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
@@ -7357,8 +7357,8 @@ func (Implementation) Zsyrk(ul blas.Uplo, t blas.Transpose, n, k int, alpha comp
 }
 
 // Zsyr2k performs one of the symmetric rank-2k operations
-//  C = alpha*A*B^T + alpha*B*A^T + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^T*B + alpha*B^T*A + beta*C  if trans == blas.Trans
+//  C = alpha*A*Bᵀ + alpha*B*Aᵀ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᵀ*B + alpha*Bᵀ*A + beta*C  if trans == blas.Trans
 // where alpha and beta are scalars, C is an n×n symmetric matrix and A and B
 // are n×k matrices in the first case and k×n matrices in the second case.
 func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
@@ -7437,9 +7437,9 @@ func (Implementation) Zsyr2k(ul blas.Uplo, t blas.Transpose, n, k int, alpha com
 //  B = alpha * B * op(A)  if side == blas.Right,
 // where alpha is a scalar, B is an m×n matrix, A is a unit, or non-unit,
 // upper or lower triangular matrix and op(A) is one of
-//  op(A) = A    if trans == blas.NoTrans,
-//  op(A) = A^T  if trans == blas.Trans,
-//  op(A) = A^H  if trans == blas.ConjTrans.
+//  op(A) = A   if trans == blas.NoTrans,
+//  op(A) = Aᵀ  if trans == blas.Trans,
+//  op(A) = Aᴴ  if trans == blas.ConjTrans.
 func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:549:6 void cblas_ztrmm ...
 
@@ -7524,9 +7524,9 @@ func (Implementation) Ztrmm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas
 //  X * op(A) = alpha * B  if side == blas.Right,
 // where alpha is a scalar, X and B are m×n matrices, A is a unit or
 // non-unit, upper or lower triangular matrix and op(A) is one of
-//  op(A) = A    if transA == blas.NoTrans,
-//  op(A) = A^T  if transA == blas.Trans,
-//  op(A) = A^H  if transA == blas.ConjTrans.
+//  op(A) = A   if transA == blas.NoTrans,
+//  op(A) = Aᵀ  if transA == blas.Trans,
+//  op(A) = Aᴴ  if transA == blas.ConjTrans.
 // On return the matrix X is overwritten on B.
 func (Implementation) Ztrsm(s blas.Side, ul blas.Uplo, tA blas.Transpose, d blas.Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
 	// declared at cblas.h:554:6 void cblas_ztrsm ...
@@ -7687,8 +7687,8 @@ func (Implementation) Chemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex64
 }
 
 // Cherk performs one of the hermitian rank-k operations
-//  C = alpha*A*A^H + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^H*A + beta*C  if trans == blas.ConjTrans
+//  C = alpha*A*Aᴴ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᴴ*A + beta*C  if trans == blas.ConjTrans
 // where alpha and beta are real scalars, C is an n×n hermitian matrix and A is
 // an n×k matrix in the first case and a k×n matrix in the second case.
 //
@@ -7758,8 +7758,8 @@ func (Implementation) Cherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 }
 
 // Cher2k performs one of the hermitian rank-2k operations
-//  C = alpha*A*B^H + conj(alpha)*B*A^H + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^H*B + conj(alpha)*B^H*A + beta*C  if trans == blas.ConjTrans
+//  C = alpha*A*Bᴴ + conj(alpha)*B*Aᴴ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᴴ*B + conj(alpha)*Bᴴ*A + beta*C  if trans == blas.ConjTrans
 // where alpha and beta are scalars with beta real, C is an n×n hermitian matrix
 // and A and B are n×k matrices in the first case and k×n matrices in the second case.
 //
@@ -7916,8 +7916,8 @@ func (Implementation) Zhemm(s blas.Side, ul blas.Uplo, m, n int, alpha complex12
 }
 
 // Zherk performs one of the hermitian rank-k operations
-//  C = alpha*A*A^H + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^H*A + beta*C  if trans == blas.ConjTrans
+//  C = alpha*A*Aᴴ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᴴ*A + beta*C  if trans == blas.ConjTrans
 // where alpha and beta are real scalars, C is an n×n hermitian matrix and A is
 // an n×k matrix in the first case and a k×n matrix in the second case.
 //
@@ -7985,8 +7985,8 @@ func (Implementation) Zherk(ul blas.Uplo, t blas.Transpose, n, k int, alpha floa
 }
 
 // Zher2k performs one of the hermitian rank-2k operations
-//  C = alpha*A*B^H + conj(alpha)*B*A^H + beta*C  if trans == blas.NoTrans
-//  C = alpha*A^H*B + conj(alpha)*B^H*A + beta*C  if trans == blas.ConjTrans
+//  C = alpha*A*Bᴴ + conj(alpha)*B*Aᴴ + beta*C  if trans == blas.NoTrans
+//  C = alpha*Aᴴ*B + conj(alpha)*Bᴴ*A + beta*C  if trans == blas.ConjTrans
 // where alpha and beta are scalars with beta real, C is an n×n hermitian matrix
 // and A and B are n×k matrices in the first case and k×n matrices in the second case.
 //
