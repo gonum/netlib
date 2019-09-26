@@ -8,7 +8,6 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -74,7 +73,12 @@ func main() {
 func pathTo(module, file string) (string, error) {
 	gopath, ok := os.LookupEnv("GOPATH")
 	if !ok {
-		return "", errors.New("no $GOPATH")
+		var err error
+		gopath, err = os.UserHomeDir()
+		if err != nil {
+			return "", err
+		}
+		gopath = filepath.Join(gopath, "go")
 	}
 
 	cmd := exec.Command("go", "list", "-m", module)

@@ -813,7 +813,12 @@ func ldToPanicString(ld string) string {
 func pathTo(module, pkg string) string {
 	gopath, ok := os.LookupEnv("GOPATH")
 	if !ok {
-		panic("no $GOPATH")
+		var err error
+		gopath, err = os.UserHomeDir()
+		if err != nil {
+			log.Fatal(err)
+		}
+		gopath = filepath.Join(gopath, "go")
 	}
 
 	cmd := exec.Command("go", "list", "-m", module)
@@ -822,9 +827,7 @@ func pathTo(module, pkg string) string {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		// TODO(kortschak): Make this an error when go1.10 support is dropped.
-		log.Printf("module aware go list failed with stderr output %q: %v", stderr.String(), err)
-		return filepath.Join(gopath, "src", module, pkg)
+		log.Fatalf("module aware go list failed with stderr output %q: %v", stderr.String(), err)
 	}
 	version := strings.TrimSpace(strings.Join(strings.Split(buf.String(), " "), "@"))
 	return filepath.Join(gopath, "pkg", "mod", version, pkg)
