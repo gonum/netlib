@@ -10,3 +10,5 @@ require (
 	modernc.org/strutil v1.0.0 // indirect
 	modernc.org/xc v1.0.0
 )
+
+go 1.13
