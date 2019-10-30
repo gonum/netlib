@@ -592,6 +592,10 @@ func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 		panic(shortWork)
 	}
 
+	if norm == lapack.MaxRowSum && len(work) < m {
+		// Unfortunately we have to allocate work for LAPACKE.
+		work = make([]float64, m)
+	}
 	return lapacke.Dlantr(byte(norm), byte(uplo), byte(diag), m, n, a, lda, work)
 }
 
