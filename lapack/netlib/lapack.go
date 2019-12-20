@@ -573,8 +573,14 @@ func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 		panic(badUplo)
 	case diag != blas.Unit && diag != blas.NonUnit:
 		panic(badDiag)
+	case m < 0:
+		panic(mLT0)
+	case uplo == blas.Upper && m > n:
+		panic(mGTN)
 	case n < 0:
 		panic(nLT0)
+	case uplo == blas.Lower && n > m:
+		panic(nGTM)
 	case lda < max(1, n):
 		panic(badLdA)
 	}
@@ -593,7 +599,8 @@ func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 	}
 
 	if norm == lapack.MaxRowSum && len(work) < m {
-		// Unfortunately we have to allocate work for LAPACKE.
+		// Allocate new work to be on the safe side because the expectation of LAPACKE on
+		// row-major input is unclear.
 		work = make([]float64, m)
 	}
 	return lapacke.Dlantr(byte(norm), byte(uplo), byte(diag), m, n, a, lda, work)
