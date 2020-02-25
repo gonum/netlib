@@ -1,5 +1,7 @@
 module gonum.org/v1/netlib
 
+go 1.13
+
 require (
 	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
 	golang.org/x/exp v0.0.0-20190312203227-4b39c73a6495
@@ -10,5 +12,3 @@ require (
 	modernc.org/strutil v1.1.0 // indirect
 	modernc.org/xc v1.0.0
 )
-
-go 1.13
