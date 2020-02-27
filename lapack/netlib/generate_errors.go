@@ -87,9 +87,7 @@ func pathTo(module, file string) (string, error) {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		// TODO(kortschak): Make this an error when go1.10 support is dropped.
-		log.Printf("module aware go list failed with stderr output %q: %v", stderr.String(), err)
-		return filepath.Join(gopath, "src", module, file), nil
+		return "", fmt.Errorf("module aware go list failed with stderr output %q: %w", stderr.String(), err)
 	}
 	version := strings.TrimSpace(strings.Join(strings.Split(buf.String(), " "), "@"))
 	return filepath.Join(gopath, "pkg", "mod", version, file), nil
