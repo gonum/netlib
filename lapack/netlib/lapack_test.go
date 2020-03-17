@@ -104,6 +104,10 @@ func TestDlaswp(t *testing.T) {
 	testlapack.DlaswpTest(t, impl)
 }
 
+func TestDpbcon(t *testing.T) {
+	testlapack.DpbconTest(t, impl)
+}
+
 func TestDpbtrf(t *testing.T) {
 	testlapack.DpbtrfTest(t, impl)
 }
