@@ -794,6 +794,54 @@ func (impl Implementation) Dlaswp(n int, a []float64, lda, k1, k2 int, ipiv []in
 	lapacke.Dlaswp(n, a, lda, k1+1, k2+1, ipiv32, incX)
 }
 
+// Dpbcon returns an estimate of the reciprocal of the condition number (in the
+// 1-norm) of an n×n symmetric positive definite band matrix using the Cholesky
+// factorization
+//  A = Uᵀ*U  if uplo == blas.Upper
+//  A = L*Lᵀ  if uplo == blas.Lower
+// computed by Dpbtrf. The estimate is obtained for norm(inv(A)), and the
+// reciprocal of the condition number is computed as
+//  rcond = 1 / (anorm * norm(inv(A))).
+//
+// The length of work must be at least 3*n and the length of iwork must be at
+// least n.
+func (impl Implementation) Dpbcon(uplo blas.Uplo, n, kd int, ab []float64, ldab int, anorm float64, work []float64, iwork []int) (rcond float64) {
+	switch {
+	case uplo != blas.Upper && uplo != blas.Lower:
+		panic(badUplo)
+	case n < 0:
+		panic(nLT0)
+	case kd < 0:
+		panic(kdLT0)
+	case ldab < kd+1:
+		panic(badLdA)
+	case anorm < 0:
+		panic(badNorm)
+	}
+
+	// Quick return if possible.
+	if n == 0 {
+		return 1
+	}
+
+	switch {
+	case len(ab) < (n-1)*ldab+kd+1:
+		panic(shortAB)
+	case len(work) < 3*n:
+		panic(shortWork)
+	case len(iwork) < n:
+		panic(shortIWork)
+	}
+
+	_ldab := n
+	_ab := make([]float64, (kd+1)*_ldab)
+	convDpbToLapacke(uplo, n, kd, ab, ldab, _ab, _ldab)
+	_rcond := []float64{0}
+	_iwork := make([]int32, n)
+	lapacke.Dpbcon(byte(uplo), n, kd, _ab, _ldab, anorm, _rcond, work, _iwork)
+	return _rcond[0]
+}
+
 // Dpbtrf computes the Cholesky factorization of an n×n symmetric positive
 // definite band matrix
 //  A = U^T * U  if uplo == blas.Upper
