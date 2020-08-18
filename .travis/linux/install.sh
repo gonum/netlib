@@ -4,13 +4,9 @@ set -ex
 # prior to more specific installation commands for a particular blas library.
 go get golang.org/x/tools/cmd/cover
 go get github.com/mattn/goveralls
-go get gonum.org/v1/gonum/blas
-go get gonum.org/v1/gonum/lapack
-go get gonum.org/v1/gonum/floats
 
 # Repositories for code generation.
 go get modernc.org/cc
-go get gonum.org/v1/netlib/internal/binding
 
 # travis compiles commands in script and then executes in bash.  By adding
 # set -e we are changing the travis build script's behavior, and the set

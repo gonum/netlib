@@ -52,8 +52,6 @@ matrix:
 before_install:
  # Required for format check.
  - go get golang.org/x/tools/cmd/goimports
- # Required for code get checks.
- - go mod download gonum.org/v1/gonum || true
  # Required for imports check.
  - go get gonum.org/v1/tools/cmd/check-imports
  # Required for copyright header check.
