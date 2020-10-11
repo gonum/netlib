@@ -14,7 +14,7 @@ import (
 	"gonum.org/v1/gonum/floats"
 )
 
-func TestConvDpb(t *testing.T) {
+func TestConvBandTri(t *testing.T) {
 	for ti, test := range []struct {
 		uplo  blas.Uplo
 		n, kd int
@@ -72,7 +72,7 @@ func TestConvDpb(t *testing.T) {
 		}
 		ldb := max(1, n)
 
-		convDpbToLapacke(uplo, n, kd, a, lda, got, ldb)
+		bandTriToLapacke(uplo, n, kd, a, lda, got, ldb)
 		if !floats.Equal(test.a, a) {
 			t.Errorf("%v: unexpected modification of A in conversion to LAPACKE row-major", name)
 		}
@@ -88,7 +88,7 @@ func TestConvDpb(t *testing.T) {
 			got[i] = -1
 		}
 
-		convDpbToGonum(uplo, n, kd, b, ldb, got, lda)
+		bandTriToGonum(uplo, n, kd, b, ldb, got, lda)
 		if !floats.Equal(test.b, b) {
 			t.Errorf("%v: unexpected modification of B in conversion to Gonum row-major", name)
 		}
@@ -118,8 +118,8 @@ func TestConvDpb(t *testing.T) {
 						b[i] = rnd.NormFloat64()
 					}
 
-					convDpbToLapacke(uplo, n, kd, a, lda, b, ldb)
-					convDpbToGonum(uplo, n, kd, b, ldb, a, lda)
+					bandTriToLapacke(uplo, n, kd, a, lda, b, ldb)
+					bandTriToGonum(uplo, n, kd, b, ldb, a, lda)
 
 					if !floats.Equal(a, aCopy) {
 						t.Errorf("%v: conversion does not roundtrip", name)

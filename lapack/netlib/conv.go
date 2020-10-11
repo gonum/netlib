@@ -6,10 +6,10 @@ package netlib
 
 import "gonum.org/v1/gonum/blas"
 
-// convDpbToLapacke converts a symmetric band matrix A in CBLAS row-major layout
-// to LAPACKE row-major layout and stores the result in B.
+// bandTriToLapacke converts a triangular or symmetric band matrix A in CBLAS
+// row-major layout to LAPACKE row-major layout and stores the result in B.
 //
-// For example, when n = 6, kd = 2 and uplo == 'U', convDpbToLapacke converts
+// For example, when n = 6, kd = 2 and uplo == 'U', bandTriToLapacke converts
 //  A = a00  a01  a02
 //      a11  a12  a13
 //      a22  a23  a24
@@ -25,7 +25,7 @@ import "gonum.org/v1/gonum/blas"
 // stored in a slice as
 //  b = [* * a02 a13 a24 a35 * a01 a12 a23 a34 a45 a00 a11 a22 a33 a44 a55]
 //
-// When n = 6, kd = 2 and uplo == 'L', convDpbToLapacke converts
+// When n = 6, kd = 2 and uplo == 'L', bandTriToLapacke converts
 //  A =  *    *   a00
 //       *   a10  a11
 //      a20  a21  a22
@@ -42,7 +42,7 @@ import "gonum.org/v1/gonum/blas"
 //  b = [a00 a11 a22 a33 a44 a55 a10 a21 a32 a43 a54 * a20 a31 a42 a53 * * ]
 //
 // In these example elements marked as * are not referenced.
-func convDpbToLapacke(uplo blas.Uplo, n, kd int, a []float64, lda int, b []float64, ldb int) {
+func bandTriToLapacke(uplo blas.Uplo, n, kd int, a []float64, lda int, b []float64, ldb int) {
 	if uplo == blas.Upper {
 		for i := 0; i < n; i++ {
 			for jb := 0; jb < min(n-i, kd+1); jb++ {
@@ -60,10 +60,10 @@ func convDpbToLapacke(uplo blas.Uplo, n, kd int, a []float64, lda int, b []float
 	}
 }
 
-// convDpbToGonum converts a symmetric band matrix A in LAPACKE row-major layout
-// to CBLAS row-major layout and stores the result in B. In other words, it
-// performs the inverse conversion to convDpbToLapacke.
-func convDpbToGonum(uplo blas.Uplo, n, kd int, a []float64, lda int, b []float64, ldb int) {
+// bandTriToGonum converts a triangular or symmetric band matrix A in LAPACKE
+// row-major layout to CBLAS row-major layout and stores the result in B. In
+// other words, it performs the inverse conversion to bandTriToLapacke.
+func bandTriToGonum(uplo blas.Uplo, n, kd int, a []float64, lda int, b []float64, ldb int) {
 	if uplo == blas.Upper {
 		for j := 0; j < n; j++ {
 			for ib := max(0, kd-j); ib < kd+1; ib++ {
