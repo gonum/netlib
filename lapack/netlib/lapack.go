@@ -835,7 +835,7 @@ func (impl Implementation) Dpbcon(uplo blas.Uplo, n, kd int, ab []float64, ldab 
 
 	_ldab := n
 	_ab := make([]float64, (kd+1)*_ldab)
-	convDpbToLapacke(uplo, n, kd, ab, ldab, _ab, _ldab)
+	bandTriToLapacke(uplo, n, kd, ab, ldab, _ab, _ldab)
 	_rcond := []float64{0}
 	_iwork := make([]int32, n)
 	lapacke.Dpbcon(byte(uplo), n, kd, _ab, _ldab, anorm, _rcond, work, _iwork)
@@ -892,9 +892,9 @@ func (impl Implementation) Dpbtrf(uplo blas.Uplo, n, kd int, ab []float64, ldab 
 
 	ldabConv := n
 	abConv := make([]float64, (kd+1)*ldabConv)
-	convDpbToLapacke(uplo, n, kd, ab, ldab, abConv, ldabConv)
+	bandTriToLapacke(uplo, n, kd, ab, ldab, abConv, ldabConv)
 	info := lapacke.Dpbtrf(byte(uplo), n, kd, abConv, ldabConv)
-	convDpbToGonum(uplo, n, kd, abConv, ldabConv, ab, ldab)
+	bandTriToGonum(uplo, n, kd, abConv, ldabConv, ab, ldab)
 	return info
 }
 
@@ -937,7 +937,7 @@ func (Implementation) Dpbtrs(uplo blas.Uplo, n, kd, nrhs int, ab []float64, ldab
 
 	ldabConv := n
 	abConv := make([]float64, (kd+1)*ldabConv)
-	convDpbToLapacke(uplo, n, kd, ab, ldab, abConv, ldabConv)
+	bandTriToLapacke(uplo, n, kd, ab, ldab, abConv, ldabConv)
 	lapacke.Dpbtrs(byte(uplo), n, kd, nrhs, abConv, ldabConv, b, ldb)
 }
 
@@ -3316,7 +3316,7 @@ func (impl Implementation) Dtbtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 
 	ldaConv := n
 	aConv := make([]float64, (kd+1)*ldaConv)
-	convDpbToLapacke(uplo, n, kd, a, lda, aConv, ldaConv)
+	bandTriToLapacke(uplo, n, kd, a, lda, aConv, ldaConv)
 	return lapacke.Dtbtrs(byte(uplo), byte(trans), byte(diag), n, kd, nrhs, aConv, ldaConv, b, ldb)
 }
 
