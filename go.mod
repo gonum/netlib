@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
 	golang.org/x/exp v0.0.0-20190312203227-4b39c73a6495
-	gonum.org/v1/gonum v0.8.1
+	gonum.org/v1/gonum v0.8.1-0.20200930085651-eea0b5cb5cc9
 	modernc.org/cc v1.0.0
 	modernc.org/golex v1.0.0 // indirect
 	modernc.org/mathutil v1.0.0 // indirect
