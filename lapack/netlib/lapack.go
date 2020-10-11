@@ -3274,6 +3274,52 @@ func (impl Implementation) Dsytrd(uplo blas.Uplo, n int, a []float64, lda int, d
 	lapacke.Dsytrd(byte(uplo), n, a, lda, d, e, tau, work, lwork)
 }
 
+// Dtbtrs solves a triangular system of the form
+//  A * X = B   if trans == blas.NoTrans
+//  Aᵀ * X = B  if trans == blas.Trans or blas.ConjTrans
+// where A is an n×n triangular band matrix with kd super- or subdiagonals, and
+// B is an n×nrhs matrix.
+//
+// Dtbtrs returns whether A is non-singular. If A is singular, no solution X is
+// computed.
+func (impl Implementation) Dtbtrs(uplo blas.Uplo, trans blas.Transpose, diag blas.Diag, n, kd, nrhs int, a []float64, lda int, b []float64, ldb int) (ok bool) {
+	switch {
+	case uplo != blas.Upper && uplo != blas.Lower:
+		panic(badUplo)
+	case trans != blas.NoTrans && trans != blas.Trans && trans != blas.ConjTrans:
+		panic(badTrans)
+	case diag != blas.NonUnit && diag != blas.Unit:
+		panic(badDiag)
+	case n < 0:
+		panic(nLT0)
+	case kd < 0:
+		panic(kdLT0)
+	case nrhs < 0:
+		panic(nrhsLT0)
+	case lda < kd+1:
+		panic(badLdA)
+	case ldb < max(1, nrhs):
+		panic(badLdB)
+	}
+
+	// Quick return if possible.
+	if n == 0 {
+		return true
+	}
+
+	switch {
+	case len(a) < (n-1)*lda+kd+1:
+		panic(shortA)
+	case len(b) < (n-1)*ldb+nrhs:
+		panic(shortB)
+	}
+
+	ldaConv := n
+	aConv := make([]float64, (kd+1)*ldaConv)
+	convDpbToLapacke(uplo, n, kd, a, lda, aConv, ldaConv)
+	return lapacke.Dtbtrs(byte(uplo), byte(trans), byte(diag), n, kd, nrhs, aConv, ldaConv, b, ldb)
+}
+
 // Dtrcon estimates the reciprocal of the condition number of a triangular matrix A.
 // The condition number computed may be based on the 1-norm or the ∞-norm.
 //
