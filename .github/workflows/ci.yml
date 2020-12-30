@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        go-version: [1.15.x, 1.14.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+    env:
+        GO111MODULE: on
+        GOPATH: ${{ github.workspace }}
+        CGO_LDFLAGS: "-L/usr/lib -lopenblas"
+    defaults:
+        run:
+            working-directory: ${{ env.GOPATH }}/src/gonum.org/v1/netlib
+
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Cache-Go
+      uses: actions/cache@v1
+      with:
+        path: |
+            ~/go/pkg/mod              # Module download cache
+            ~/.cache/go-build         # Build cache (Linux)
+            ~/Library/Caches/go-build # Build cache (Mac)
+            '%LocalAppData%\go-build' # Build cache (Windows)
+            ~/.cache/OpenBLAS         # OpenBLAS build cache
+
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+          path: ${{ env.GOPATH }}/src/gonum.org/v1/netlib
+
+    - name: Install Dependencies
+      if: matrix.platform == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -qq gfortran
+        go get golang.org/x/tools/cmd/cover
+        # Repositories for code generation.
+        go get modernc.org/cc
+        # Required for format check.
+        go get golang.org/x/tools/cmd/goimports
+        # Required for imports check.
+        go get gonum.org/v1/tools/cmd/check-imports
+        # Required for copyright header check.
+        go get gonum.org/v1/tools/cmd/check-copyright
+        ./.github/workflows/install-openblas.sh
+
+    - name: Check copyrights+imports+formatting+generate
+      if: matrix.platform == 'ubuntu-latest'
+      run: |
+        ./.travis/check-copyright.sh
+        ./.travis/check-formatting.sh
+        ./.travis/check-generate.sh
+        ./.travis/check-imports.sh
+
+    - name: Test
+      run: |
+        ./.github/workflows/test.sh
+
+    - name: Coverage
+      if: matrix.platform == 'ubuntu-latest'
+      run: |
+        ./.github/workflows/test-coverage.sh
+
+    - name: Upload-Coverage
+      if: matrix.platform == 'ubuntu-latest'
+      uses: codecov/codecov-action@v1
