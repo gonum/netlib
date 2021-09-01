@@ -47,7 +47,7 @@ const (
 )
 
 var skip = map[string]bool{
-	"cblas_errprn":    true,
+	"cblas_xerbla":    true,
 	"cblas_srotg":     true,
 	"cblas_srotmg":    true,
 	"cblas_srotm":     true,
@@ -60,6 +60,8 @@ var skip = map[string]bool{
 	"cblas_cdotc_sub": true,
 	"cblas_zdotu_sub": true,
 	"cblas_zdotc_sub": true,
+	"cblas_scabs1":    true,
+	"cblas_dcabs1":    true,
 
 	// ATLAS extensions.
 	"cblas_csrot": true,
@@ -67,13 +69,14 @@ var skip = map[string]bool{
 }
 
 var cToGoType = map[string]string{
-	"int":    "int",
-	"float":  "float32",
-	"double": "float64",
+	"int":           "int",
+	"unsigned long": "int", // For I?amax routines that return CBLAS_INDEX as size_t.
+	"float":         "float32",
+	"double":        "float64",
 }
 
 var blasEnums = map[string]*template.Template{
-	"CBLAS_ORDER":     template.Must(template.New("order").Parse("order")),
+	"CBLAS_LAYOUT":    template.Must(template.New("layout").Parse("layout")),
 	"CBLAS_DIAG":      template.Must(template.New("diag").Parse("blas.Diag")),
 	"CBLAS_TRANSPOSE": template.Must(template.New("trans").Parse("blas.Transpose")),
 	"CBLAS_UPLO":      template.Must(template.New("uplo").Parse("blas.Uplo")),
@@ -81,11 +84,11 @@ var blasEnums = map[string]*template.Template{
 }
 
 var cgoEnums = map[string]*template.Template{
-	"CBLAS_ORDER":     template.Must(template.New("order").Parse("C.enum_CBLAS_ORDER(rowMajor)")),
-	"CBLAS_DIAG":      template.Must(template.New("diag").Parse("C.enum_CBLAS_DIAG({{.}})")),
-	"CBLAS_TRANSPOSE": template.Must(template.New("trans").Parse("C.enum_CBLAS_TRANSPOSE({{.}})")),
-	"CBLAS_UPLO":      template.Must(template.New("uplo").Parse("C.enum_CBLAS_UPLO({{.}})")),
-	"CBLAS_SIDE":      template.Must(template.New("side").Parse("C.enum_CBLAS_SIDE({{.}})")),
+	"CBLAS_LAYOUT":    template.Must(template.New("layout").Parse("C.CBLAS_LAYOUT(rowMajor)")),
+	"CBLAS_DIAG":      template.Must(template.New("diag").Parse("C.CBLAS_DIAG({{.}})")),
+	"CBLAS_TRANSPOSE": template.Must(template.New("trans").Parse("C.CBLAS_TRANSPOSE({{.}})")),
+	"CBLAS_UPLO":      template.Must(template.New("uplo").Parse("C.CBLAS_UPLO({{.}})")),
+	"CBLAS_SIDE":      template.Must(template.New("side").Parse("C.CBLAS_SIDE({{.}})")),
 }
 
 var cgoTypes = map[binding.TypeKey]*template.Template{
@@ -216,7 +219,7 @@ func goSignature(buf *bytes.Buffer, d binding.Declaration, docs map[string][]*as
 	fmt.Fprintf(buf, "func (%s) %s(", typ, goName)
 	c := 0
 	for i, p := range parameters {
-		if p.Kind() == cc.Enum && binding.GoTypeForEnum(p.Type(), "", blasEnums) == "order" {
+		if p.Kind() == cc.Enum && binding.GoTypeForEnum(p.Type(), "", blasEnums) == "layout" {
 			continue
 		}
 		if c != 0 {
@@ -249,7 +252,11 @@ func goSignature(buf *bytes.Buffer, d binding.Declaration, docs map[string][]*as
 		}
 	}
 	if d.Return.Kind() != cc.Void {
-		fmt.Fprintf(buf, ") %s {\n", cToGoType[d.Return.String()])
+		goType, ok := cToGoType[d.Return.String()]
+		if !ok {
+			panic(fmt.Sprintf("Unexpected C type \"%s\"", d.Return.String()))
+		}
+		fmt.Fprintf(buf, ") %s {\n", goType)
 	} else {
 		buf.WriteString(") {\n")
 	}
@@ -265,7 +272,11 @@ func parameterChecks(buf *bytes.Buffer, d binding.Declaration, rules []func(*byt
 
 func cgoCall(buf *bytes.Buffer, d binding.Declaration) {
 	if d.Return.Kind() != cc.Void {
-		fmt.Fprintf(buf, "return %s(", cToGoType[d.Return.String()])
+		goType, ok := cToGoType[d.Return.String()]
+		if !ok {
+			panic(fmt.Sprintf("Unexpected C type \"%s\"", d.Return.String()))
+		}
+		fmt.Fprintf(buf, "return %s(", goType)
 	}
 	fmt.Fprintf(buf, "C.%s(", d.Name)
 	for i, p := range d.Parameters() {
@@ -704,6 +715,16 @@ func sliceLength(buf *bytes.Buffer, d binding.Declaration, p binding.Parameter) 
 			}
 		}
 		return
+
+	case "cblas_sspr2", "cblas_dspr2", "cblas_chpr", "cblas_zhpr":
+		switch pname {
+		case "a":
+			fmt.Fprint(buf, `	if len(a) < n*(n+1)/2 {
+		panic(shortA)
+	}
+`)
+			return
+		}
 	}
 
 	switch pname {
@@ -861,11 +882,11 @@ var (
 	_ blas.Complex128 = Implementation{}
 )
 
-// Type order is used to specify the matrix storage format. We still interact with
-// an API that allows client calls to specify order, so this is here to document that fact.
-type order int
+// Type layout is used to specify the matrix storage format. We still interact with
+// an API that allows client calls to specify layout, so this is here to document that fact.
+type layout int
 
-const rowMajor order = C.CblasRowMajor
+const rowMajor layout = C.CblasRowMajor
 
 func min(a, b int) int {
 	if a < b {
