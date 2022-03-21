@@ -3054,6 +3054,64 @@ func (impl Implementation) Dpocon(uplo blas.Uplo, n int, a []float64, lda int, a
 	return rcond[0]
 }
 
+// Dpstrf computes the Cholesky factorization with complete pivoting of an n×n
+// symmetric positive semidefinite matrix A.
+//
+// The factorization has the form
+//  Pᵀ * A * P = Uᵀ * U ,  if uplo = blas.Upper,
+//  Pᵀ * A * P = L  * Lᵀ,  if uplo = blas.Lower,
+// where U is an upper triangular matrix, L is lower triangular, and P is a
+// permutation matrix.
+//
+// tol is a user-defined tolerance. The algorithm terminates if the pivot is
+// less than or equal to tol. If tol is negative, then n*eps*max(A[k,k]) will be
+// used instead.
+//
+// On return, A contains the factor U or L from the Cholesky factorization and
+// piv contains P stored such that P[piv[k],k] = 1.
+//
+// Dpstrf returns the computed rank of A and whether the factorization can be
+// used to solve a system. Dpstrf does not attempt to check that A is positive
+// semi-definite, so if ok is false, the matrix A is either rank deficient or is
+// not positive semidefinite.
+//
+// The length of piv must be n and the length of work must be at least 2*n,
+// otherwise Dpstrf will panic.
+//
+// Dpstrf is an internal routine. It is exported for testing purposes.
+func (impl Implementation) Dpstrf(uplo blas.Uplo, n int, a []float64, lda int, piv []int, tol float64, work []float64) (rank int, ok bool) {
+	switch {
+	case uplo != blas.Upper && uplo != blas.Lower:
+		panic(badUplo)
+	case n < 0:
+		panic(nLT0)
+	case lda < max(1, n):
+		panic(badLdA)
+	}
+
+	// Quick return if possible.
+	if n == 0 {
+		return 0, true
+	}
+
+	switch {
+	case len(a) < (n-1)*lda+n:
+		panic(shortA)
+	case len(piv) != n:
+		panic(badLenPiv)
+	case len(work) < 2*n:
+		panic(shortWork)
+	}
+
+	_piv := make([]int32, n)
+	_rank := []int32{0}
+	ok = lapacke.Dpstrf(byte(uplo), n, a, lda, _piv, _rank, tol, work)
+	for i, v := range _piv {
+		piv[i] = int(v - 1)
+	}
+	return int(_rank[0]), ok
+}
+
 // Dsteqr computes the eigenvalues and optionally the eigenvectors of a symmetric
 // tridiagonal matrix using the implicit QL or QR method. The eigenvectors of a
 // full or band symmetric matrix can also be found if Dsytrd, Dsptrd, or Dsbtrd
