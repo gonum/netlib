@@ -8,7 +8,7 @@ mkdir -p ${CACHE_DIR}
 # check if cache exists
 if [ -e ${CACHE_DIR}/last_commit_id ]; then
     echo "Cache $CACHE_DIR hit"
-    LAST_COMMIT="$(git ls-remote git://github.com/xianyi/OpenBLAS HEAD | grep -o '^\S*')"
+    LAST_COMMIT="$(git ls-remote https://github.com/xianyi/OpenBLAS HEAD | grep -o '^\S*')"
     CACHED_COMMIT="$(cat ${CACHE_DIR}/last_commit_id)"
     # determine current OpenBLAS master commit id and compare
     # with commit id in cache directory
@@ -25,7 +25,7 @@ if [ ! -e ${CACHE_DIR}/last_commit_id ]; then
 
     # cache generation
     echo "Building cache at $CACHE_DIR"
-    git clone --depth=1 git://github.com/xianyi/OpenBLAS
+    git clone --depth=1 https://github.com/xianyi/OpenBLAS
 
     pushd OpenBLAS
     make FC=gfortran &> /dev/null && make PREFIX=${CACHE_DIR} install
