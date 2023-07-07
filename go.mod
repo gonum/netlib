@@ -3,12 +3,15 @@ module gonum.org/v1/netlib
 go 1.17
 
 require (
-	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
-	golang.org/x/exp v0.0.0-20190312203227-4b39c73a6495
-	gonum.org/v1/gonum v0.8.1-0.20200930085651-eea0b5cb5cc9
+	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
+	gonum.org/v1/gonum v0.13.1-0.20230729095443-194082cf5ba1
 	modernc.org/cc v1.0.0
+	modernc.org/xc v1.0.0
+)
+
+require (
+	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
 	modernc.org/golex v1.0.0 // indirect
 	modernc.org/mathutil v1.0.0 // indirect
 	modernc.org/strutil v1.1.0 // indirect
-	modernc.org/xc v1.0.0
 )

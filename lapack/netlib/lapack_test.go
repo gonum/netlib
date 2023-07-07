@@ -84,6 +84,10 @@ func TestDlarft(t *testing.T) {
 	testlapack.DlarftTest(t, impl)
 }
 
+func TestDlapmr(t *testing.T) {
+	testlapack.DlapmrTest(t, impl)
+}
+
 func TestDlapmt(t *testing.T) {
 	testlapack.DlapmtTest(t, impl)
 }
@@ -130,6 +134,10 @@ func TestDpotri(t *testing.T) {
 
 func TestDpotrs(t *testing.T) {
 	testlapack.DpotrsTest(t, impl)
+}
+
+func TestDpstrf(t *testing.T) {
+	testlapack.DpstrfTest(t, impl)
 }
 
 func TestDgebak(t *testing.T) {
