@@ -2061,7 +2061,6 @@ func (impl Implementation) Dgetri(n int, a []float64, lda int, ipiv []int, work 
 
 	if lwork == -1 {
 		return lapacke.Dgetri(n, a, lda, nil, work, -1)
-		return true
 	}
 
 	switch {
@@ -3309,7 +3308,6 @@ func (impl Implementation) Dsyev(jobz lapack.EVJob, uplo blas.Uplo, n int, a []f
 
 	if lwork == -1 {
 		return lapacke.Dsyev(byte(jobz), byte(uplo), n, a, lda, w, work, -1)
-		return
 	}
 
 	switch {
