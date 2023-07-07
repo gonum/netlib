@@ -22,9 +22,13 @@ var _ lapack.Float64 = Implementation{}
 // m×n matrix A: A*P = Q*R using Level 3 BLAS.
 //
 // The matrix Q is represented as a product of elementary reflectors
-//  Q = H_0 H_1 . . . H_{k-1}, where k = min(m,n).
+//
+//	Q = H_0 H_1 . . . H_{k-1}, where k = min(m,n).
+//
 // Each H_i has the form
-//  H_i = I - tau * v * v^T
+//
+//	H_i = I - tau * v * v^T
+//
 // where tau and v are real vectors with v[0:i-1] = 0 and v[i] = 1;
 // v[i:m] is stored on exit in A[i:m, i], and tau in tau[i].
 //
@@ -103,7 +107,9 @@ func (impl Implementation) Dgeqp3(m, n int, a []float64, lda int, jpvt []int, ta
 }
 
 // Dgerqf computes an RQ factorization of the m×n matrix A,
-//  A = R * Q.
+//
+//	A = R * Q.
+//
 // On exit, if m <= n, the upper triangle of the subarray
 // A[0:m, n-m:n] contains the m×m upper triangular matrix R.
 // If m >= n, the elements on and above the (m-n)-th subdiagonal
@@ -113,9 +119,13 @@ func (impl Implementation) Dgeqp3(m, n int, a []float64, lda int, jpvt []int, ta
 // reflectors.
 //
 // The matrix Q is represented as a product of elementary reflectors
-//  Q = H_0 H_1 . . . H_{min(m,n)-1}.
+//
+//	Q = H_0 H_1 . . . H_{min(m,n)-1}.
+//
 // Each H(i) has the form
-//  H_i = I - tau_i * v * v^T
+//
+//	H_i = I - tau_i * v * v^T
+//
 // where v is a vector with v[0:n-k+i-1] stored in A[m-k+i, 0:n-k+i-1],
 // v[n-k+i:n] = 0 and v[n-k+i] = 1.
 //
@@ -167,8 +177,10 @@ func (impl Implementation) Dgerqf(m, n int, a []float64, lda int, tau, work []fl
 // used on the next call.
 // On the initial call, kase must be 0.
 // In between calls, x must be overwritten by
-//  A * X    if kase was returned as 1,
-//  A^T * X  if kase was returned as 2,
+//
+//	A * X    if kase was returned as 1,
+//	A^T * X  if kase was returned as 2,
+//
 // and all other parameters must not be changed.
 // On the final return, kase is returned as 0, v contains A*W where W is a
 // vector, and est = norm(V)/norm(W) is a lower bound for 1-norm of A.
@@ -244,11 +256,11 @@ func (impl Implementation) Dlacpy(uplo blas.Uplo, m, n int, a []float64, lda int
 //
 // If forward is true a forward permutation is performed:
 //
-//  X[0:m, k[j]] is moved to X[0:m, j] for j = 0, 1, ..., n-1.
+//	X[0:m, k[j]] is moved to X[0:m, j] for j = 0, 1, ..., n-1.
 //
 // otherwise a backward permutation is performed:
 //
-//  X[0:m, j] is moved to X[0:m, k[j]] for j = 0, 1, ..., n-1.
+//	X[0:m, j] is moved to X[0:m, k[j]] for j = 0, 1, ..., n-1.
 //
 // k must have length n, otherwise Dlapmt will panic. k is zero-indexed.
 func (impl Implementation) Dlapmt(forward bool, m, n int, x []float64, ldx int, k []int) {
@@ -303,36 +315,48 @@ func (Implementation) Dlapy2(x, y float64) float64 {
 // Dlarfb applies a block reflector to a matrix.
 //
 // In the call to Dlarfb, the mxn c is multiplied by the implicitly defined matrix h as follows:
-//  c = h * c if side == Left and trans == NoTrans
-//  c = c * h if side == Right and trans == NoTrans
-//  c = h^T * c if side == Left and trans == Trans
-//  c = c * h^T if side == Right and trans == Trans
+//
+//	c = h * c if side == Left and trans == NoTrans
+//	c = c * h if side == Right and trans == NoTrans
+//	c = h^T * c if side == Left and trans == Trans
+//	c = c * h^T if side == Right and trans == Trans
+//
 // h is a product of elementary reflectors. direct sets the direction of multiplication
-//  h = h_1 * h_2 * ... * h_k if direct == Forward
-//  h = h_k * h_k-1 * ... * h_1 if direct == Backward
+//
+//	h = h_1 * h_2 * ... * h_k if direct == Forward
+//	h = h_k * h_k-1 * ... * h_1 if direct == Backward
+//
 // The combination of direct and store defines the orientation of the elementary
 // reflectors. In all cases the ones on the diagonal are implicitly represented.
 //
 // If direct == lapack.Forward and store == lapack.ColumnWise
-//  V = [ 1        ]
-//      [v1   1    ]
-//      [v1  v2   1]
-//      [v1  v2  v3]
-//      [v1  v2  v3]
+//
+//	V = [ 1        ]
+//	    [v1   1    ]
+//	    [v1  v2   1]
+//	    [v1  v2  v3]
+//	    [v1  v2  v3]
+//
 // If direct == lapack.Forward and store == lapack.RowWise
-//  V = [ 1  v1  v1  v1  v1]
-//      [     1  v2  v2  v2]
-//      [         1  v3  v3]
+//
+//	V = [ 1  v1  v1  v1  v1]
+//	    [     1  v2  v2  v2]
+//	    [         1  v3  v3]
+//
 // If direct == lapack.Backward and store == lapack.ColumnWise
-//  V = [v1  v2  v3]
-//      [v1  v2  v3]
-//      [ 1  v2  v3]
-//      [     1  v3]
-//      [         1]
+//
+//	V = [v1  v2  v3]
+//	    [v1  v2  v3]
+//	    [ 1  v2  v3]
+//	    [     1  v3]
+//	    [         1]
+//
 // If direct == lapack.Backward and store == lapack.RowWise
-//  V = [v1  v1   1        ]
-//      [v2  v2  v2   1    ]
-//      [v3  v3  v3  v3   1]
+//
+//	V = [v1  v1   1        ]
+//	    [v2  v2  v2   1    ]
+//	    [v3  v3  v3  v3   1]
+//
 // An elementary reflector can be explicitly constructed by extracting the
 // corresponding elements of v, placing a 1 where the diagonal would be, and
 // placing zeros in the remaining elements.
@@ -411,11 +435,15 @@ func (Implementation) Dlarfb(side blas.Side, trans blas.Transpose, direct lapack
 
 // Dlarfg generates an elementary reflector for a Householder matrix. It creates
 // a real elementary reflector of order n such that
-//  H * (alpha) = (beta)
-//      (    x)   (   0)
-//  H^T * H = I
+//
+//	H * (alpha) = (beta)
+//	    (    x)   (   0)
+//	H^T * H = I
+//
 // H is represented in the form
-//  H = 1 - tau * (1; v) * (1 v^T)
+//
+//	H = 1 - tau * (1; v) * (1 v^T)
+//
 // where tau is a real scalar.
 //
 // On entry, x contains the vector x, on exit it contains v.
@@ -449,11 +477,14 @@ func (impl Implementation) Dlarfg(n int, alpha float64, x []float64, incX int) (
 
 // Dlarft forms the triangular factor T of a block reflector H, storing the answer
 // in t.
-//  H = I - V * T * V^T  if store == lapack.ColumnWise
-//  H = I - V^T * T * V  if store == lapack.RowWise
+//
+//	H = I - V * T * V^T  if store == lapack.ColumnWise
+//	H = I - V^T * T * V  if store == lapack.RowWise
+//
 // H is defined by a product of the elementary reflectors where
-//  H = H_0 * H_1 * ... * H_{k-1}  if direct == lapack.Forward
-//  H = H_{k-1} * ... * H_1 * H_0  if direct == lapack.Backward
+//
+//	H = H_0 * H_1 * ... * H_{k-1}  if direct == lapack.Forward
+//	H = H_{k-1} * ... * H_1 * H_0  if direct == lapack.Backward
 //
 // t is a k×k triangular matrix. t is upper triangular if direct = lapack.Forward
 // and lower triangular otherwise. This function will panic if t is not of
@@ -503,10 +534,12 @@ func (Implementation) Dlarft(direct lapack.Direct, store lapack.StoreV, n, k int
 
 // Dlange computes the matrix norm of the general m×n matrix a. The input norm
 // specifies the norm computed.
-//  lapack.MaxAbs: the maximum absolute value of an element.
-//  lapack.MaxColumnSum: the maximum column sum of the absolute values of the entries.
-//  lapack.MaxRowSum: the maximum row sum of the absolute values of the entries.
-//  lapack.Frobenius: the square root of the sum of the squares of the entries.
+//
+//	lapack.MaxAbs: the maximum absolute value of an element.
+//	lapack.MaxColumnSum: the maximum column sum of the absolute values of the entries.
+//	lapack.MaxRowSum: the maximum row sum of the absolute values of the entries.
+//	lapack.Frobenius: the square root of the sum of the squares of the entries.
+//
 // If norm == lapack.MaxColumnSum, work must be of length n, and this function will panic otherwise.
 // There are no restrictions on work for the other matrix norms.
 func (impl Implementation) Dlange(norm lapack.MatrixNorm, m, n int, a []float64, lda int, work []float64) float64 {
@@ -611,7 +644,9 @@ func (impl Implementation) Dlantr(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 // than 11.
 //
 // H is represented in the form
-//  H = I - tau * v * v^T,
+//
+//	H = I - tau * v * v^T,
+//
 // where tau is a real scalar and v is a real vector. If tau = 0, then H is
 // taken to be the identity matrix.
 //
@@ -797,11 +832,14 @@ func (impl Implementation) Dlaswp(n int, a []float64, lda, k1, k2 int, ipiv []in
 // Dpbcon returns an estimate of the reciprocal of the condition number (in the
 // 1-norm) of an n×n symmetric positive definite band matrix using the Cholesky
 // factorization
-//  A = Uᵀ*U  if uplo == blas.Upper
-//  A = L*Lᵀ  if uplo == blas.Lower
+//
+//	A = Uᵀ*U  if uplo == blas.Upper
+//	A = L*Lᵀ  if uplo == blas.Lower
+//
 // computed by Dpbtrf. The estimate is obtained for norm(inv(A)), and the
 // reciprocal of the condition number is computed as
-//  rcond = 1 / (anorm * norm(inv(A))).
+//
+//	rcond = 1 / (anorm * norm(inv(A))).
 //
 // The length of work must be at least 3*n and the length of iwork must be at
 // least n.
@@ -844,31 +882,33 @@ func (impl Implementation) Dpbcon(uplo blas.Uplo, n, kd int, ab []float64, ldab 
 
 // Dpbtrf computes the Cholesky factorization of an n×n symmetric positive
 // definite band matrix
-//  A = U^T * U  if uplo == blas.Upper
-//  A = L * L^T  if uplo == blas.Lower
+//
+//	A = U^T * U  if uplo == blas.Upper
+//	A = L * L^T  if uplo == blas.Lower
+//
 // where U is an upper triangular band matrix and L is lower triangular. kd is
 // the number of super- or sub-diagonals of A.
 //
 // The band storage scheme is illustrated below when n = 6 and kd = 2. Elements
 // marked * are not used by the function.
 //
-//  uplo == blas.Upper
-//  On entry:         On return:
-//   a00  a01  a02     u00  u01  u02
-//   a11  a12  a13     u11  u12  u13
-//   a22  a23  a24     u22  u23  u24
-//   a33  a34  a35     u33  u34  u35
-//   a44  a45   *      u44  u45   *
-//   a55   *    *      u55   *    *
+//	uplo == blas.Upper
+//	On entry:         On return:
+//	 a00  a01  a02     u00  u01  u02
+//	 a11  a12  a13     u11  u12  u13
+//	 a22  a23  a24     u22  u23  u24
+//	 a33  a34  a35     u33  u34  u35
+//	 a44  a45   *      u44  u45   *
+//	 a55   *    *      u55   *    *
 //
-//  uplo == blas.Lower
-//  On entry:         On return:
-//    *    *   a00       *    *   l00
-//    *   a10  a11       *   l10  l11
-//   a20  a21  a22      l20  l21  l22
-//   a31  a32  a33      l31  l32  l33
-//   a42  a43  a44      l42  l43  l44
-//   a53  a54  a55      l53  l54  l55
+//	uplo == blas.Lower
+//	On entry:         On return:
+//	  *    *   a00       *    *   l00
+//	  *   a10  a11       *   l10  l11
+//	 a20  a21  a22      l20  l21  l22
+//	 a31  a32  a33      l31  l32  l33
+//	 a42  a43  a44      l42  l43  l44
+//	 a53  a54  a55      l53  l54  l55
 func (impl Implementation) Dpbtrf(uplo blas.Uplo, n, kd int, ab []float64, ldab int) (ok bool) {
 	switch {
 	case uplo != blas.Upper && uplo != blas.Lower:
@@ -900,8 +940,10 @@ func (impl Implementation) Dpbtrf(uplo blas.Uplo, n, kd int, ab []float64, ldab 
 
 // Dpbtrs solves a system of linear equations A*X = B with an n×n symmetric
 // positive definite band matrix A using the Cholesky factorization
-//  A = U^T * U  if uplo == blas.Upper
-//  A = L * L^T  if uplo == blas.Lower
+//
+//	A = U^T * U  if uplo == blas.Upper
+//	A = L * L^T  if uplo == blas.Lower
+//
 // computed by Dpbtrf. kd is the number of super- or sub-diagonals of A. See the
 // documentation for Dpbtrf for a description of the band storage format of A.
 //
@@ -1000,8 +1042,10 @@ func (impl Implementation) Dpotri(uplo blas.Uplo, n int, a []float64, lda int) (
 // Dpotrs solves a system of n linear equations A*X = B where A is an n×n
 // symmetric positive definite matrix and B is an n×nrhs matrix. The matrix A is
 // represented by its Cholesky factorization
-//  A = U^T*U  if uplo == blas.Upper
-//  A = L*L^T  if uplo == blas.Lower
+//
+//	A = U^T*U  if uplo == blas.Upper
+//	A = L*L^T  if uplo == blas.Lower
+//
 // as computed by Dpotrf. On entry, B contains the right-hand side matrix B, on
 // return it contains the solution matrix X.
 func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, b []float64, ldb int) {
@@ -1038,9 +1082,11 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 //
 // Permuting consists of applying a permutation matrix P such that the matrix
 // that results from P^T*A*P takes the upper block triangular form
-//            [ T1  X  Y  ]
-//  P^T A P = [  0  B  Z  ],
-//            [  0  0  T2 ]
+//
+//	          [ T1  X  Y  ]
+//	P^T A P = [  0  B  Z  ],
+//	          [  0  0  T2 ]
+//
 // where T1 and T2 are upper triangular matrices and B contains at least one
 // nonzero off-diagonal element in each row and column. The indices ilo and ihi
 // mark the starting and ending columns of the submatrix B. The eigenvalues of A
@@ -1050,9 +1096,11 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 // Scaling consists of applying a diagonal similarity transformation D such that
 // D^{-1}*B*D has the 1-norm of each row and its corresponding column nearly
 // equal. The output matrix is
-//  [ T1     X*D          Y    ]
-//  [  0  inv(D)*B*D  inv(D)*Z ].
-//  [  0      0           T2   ]
+//
+//	[ T1     X*D          Y    ]
+//	[  0  inv(D)*B*D  inv(D)*Z ].
+//	[  0      0           T2   ]
+//
 // Scaling may reduce the 1-norm of the matrix, and improve the accuracy of
 // the computed eigenvalues and/or eigenvectors.
 //
@@ -1063,16 +1111,21 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 // If job is lapack.PermuteScale, both permuting and scaling will be done.
 //
 // On return, if job is lapack.Permute or lapack.PermuteScale, it will hold that
-//  A[i,j] == 0,   for i > j and j ∈ {0, ..., ilo-1, ihi+1, ..., n-1}.
+//
+//	A[i,j] == 0,   for i > j and j ∈ {0, ..., ilo-1, ihi+1, ..., n-1}.
+//
 // If job is lapack.None or lapack.Scale, or if n == 0, it will hold that
-//  ilo == 0 and ihi == n-1.
+//
+//	ilo == 0 and ihi == n-1.
 //
 // On return, scale will contain information about the permutations and scaling
 // factors applied to A. If π(j) denotes the index of the column interchanged
 // with column j, and D[j,j] denotes the scaling factor applied to column j,
 // then
-//  scale[j] == π(j),     for j ∈ {0, ..., ilo-1, ihi+1, ..., n-1},
-//           == D[j,j],   for j ∈ {ilo, ..., ihi}.
+//
+//	scale[j] == π(j),     for j ∈ {0, ..., ilo-1, ihi+1, ..., n-1},
+//	         == D[j,j],   for j ∈ {ilo, ..., ihi}.
+//
 // scale must have length equal to n, otherwise Dgebal will panic.
 //
 // Dgebal is an internal routine. It is exported for testing purposes.
@@ -1115,8 +1168,10 @@ func (impl Implementation) Dgebal(job lapack.BalanceJob, n int, a []float64, lda
 }
 
 // Dgebak transforms an n×m matrix V as
-//  V = P D V,        if side == blas.Right,
-//  V = P D^{-1} V,   if side == blas.Left,
+//
+//	V = P D V,        if side == blas.Right,
+//	V = P D^{-1} V,   if side == blas.Left,
+//
 // where P and D are n×n permutation and scaling matrices, respectively,
 // implicitly represented by job, scale, ilo and ihi as returned by Dgebal.
 //
@@ -1180,7 +1235,9 @@ func (impl Implementation) Dgebak(job lapack.BalanceJob, side lapack.EVSide, n, 
 // Dbdsqr performs a singular value decomposition of a real n×n bidiagonal matrix.
 //
 // The SVD of the bidiagonal matrix B is
-//  B = Q * S * P^T
+//
+//	B = Q * S * P^T
+//
 // where S is a diagonal matrix of singular values, Q is an orthogonal matrix of
 // left singular vectors, and P is an orthogonal matrix of right singular vectors.
 //
@@ -1190,7 +1247,8 @@ func (impl Implementation) Dgebak(job lapack.BalanceJob, side lapack.EVSide, n, 
 //
 // Frequently Dbdsqr is used in conjunction with Dgebrd which reduces a general
 // matrix A into bidiagonal form. In this case, the SVD of A is
-//  A = (U * Q) * S * (P^T * VT)
+//
+//	A = (U * Q) * S * (P^T * VT)
 //
 // This routine may also compute Q^T * C.
 //
@@ -1261,7 +1319,9 @@ func (impl Implementation) Dbdsqr(uplo blas.Uplo, n, ncvt, nru, ncc int, d, e, v
 
 // Dgebrd reduces a general m×n matrix A to upper or lower bidiagonal form B by
 // an orthogonal transformation:
-//  Q^T * A * P = B.
+//
+//	Q^T * A * P = B.
+//
 // The diagonal elements of B are stored in d and the off-diagonal elements are
 // stored in e. These are additionally stored along the diagonal of A and the
 // off-diagonal of A. If m >= n B is an upper-bidiagonal matrix, and if m < n B
@@ -1269,27 +1329,33 @@ func (impl Implementation) Dbdsqr(uplo blas.Uplo, n, ncvt, nru, ncc int, d, e, v
 //
 // The remaining elements of A store the data needed to construct Q and P.
 // The matrices Q and P are products of elementary reflectors
-//  if m >= n, Q = H_0 * H_1 * ... * H_{n-1},
-//             P = G_0 * G_1 * ... * G_{n-2},
-//  if m < n,  Q = H_0 * H_1 * ... * H_{m-2},
-//             P = G_0 * G_1 * ... * G_{m-1},
+//
+//	if m >= n, Q = H_0 * H_1 * ... * H_{n-1},
+//	           P = G_0 * G_1 * ... * G_{n-2},
+//	if m < n,  Q = H_0 * H_1 * ... * H_{m-2},
+//	           P = G_0 * G_1 * ... * G_{m-1},
+//
 // where
-//  H_i = I - tauQ[i] * v_i * v_i^T,
-//  G_i = I - tauP[i] * u_i * u_i^T.
+//
+//	H_i = I - tauQ[i] * v_i * v_i^T,
+//	G_i = I - tauP[i] * u_i * u_i^T.
 //
 // As an example, on exit the entries of A when m = 6, and n = 5
-//  [ d   e  u1  u1  u1]
-//  [v1   d   e  u2  u2]
-//  [v1  v2   d   e  u3]
-//  [v1  v2  v3   d   e]
-//  [v1  v2  v3  v4   d]
-//  [v1  v2  v3  v4  v5]
+//
+//	[ d   e  u1  u1  u1]
+//	[v1   d   e  u2  u2]
+//	[v1  v2   d   e  u3]
+//	[v1  v2  v3   d   e]
+//	[v1  v2  v3  v4   d]
+//	[v1  v2  v3  v4  v5]
+//
 // and when m = 5, n = 6
-//  [ d  u1  u1  u1  u1  u1]
-//  [ e   d  u2  u2  u2  u2]
-//  [v1   e   d  u3  u3  u3]
-//  [v1  v2   e   d  u4  u4]
-//  [v1  v2  v3   e   d  u5]
+//
+//	[ d  u1  u1  u1  u1  u1]
+//	[ e   d  u2  u2  u2  u2]
+//	[v1   e   d  u3  u3  u3]
+//	[v1  v2   e   d  u4  u4]
+//	[v1  v2  v3   e   d  u5]
 //
 // d, tauQ, and tauP must all have length at least min(m,n), and e must have
 // length min(m,n) - 1, unless lwork is -1 when there is no check except for
@@ -1398,7 +1464,9 @@ func (impl Implementation) Dgecon(norm lapack.MatrixNorm, n int, a []float64, ld
 //
 // See Dgeqr2 for a description of the elementary reflectors and orthonormal
 // matrix Q. Q is constructed as a product of these elementary reflectors,
-//  Q = H_{k-1} * ... * H_1 * H_0,
+//
+//	Q = H_{k-1} * ... * H_1 * H_0,
+//
 // where k = min(m,n).
 //
 // Work is temporary storage of length at least m and this function will panic otherwise.
@@ -1489,9 +1557,11 @@ func (impl Implementation) Dgelqf(m, n int, a []float64, lda int, tau, work []fl
 //
 // The ith elementary reflector can be explicitly constructed by first extracting
 // the
-//  v[j] = 0           j < i
-//  v[j] = 1           j == i
-//  v[j] = a[j*lda+i]  j > i
+//
+//	v[j] = 0           j < i
+//	v[j] = 1           j == i
+//	v[j] = a[j*lda+i]  j > i
+//
 // and computing H_i = I - tau[i] * v * v^T.
 //
 // The orthonormal matrix Q can be constucted from a product of these elementary
@@ -1579,9 +1649,13 @@ func (impl Implementation) Dgeqrf(m, n int, a []float64, lda int, tau, work []fl
 //
 // The matrix Q is represented as a product of (ihi-ilo) elementary
 // reflectors
-//  Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
+//
+//	Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
+//
 // Each H_i has the form
-//  H_i = I - tau[i] * v * v^T
+//
+//	H_i = I - tau[i] * v * v^T
+//
 // where v is a real vector with v[0:i+1] = 0, v[i+1] = 1 and v[ihi+1:n] = 0.
 // v[i+2:ihi+1] is stored on exit in A[i+2:ihi+1,i].
 //
@@ -1594,21 +1668,25 @@ func (impl Implementation) Dgeqrf(m, n int, a []float64, lda int, tau, work []fl
 // The contents of a are illustrated by the following example, with n = 7, ilo =
 // 1 and ihi = 5.
 // On entry,
-//  [ a   a   a   a   a   a   a ]
-//  [     a   a   a   a   a   a ]
-//  [     a   a   a   a   a   a ]
-//  [     a   a   a   a   a   a ]
-//  [     a   a   a   a   a   a ]
-//  [     a   a   a   a   a   a ]
-//  [                         a ]
+//
+//	[ a   a   a   a   a   a   a ]
+//	[     a   a   a   a   a   a ]
+//	[     a   a   a   a   a   a ]
+//	[     a   a   a   a   a   a ]
+//	[     a   a   a   a   a   a ]
+//	[     a   a   a   a   a   a ]
+//	[                         a ]
+//
 // on return,
-//  [ a   a   h   h   h   h   a ]
-//  [     a   h   h   h   h   a ]
-//  [     h   h   h   h   h   h ]
-//  [     v1  h   h   h   h   h ]
-//  [     v1  v2  h   h   h   h ]
-//  [     v1  v2  v3  h   h   h ]
-//  [                         a ]
+//
+//	[ a   a   h   h   h   h   a ]
+//	[     a   h   h   h   h   a ]
+//	[     h   h   h   h   h   h ]
+//	[     v1  h   h   h   h   h ]
+//	[     v1  v2  h   h   h   h ]
+//	[     v1  v2  v3  h   h   h ]
+//	[                         a ]
+//
 // where a denotes an element of the original matrix A, h denotes a
 // modified element of the upper Hessenberg matrix H, and vi denotes an
 // element of the vector defining H_i.
@@ -1680,6 +1758,7 @@ func (impl Implementation) Dgehrd(n, ilo, ihi int, a []float64, lda int, tau, wo
 //     A^T * X = B.
 //  4. If m < n and trans == blas.Trans, Dgels finds X such that || A*X - B||_2
 //     is minimized.
+//
 // Note that the least-squares solutions (cases 1 and 3) perform the minimization
 // per column of B. This is not the same as finding the minimum-norm matrix.
 //
@@ -1741,7 +1820,9 @@ func (impl Implementation) Dgels(trans blas.Transpose, m, n, nrhs int, a []float
 // Dgesvd computes the singular value decomposition of the input matrix A.
 //
 // The singular value decomposition is
-//  A = U * Sigma * V^T
+//
+//	A = U * Sigma * V^T
+//
 // where Sigma is an m×n diagonal matrix containing the singular values of A,
 // U is an m×m orthogonal matrix and V is an n×n orthogonal matrix. The first
 // min(m,n) columns of U and V are the left and right singular vectors of A
@@ -1749,10 +1830,12 @@ func (impl Implementation) Dgels(trans blas.Transpose, m, n, nrhs int, a []float
 //
 // jobU and jobVT are options for computing the singular vectors. The behavior
 // is as follows
-//  jobU == lapack.SVDAll       All m columns of U are returned in u
-//  jobU == lapack.SVDStore     The first min(m,n) columns are returned in u
-//  jobU == lapack.SVDOverwrite The first min(m,n) columns of U are written into a
-//  jobU == lapack.SVDNone      The columns of U are not computed.
+//
+//	jobU == lapack.SVDAll       All m columns of U are returned in u
+//	jobU == lapack.SVDStore     The first min(m,n) columns are returned in u
+//	jobU == lapack.SVDOverwrite The first min(m,n) columns of U are written into a
+//	jobU == lapack.SVDNone      The columns of U are not computed.
+//
 // The behavior is the same for jobVT and the rows of V^T. At most one of jobU
 // and jobVT can equal lapack.SVDOverwrite, and Dgesvd will panic otherwise.
 //
@@ -1850,7 +1933,9 @@ func (impl Implementation) Dgesvd(jobU, jobVT lapack.SVDJob, m, n int, a []float
 
 // Dgetf2 computes the LU decomposition of the m×n matrix A.
 // The LU decomposition is a factorization of a into
-//  A = P * L * U
+//
+//	A = P * L * U
+//
 // where P is a permutation matrix, L is a unit lower triangular matrix, and
 // U is a (usually) non-unit upper triangular matrix. On exit, L and U are stored
 // in place into a.
@@ -1896,7 +1981,9 @@ func (Implementation) Dgetf2(m, n int, a []float64, lda int, ipiv []int) (ok boo
 
 // Dgetrf computes the LU decomposition of the m×n matrix A.
 // The LU decomposition is a factorization of A into
-//  A = P * L * U
+//
+//	A = P * L * U
+//
 // where P is a permutation matrix, L is a unit lower triangular matrix, and
 // U is a (usually) non-unit upper triangular matrix. On exit, L and U are stored
 // in place into a.
@@ -1997,8 +2084,10 @@ func (impl Implementation) Dgetri(n int, a []float64, lda int, ipiv []int, work 
 
 // Dgetrs solves a system of equations using an LU factorization.
 // The system of equations solved is
-//  A * X = B if trans == blas.Trans
-//  A^T * X = B if trans == blas.NoTrans
+//
+//	A * X = B if trans == blas.Trans
+//	A^T * X = B if trans == blas.NoTrans
+//
 // A is a general n×n matrix with stride lda. B is a general matrix of size n×nrhs.
 //
 // On entry b contains the elements of the matrix B. On exit, b contains the
@@ -2047,9 +2136,11 @@ func (impl Implementation) Dgetrs(trans blas.Transpose, n, nrhs int, a []float64
 
 // Dggsvd3 computes the generalized singular value decomposition (GSVD)
 // of an m×n matrix A and p×n matrix B:
-//  U^T*A*Q = D1*[ 0 R ]
 //
-//  V^T*B*Q = D2*[ 0 R ]
+//	U^T*A*Q = D1*[ 0 R ]
+//
+//	V^T*B*Q = D2*[ 0 R ]
+//
 // where U, V and Q are orthogonal matrices.
 //
 // Dggsvd3 returns k and l, the dimensions of the sub-blocks. k+l
@@ -2060,62 +2151,69 @@ func (impl Implementation) Dgetrs(trans blas.Transpose, n, nrhs int, a []float64
 //
 // If m-k-l >= 0,
 //
-//                    k  l
-//       D1 =     k [ I  0 ]
-//                l [ 0  C ]
-//            m-k-l [ 0  0 ]
+//	                  k  l
+//	     D1 =     k [ I  0 ]
+//	              l [ 0  C ]
+//	          m-k-l [ 0  0 ]
 //
-//                  k  l
-//       D2 = l   [ 0  S ]
-//            p-l [ 0  0 ]
+//	                k  l
+//	     D2 = l   [ 0  S ]
+//	          p-l [ 0  0 ]
 //
-//               n-k-l  k    l
-//  [ 0 R ] = k [  0   R11  R12 ] k
-//            l [  0    0   R22 ] l
+//	             n-k-l  k    l
+//	[ 0 R ] = k [  0   R11  R12 ] k
+//	          l [  0    0   R22 ] l
 //
 // where
 //
-//  C = diag( alpha_k, ... , alpha_{k+l} ),
-//  S = diag( beta_k,  ... , beta_{k+l} ),
-//  C^2 + S^2 = I.
+//	C = diag( alpha_k, ... , alpha_{k+l} ),
+//	S = diag( beta_k,  ... , beta_{k+l} ),
+//	C^2 + S^2 = I.
 //
 // R is stored in
-//  A[0:k+l, n-k-l:n]
+//
+//	A[0:k+l, n-k-l:n]
+//
 // on exit.
 //
 // If m-k-l < 0,
 //
-//                 k m-k k+l-m
-//      D1 =   k [ I  0    0  ]
-//           m-k [ 0  C    0  ]
+//	               k m-k k+l-m
+//	    D1 =   k [ I  0    0  ]
+//	         m-k [ 0  C    0  ]
 //
-//                   k m-k k+l-m
-//      D2 =   m-k [ 0  S    0  ]
-//           k+l-m [ 0  0    I  ]
-//             p-l [ 0  0    0  ]
+//	                 k m-k k+l-m
+//	    D2 =   m-k [ 0  S    0  ]
+//	         k+l-m [ 0  0    I  ]
+//	           p-l [ 0  0    0  ]
 //
-//                 n-k-l  k   m-k  k+l-m
-//  [ 0 R ] =    k [ 0    R11  R12  R13 ]
-//             m-k [ 0     0   R22  R23 ]
-//           k+l-m [ 0     0    0   R33 ]
+//	               n-k-l  k   m-k  k+l-m
+//	[ 0 R ] =    k [ 0    R11  R12  R13 ]
+//	           m-k [ 0     0   R22  R23 ]
+//	         k+l-m [ 0     0    0   R33 ]
 //
 // where
-//  C = diag( alpha_k, ... , alpha_m ),
-//  S = diag( beta_k,  ... , beta_m ),
-//  C^2 + S^2 = I.
 //
-//  R = [ R11 R12 R13 ] is stored in A[1:m, n-k-l+1:n]
-//      [  0  R22 R23 ]
+//	C = diag( alpha_k, ... , alpha_m ),
+//	S = diag( beta_k,  ... , beta_m ),
+//	C^2 + S^2 = I.
+//
+//	R = [ R11 R12 R13 ] is stored in A[1:m, n-k-l+1:n]
+//	    [  0  R22 R23 ]
+//
 // and R33 is stored in
-//  B[m-k:l, n+m-k-l:n] on exit.
+//
+//	B[m-k:l, n+m-k-l:n] on exit.
 //
 // Dggsvd3 computes C, S, R, and optionally the orthogonal transformation
 // matrices U, V and Q.
 //
 // jobU, jobV and jobQ are options for computing the orthogonal matrices. The behavior
 // is as follows
-//  jobU == lapack.GSVDU        Compute orthogonal matrix U
-//  jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
+//	jobU == lapack.GSVDU        Compute orthogonal matrix U
+//	jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
 // The behavior is the same for jobV and jobQ with the exception that instead of
 // lapack.GSVDU these accept lapack.GSVDV and lapack.GSVDQ respectively.
 // The matrices U, V and Q must be m×m, p×p and n×n respectively unless the
@@ -2123,17 +2221,24 @@ func (impl Implementation) Dgetrs(trans blas.Transpose, n, nrhs int, a []float64
 //
 // alpha and beta must have length n or Dggsvd3 will panic. On exit, alpha and
 // beta contain the generalized singular value pairs of A and B
-//   alpha[0:k] = 1,
-//   beta[0:k]  = 0,
+//
+//	alpha[0:k] = 1,
+//	beta[0:k]  = 0,
+//
 // if m-k-l >= 0,
-//   alpha[k:k+l] = diag(C),
-//   beta[k:k+l]  = diag(S),
+//
+//	alpha[k:k+l] = diag(C),
+//	beta[k:k+l]  = diag(S),
+//
 // if m-k-l < 0,
-//   alpha[k:m]= C, alpha[m:k+l]= 0
-//   beta[k:m] = S, beta[m:k+l] = 1.
+//
+//	alpha[k:m]= C, alpha[m:k+l]= 0
+//	beta[k:m] = S, beta[m:k+l] = 1.
+//
 // if k+l < n,
-//   alpha[k+l:n] = 0 and
-//   beta[k+l:n]  = 0.
+//
+//	alpha[k+l:n] = 0 and
+//	beta[k+l:n]  = 0.
 //
 // On exit, iwork contains the permutation required to sort alpha descending.
 //
@@ -2212,18 +2317,18 @@ func (impl Implementation) Dggsvd3(jobU, jobV, jobQ lapack.GSVDJob, m, n, p int,
 
 // Dggsvp3 computes orthogonal matrices U, V and Q such that
 //
-//                  n-k-l  k    l
-//  U^T*A*Q =    k [ 0    A12  A13 ] if m-k-l >= 0;
-//               l [ 0     0   A23 ]
-//           m-k-l [ 0     0    0  ]
+//	                n-k-l  k    l
+//	U^T*A*Q =    k [ 0    A12  A13 ] if m-k-l >= 0;
+//	             l [ 0     0   A23 ]
+//	         m-k-l [ 0     0    0  ]
 //
-//                  n-k-l  k    l
-//  U^T*A*Q =    k [ 0    A12  A13 ] if m-k-l < 0;
-//             m-k [ 0     0   A23 ]
+//	                n-k-l  k    l
+//	U^T*A*Q =    k [ 0    A12  A13 ] if m-k-l < 0;
+//	           m-k [ 0     0   A23 ]
 //
-//                  n-k-l  k    l
-//  V^T*B*Q =    l [ 0     0   B13 ]
-//             p-l [ 0     0    0  ]
+//	                n-k-l  k    l
+//	V^T*B*Q =    l [ 0     0   B13 ]
+//	           p-l [ 0     0    0  ]
 //
 // where the k×k matrix A12 and l×l matrix B13 are non-singular
 // upper triangular. A23 is l×l upper triangular if m-k-l >= 0,
@@ -2234,8 +2339,10 @@ func (impl Implementation) Dggsvd3(jobU, jobV, jobQ lapack.GSVDJob, m, n, p int,
 //
 // jobU, jobV and jobQ are options for computing the orthogonal matrices. The behavior
 // is as follows
-//  jobU == lapack.GSVDU        Compute orthogonal matrix U
-//  jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
+//	jobU == lapack.GSVDU        Compute orthogonal matrix U
+//	jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
 // The behavior is the same for jobV and jobQ with the exception that instead of
 // lapack.GSVDU these accept lapack.GSVDV and lapack.GSVDQ respectively.
 // The matrices U, V and Q must be m×m, p×p and n×n respectively unless the
@@ -2244,8 +2351,10 @@ func (impl Implementation) Dggsvd3(jobU, jobV, jobQ lapack.GSVDJob, m, n, p int,
 // tola and tolb are the convergence criteria for the Jacobi-Kogbetliantz
 // iteration procedure. Generally, they are the same as used in the preprocessing
 // step, for example,
-//  tola = max(m, n)*norm(A)*eps,
-//  tolb = max(p, n)*norm(B)*eps.
+//
+//	tola = max(m, n)*norm(A)*eps,
+//	tolb = max(p, n)*norm(B)*eps.
+//
 // Where eps is the machine epsilon.
 //
 // iwork must have length n, work must have length at least max(1, lwork), and
@@ -2380,7 +2489,8 @@ func (impl Implementation) Dorgbr(vect lapack.GenOrtho, m, n, k int, a []float64
 
 // Dorghr generates an n×n orthogonal matrix Q which is defined as the product
 // of ihi-ilo elementary reflectors:
-//  Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
+//
+//	Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
 //
 // a and lda represent an n×n matrix that contains the elementary reflectors, as
 // returned by Dgehrd. On return, a is overwritten by the n×n orthogonal matrix
@@ -2389,8 +2499,9 @@ func (impl Implementation) Dorgbr(vect lapack.GenOrtho, m, n, k int, a []float64
 //
 // ilo and ihi must have the same values as in the previous call of Dgehrd. It
 // must hold that
-//  0 <= ilo <= ihi < n,  if n > 0,
-//  ilo = 0, ihi = -1,    if n == 0.
+//
+//	0 <= ilo <= ihi < n,  if n > 0,
+//	ilo = 0, ihi = -1,    if n == 0.
 //
 // tau contains the scalar factors of the elementary reflectors, as returned by
 // Dgehrd. tau must have length n-1.
@@ -2444,7 +2555,9 @@ func (impl Implementation) Dorghr(n, ilo, ihi int, a []float64, lda int, tau, wo
 
 // Dorglq generates an m×n matrix Q with orthonormal rows defined by the product
 // of elementary reflectors
-//  Q = H_{k-1} * ... * H_1 * H_0
+//
+//	Q = H_{k-1} * ... * H_1 * H_0
+//
 // as computed by Dgelqf. Dorglq is the blocked version of Dorgl2 that makes
 // greater use of level-3 BLAS routines.
 //
@@ -2498,10 +2611,13 @@ func (impl Implementation) Dorglq(m, n, k int, a []float64, lda int, tau, work [
 
 // Dorgql generates the m×n matrix Q with orthonormal columns defined as the
 // last n columns of a product of k elementary reflectors of order m
-//  Q = H_{k-1} * ... * H_1 * H_0.
+//
+//	Q = H_{k-1} * ... * H_1 * H_0.
 //
 // It must hold that
-//  0 <= k <= n <= m,
+//
+//	0 <= k <= n <= m,
+//
 // and Dorgql will panic otherwise.
 //
 // On entry, the (n-k+i)-th column of A must contain the vector which defines
@@ -2561,7 +2677,9 @@ func (impl Implementation) Dorgql(m, n, k int, a []float64, lda int, tau, work [
 
 // Dorgqr generates an m×n matrix Q with orthonormal columns defined by the
 // product of elementary reflectors
-//  Q = H_0 * H_1 * ... * H_{k-1}
+//
+//	Q = H_0 * H_1 * ... * H_{k-1}
+//
 // as computed by Dgeqrf. Dorgqr is the blocked version of Dorg2r that makes
 // greater use of level-3 BLAS routines.
 //
@@ -2620,8 +2738,10 @@ func (impl Implementation) Dorgqr(m, n, k int, a []float64, lda int, tau, work [
 // of n-1 elementary reflectors of order n as returned by Dsytrd.
 //
 // The construction of Q depends on the value of uplo:
-//  Q = H_{n-1} * ... * H_1 * H_0  if uplo == blas.Upper
-//  Q = H_0 * H_1 * ... * H_{n-1}  if uplo == blas.Lower
+//
+//	Q = H_{n-1} * ... * H_1 * H_0  if uplo == blas.Upper
+//	Q = H_0 * H_1 * ... * H_{n-1}  if uplo == blas.Lower
+//
 // where H_i is constructed from the elementary reflectors as computed by Dsytrd.
 // See the documentation for Dsytrd for more information.
 //
@@ -2672,15 +2792,17 @@ func (impl Implementation) Dorgtr(uplo blas.Uplo, n int, a []float64, lda int, t
 // decomposition computed by Dgebrd.
 //
 // Dormbr overwrites the m×n matrix C with
-//  Q * C   if vect == lapack.ApplyQ, side == blas.Left, and trans == blas.NoTrans
-//  C * Q   if vect == lapack.ApplyQ, side == blas.Right, and trans == blas.NoTrans
-//  Q^T * C if vect == lapack.ApplyQ, side == blas.Left, and trans == blas.Trans
-//  C * Q^T if vect == lapack.ApplyQ, side == blas.Right, and trans == blas.Trans
 //
-//  P * C   if vect == lapack.ApplyP, side == blas.Left, and trans == blas.NoTrans
-//  C * P   if vect == lapack.ApplyP, side == blas.Right, and trans == blas.NoTrans
-//  P^T * C if vect == lapack.ApplyP, side == blas.Left, and trans == blas.Trans
-//  C * P^T if vect == lapack.ApplyP, side == blas.Right, and trans == blas.Trans
+//	Q * C   if vect == lapack.ApplyQ, side == blas.Left, and trans == blas.NoTrans
+//	C * Q   if vect == lapack.ApplyQ, side == blas.Right, and trans == blas.NoTrans
+//	Q^T * C if vect == lapack.ApplyQ, side == blas.Left, and trans == blas.Trans
+//	C * Q^T if vect == lapack.ApplyQ, side == blas.Right, and trans == blas.Trans
+//
+//	P * C   if vect == lapack.ApplyP, side == blas.Left, and trans == blas.NoTrans
+//	C * P   if vect == lapack.ApplyP, side == blas.Right, and trans == blas.NoTrans
+//	P^T * C if vect == lapack.ApplyP, side == blas.Left, and trans == blas.Trans
+//	C * P^T if vect == lapack.ApplyP, side == blas.Right, and trans == blas.Trans
+//
 // where P and Q are the orthogonal matrices determined by Dgebrd when reducing
 // a matrix A to bidiagonal form: A = Q * B * P^T. See Dgebrd for the
 // definitions of Q and P.
@@ -2763,24 +2885,29 @@ func (impl Implementation) Dormbr(vect lapack.ApplyOrtho, side blas.Side, trans 
 }
 
 // Dormhr multiplies an m×n general matrix C with an nq×nq orthogonal matrix Q
-//  Q * C,    if side == blas.Left and trans == blas.NoTrans,
-//  Q^T * C,  if side == blas.Left and trans == blas.Trans,
-//  C * Q,    if side == blas.Right and trans == blas.NoTrans,
-//  C * Q^T,  if side == blas.Right and trans == blas.Trans,
+//
+//	Q * C,    if side == blas.Left and trans == blas.NoTrans,
+//	Q^T * C,  if side == blas.Left and trans == blas.Trans,
+//	C * Q,    if side == blas.Right and trans == blas.NoTrans,
+//	C * Q^T,  if side == blas.Right and trans == blas.Trans,
+//
 // where nq == m if side == blas.Left and nq == n if side == blas.Right.
 //
 // Q is defined implicitly as the product of ihi-ilo elementary reflectors, as
 // returned by Dgehrd:
-//  Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
+//
+//	Q = H_{ilo} H_{ilo+1} ... H_{ihi-1}.
+//
 // Q is equal to the identity matrix except in the submatrix
 // Q[ilo+1:ihi+1,ilo+1:ihi+1].
 //
 // ilo and ihi must have the same values as in the previous call of Dgehrd. It
 // must hold that
-//  0 <= ilo <= ihi < m,   if m > 0 and side == blas.Left,
-//  ilo = 0 and ihi = -1,  if m = 0 and side == blas.Left,
-//  0 <= ilo <= ihi < n,   if n > 0 and side == blas.Right,
-//  ilo = 0 and ihi = -1,  if n = 0 and side == blas.Right.
+//
+//	0 <= ilo <= ihi < m,   if m > 0 and side == blas.Left,
+//	ilo = 0 and ihi = -1,  if m = 0 and side == blas.Left,
+//	0 <= ilo <= ihi < n,   if n > 0 and side == blas.Right,
+//	ilo = 0 and ihi = -1,  if n = 0 and side == blas.Right.
 //
 // a and lda represent an m×m matrix if side == blas.Left and an n×n matrix if
 // side == blas.Right. The matrix contains vectors which define the elementary
@@ -2858,10 +2985,12 @@ func (impl Implementation) Dormhr(side blas.Side, trans blas.Transpose, m, n, il
 
 // Dormlq multiplies the matrix C by the orthogonal matrix Q defined by the
 // slices a and tau. A and tau are as returned from Dgelqf.
-//  C = Q * C    if side == blas.Left and trans == blas.NoTrans
-//  C = Q^T * C  if side == blas.Left and trans == blas.Trans
-//  C = C * Q    if side == blas.Right and trans == blas.NoTrans
-//  C = C * Q^T  if side == blas.Right and trans == blas.Trans
+//
+//	C = Q * C    if side == blas.Left and trans == blas.NoTrans
+//	C = Q^T * C  if side == blas.Left and trans == blas.Trans
+//	C = C * Q    if side == blas.Right and trans == blas.NoTrans
+//	C = C * Q^T  if side == blas.Right and trans == blas.Trans
+//
 // If side == blas.Left, A is a matrix of side k×m, and if side == blas.Right
 // A is of size k×n. This uses a blocked algorithm.
 //
@@ -2931,12 +3060,15 @@ func (impl Implementation) Dormlq(side blas.Side, trans blas.Transpose, m, n, k 
 }
 
 // Dormqr multiplies an m×n matrix C by an orthogonal matrix Q as
-//  C = Q * C,    if side == blas.Left  and trans == blas.NoTrans,
-//  C = Q^T * C,  if side == blas.Left  and trans == blas.Trans,
-//  C = C * Q,    if side == blas.Right and trans == blas.NoTrans,
-//  C = C * Q^T,  if side == blas.Right and trans == blas.Trans,
+//
+//	C = Q * C,    if side == blas.Left  and trans == blas.NoTrans,
+//	C = Q^T * C,  if side == blas.Left  and trans == blas.Trans,
+//	C = C * Q,    if side == blas.Right and trans == blas.NoTrans,
+//	C = C * Q^T,  if side == blas.Right and trans == blas.Trans,
+//
 // where Q is defined as the product of k elementary reflectors
-//  Q = H_0 * H_1 * ... * H_{k-1}.
+//
+//	Q = H_0 * H_1 * ... * H_{k-1}.
 //
 // If side == blas.Left, A is an m×k matrix and 0 <= k <= m.
 // If side == blas.Right, A is an n×k matrix and 0 <= k <= n.
@@ -3192,7 +3324,9 @@ func (impl Implementation) Dsyev(jobz lapack.EVJob, uplo blas.Uplo, n int, a []f
 
 // Dsytrd reduces a symmetric n×n matrix A to symmetric tridiagonal form by an
 // orthogonal similarity transformation
-//  Q^T * A * Q = T
+//
+//	Q^T * A * Q = T
+//
 // where Q is an orthonormal matrix and T is symmetric and tridiagonal.
 //
 // On entry, a contains the elements of the input matrix in the triangle specified
@@ -3202,28 +3336,38 @@ func (impl Implementation) Dsyev(jobz lapack.EVJob, uplo blas.Uplo, n int, a []f
 // the product of elementary reflectors.
 //
 // If uplo == blas.Upper, Q is constructed with
-//  Q = H_{n-2} * ... * H_1 * H_0
+//
+//	Q = H_{n-2} * ... * H_1 * H_0
+//
 // where
-//  H_i = I - tau_i * v * v^T
+//
+//	H_i = I - tau_i * v * v^T
+//
 // v is constructed as v[i+1:n] = 0, v[i] = 1, v[0:i-1] is stored in A[0:i-1, i+1].
 // The elements of A are
-//  [ d   e  v1  v2  v3]
-//  [     d   e  v2  v3]
-//  [         d   e  v3]
-//  [             d   e]
-//  [                 e]
+//
+//	[ d   e  v1  v2  v3]
+//	[     d   e  v2  v3]
+//	[         d   e  v3]
+//	[             d   e]
+//	[                 e]
 //
 // If uplo == blas.Lower, Q is constructed with
-//  Q = H_0 * H_1 * ... * H_{n-2}
+//
+//	Q = H_0 * H_1 * ... * H_{n-2}
+//
 // where
-//  H_i = I - tau_i * v * v^T
+//
+//	H_i = I - tau_i * v * v^T
+//
 // v is constructed as v[0:i+1] = 0, v[i+1] = 1, v[i+2:n] is stored in A[i+2:n, i].
 // The elements of A are
-//  [ d                ]
-//  [ e   d            ]
-//  [v0   e   d        ]
-//  [v0  v1   e   d    ]
-//  [v0  v1  v2   e   d]
+//
+//	[ d                ]
+//	[ e   d            ]
+//	[v0   e   d        ]
+//	[v0  v1   e   d    ]
+//	[v0  v1  v2   e   d]
 //
 // d must have length n, and e and tau must have length n-1. Dsytrd will panic if
 // these conditions are not met.
@@ -3275,8 +3419,10 @@ func (impl Implementation) Dsytrd(uplo blas.Uplo, n int, a []float64, lda int, d
 }
 
 // Dtbtrs solves a triangular system of the form
-//  A * X = B   if trans == blas.NoTrans
-//  Aᵀ * X = B  if trans == blas.Trans or blas.ConjTrans
+//
+//	A * X = B   if trans == blas.NoTrans
+//	Aᵀ * X = B  if trans == blas.Trans or blas.ConjTrans
+//
 // where A is an n×n triangular band matrix with kd super- or subdiagonals, and
 // B is an n×nrhs matrix.
 //
@@ -3360,7 +3506,9 @@ func (impl Implementation) Dtrcon(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 }
 
 // Dtrexc reorders the real Schur factorization of a n×n real matrix
-//  A = Q*T*Q^T
+//
+//	A = Q*T*Q^T
+//
 // so that the diagonal block of T with row index ifst is moved to row ilst.
 //
 // On entry, T must be in Schur canonical form, that is, block upper triangular
@@ -3387,7 +3535,9 @@ func (impl Implementation) Dtrcon(norm lapack.MatrixNorm, uplo blas.Uplo, diag b
 // is true, ilstOut may differ from ilst by +1 or -1.
 //
 // It must hold that
-//  0 <= ifst < n, and  0 <= ilst < n,
+//
+//	0 <= ifst < n, and  0 <= ilst < n,
+//
 // otherwise Dtrexc will panic.
 //
 // If ok is false, two adjacent blocks were too close to swap because the
@@ -3507,14 +3657,17 @@ func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 
 // Dhseqr computes the eigenvalues of an n×n Hessenberg matrix H and,
 // optionally, the matrices T and Z from the Schur decomposition
-//  H = Z T Z^T,
+//
+//	H = Z T Z^T,
+//
 // where T is an n×n upper quasi-triangular matrix (the Schur form), and Z is
 // the n×n orthogonal matrix of Schur vectors.
 //
 // Optionally Z may be postmultiplied into an input orthogonal matrix Q so that
 // this routine can give the Schur factorization of a matrix A which has been
 // reduced to the Hessenberg form H by the orthogonal matrix Q:
-//  A = Q H Q^T = (QZ) T (QZ)^T.
+//
+//	A = Q H Q^T = (QZ) T (QZ)^T.
 //
 // If job == lapack.EigenvaluesOnly, only the eigenvalues will be computed.
 // If job == lapack.EigenvaluesAndSchur, the eigenvalues and the Schur form T will
@@ -3532,13 +3685,16 @@ func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 // ilo and ihi determine the block of H on which Dhseqr operates. It is assumed
 // that H is already upper triangular in rows and columns [0:ilo] and [ihi+1:n],
 // although it will be only checked that the block is isolated, that is,
-//  ilo == 0   or H[ilo,ilo-1] == 0,
-//  ihi == n-1 or H[ihi+1,ihi] == 0,
+//
+//	ilo == 0   or H[ilo,ilo-1] == 0,
+//	ihi == n-1 or H[ihi+1,ihi] == 0,
+//
 // and Dhseqr will panic otherwise. ilo and ihi are typically set by a previous
 // call to Dgebal, otherwise they should be set to 0 and n-1, respectively. It
 // must hold that
-//  0 <= ilo <= ihi < n,     if n > 0,
-//  ilo == 0 and ihi == -1,  if n == 0.
+//
+//	0 <= ilo <= ihi < n,     if n > 0,
+//	ilo == 0 and ihi == -1,  if n == 0.
 //
 // wr and wi must have length n.
 //
@@ -3563,15 +3719,22 @@ func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 // contain the upper quasi-triangular matrix T from the Schur decomposition (the
 // Schur form). 2×2 diagonal blocks (corresponding to complex conjugate pairs of
 // eigenvalues) will be returned in standard form, with
-//  H[i,i] == H[i+1,i+1],
+//
+//	H[i,i] == H[i+1,i+1],
+//
 // and
-//  H[i+1,i]*H[i,i+1] < 0.
+//
+//	H[i+1,i]*H[i,i+1] < 0.
+//
 // The eigenvalues will be stored in wr and wi in the same order as on the
 // diagonal of the Schur form returned in H, with
-//  wr[i] = H[i,i],
+//
+//	wr[i] = H[i,i],
+//
 // and, if H[i:i+2,i:i+2] is a 2×2 diagonal block,
-//  wi[i]   = sqrt(-H[i+1,i]*H[i,i+1]),
-//  wi[i+1] = -wi[i].
+//
+//	wi[i]   = sqrt(-H[i+1,i]*H[i,i+1]),
+//	wi[i+1] = -wi[i].
 //
 // If unconverged == 0 and job == lapack.EigenvaluesOnly, the contents of h
 // on return is unspecified.
@@ -3586,30 +3749,37 @@ func (impl Implementation) Dtrtrs(uplo blas.Uplo, trans blas.Transpose, diag bla
 //
 // If unconverged > 0 and job == lapack.EigenvaluesAndSchur, then on
 // return
-//  (initial H) U = U (final H),   (*)
+//
+//	(initial H) U = U (final H),   (*)
+//
 // where U is an orthogonal matrix. The final H is upper Hessenberg and
 // H[unconverged:ihi+1,unconverged:ihi+1] is upper quasi-triangular.
 //
 // If unconverged > 0 and compz == lapack.OriginalEV, then on return
-//  (final Z) = (initial Z) U,
+//
+//	(final Z) = (initial Z) U,
+//
 // where U is the orthogonal matrix in (*) regardless of the value of job.
 //
 // If unconverged > 0 and compz == lapack.InitZ, then on return
-//  (final Z) = U,
+//
+//	(final Z) = U,
+//
 // where U is the orthogonal matrix in (*) regardless of the value of job.
 //
 // References:
-//  [1] R. Byers. LAPACK 3.1 xHSEQR: Tuning and Implementation Notes on the
-//      Small Bulge Multi-Shift QR Algorithm with Aggressive Early Deflation.
-//      LAPACK Working Note 187 (2007)
-//      URL: http://www.netlib.org/lapack/lawnspdf/lawn187.pdf
-//  [2] K. Braman, R. Byers, R. Mathias. The Multishift QR Algorithm. Part I:
-//      Maintaining Well-Focused Shifts and Level 3 Performance. SIAM J. Matrix
-//      Anal. Appl. 23(4) (2002), pp. 929—947
-//      URL: http://dx.doi.org/10.1137/S0895479801384573
-//  [3] K. Braman, R. Byers, R. Mathias. The Multishift QR Algorithm. Part II:
-//      Aggressive Early Deflation. SIAM J. Matrix Anal. Appl. 23(4) (2002), pp. 948—973
-//      URL: http://dx.doi.org/10.1137/S0895479801384585
+//
+//	[1] R. Byers. LAPACK 3.1 xHSEQR: Tuning and Implementation Notes on the
+//	    Small Bulge Multi-Shift QR Algorithm with Aggressive Early Deflation.
+//	    LAPACK Working Note 187 (2007)
+//	    URL: http://www.netlib.org/lapack/lawnspdf/lawn187.pdf
+//	[2] K. Braman, R. Byers, R. Mathias. The Multishift QR Algorithm. Part I:
+//	    Maintaining Well-Focused Shifts and Level 3 Performance. SIAM J. Matrix
+//	    Anal. Appl. 23(4) (2002), pp. 929—947
+//	    URL: http://dx.doi.org/10.1137/S0895479801384573
+//	[3] K. Braman, R. Byers, R. Mathias. The Multishift QR Algorithm. Part II:
+//	    Aggressive Early Deflation. SIAM J. Matrix Anal. Appl. 23(4) (2002), pp. 948—973
+//	    URL: http://dx.doi.org/10.1137/S0895479801384585
 //
 // Dhseqr is an internal routine. It is exported for testing purposes.
 func (impl Implementation) Dhseqr(job lapack.SchurJob, compz lapack.SchurComp, n, ilo, ihi int, h []float64, ldh int, wr, wi []float64, z []float64, ldz int, work []float64, lwork int) (unconverged int) {
@@ -3666,22 +3836,30 @@ func (impl Implementation) Dhseqr(job lapack.SchurJob, compz lapack.SchurComp, n
 //
 // The right eigenvector v_j of A corresponding to an eigenvalue λ_j
 // is defined by
-//  A v_j = λ_j v_j,
+//
+//	A v_j = λ_j v_j,
+//
 // and the left eigenvector u_j corresponding to an eigenvalue λ_j is defined by
-//  u_j^H A = λ_j u_j^H,
+//
+//	u_j^H A = λ_j u_j^H,
+//
 // where u_j^H is the conjugate transpose of u_j.
 //
 // On return, A will be overwritten and the left and right eigenvectors will be
 // stored, respectively, in the columns of the n×n matrices VL and VR in the
 // same order as their eigenvalues. If the j-th eigenvalue is real, then
-//  u_j = VL[:,j],
-//  v_j = VR[:,j],
+//
+//	u_j = VL[:,j],
+//	v_j = VR[:,j],
+//
 // and if it is not real, then j and j+1 form a complex conjugate pair and the
 // eigenvectors can be recovered as
-//  u_j     = VL[:,j] + i*VL[:,j+1],
-//  u_{j+1} = VL[:,j] - i*VL[:,j+1],
-//  v_j     = VR[:,j] + i*VR[:,j+1],
-//  v_{j+1} = VR[:,j] - i*VR[:,j+1].
+//
+//	u_j     = VL[:,j] + i*VL[:,j+1],
+//	u_{j+1} = VL[:,j] - i*VL[:,j+1],
+//	v_j     = VR[:,j] + i*VR[:,j+1],
+//	v_{j+1} = VR[:,j] - i*VR[:,j+1].
+//
 // where i is the imaginary unit. The computed eigenvectors are normalized to
 // have Euclidean norm equal to 1 and largest component real.
 //
@@ -3776,18 +3954,18 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 // preprocessing subroutine Dggsvp from a general m×n matrix A and p×n
 // matrix B:
 //
-//            n-k-l  k    l
-//  A =    k [  0   A12  A13 ] if m-k-l >= 0;
-//         l [  0    0   A23 ]
-//     m-k-l [  0    0    0  ]
+//	          n-k-l  k    l
+//	A =    k [  0   A12  A13 ] if m-k-l >= 0;
+//	       l [  0    0   A23 ]
+//	   m-k-l [  0    0    0  ]
 //
-//            n-k-l  k    l
-//  A =    k [  0   A12  A13 ] if m-k-l < 0;
-//       m-k [  0    0   A23 ]
+//	          n-k-l  k    l
+//	A =    k [  0   A12  A13 ] if m-k-l < 0;
+//	     m-k [  0    0   A23 ]
 //
-//            n-k-l  k    l
-//  B =    l [  0    0   B13 ]
-//       p-l [  0    0    0  ]
+//	          n-k-l  k    l
+//	B =    l [  0    0   B13 ]
+//	     p-l [  0    0    0  ]
 //
 // where the k×k matrix A12 and l×l matrix B13 are non-singular
 // upper triangular. A23 is l×l upper triangular if m-k-l >= 0,
@@ -3795,7 +3973,7 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 //
 // On exit,
 //
-//  U^T*A*Q = D1*[ 0 R ], V^T*B*Q = D2*[ 0 R ],
+//	U^T*A*Q = D1*[ 0 R ], V^T*B*Q = D2*[ 0 R ],
 //
 // where U, V and Q are orthogonal matrices.
 // R is a non-singular upper triangular matrix, and D1 and D2 are
@@ -3803,54 +3981,59 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 //
 // If m-k-l >= 0,
 //
-//                    k  l
-//       D1 =     k [ I  0 ]
-//                l [ 0  C ]
-//            m-k-l [ 0  0 ]
+//	                  k  l
+//	     D1 =     k [ I  0 ]
+//	              l [ 0  C ]
+//	          m-k-l [ 0  0 ]
 //
-//                  k  l
-//       D2 = l   [ 0  S ]
-//            p-l [ 0  0 ]
+//	                k  l
+//	     D2 = l   [ 0  S ]
+//	          p-l [ 0  0 ]
 //
-//               n-k-l  k    l
-//  [ 0 R ] = k [  0   R11  R12 ] k
-//            l [  0    0   R22 ] l
+//	             n-k-l  k    l
+//	[ 0 R ] = k [  0   R11  R12 ] k
+//	          l [  0    0   R22 ] l
 //
 // where
 //
-//  C = diag( alpha_k, ... , alpha_{k+l} ),
-//  S = diag( beta_k,  ... , beta_{k+l} ),
-//  C^2 + S^2 = I.
+//	C = diag( alpha_k, ... , alpha_{k+l} ),
+//	S = diag( beta_k,  ... , beta_{k+l} ),
+//	C^2 + S^2 = I.
 //
 // R is stored in
-//  A[0:k+l, n-k-l:n]
+//
+//	A[0:k+l, n-k-l:n]
+//
 // on exit.
 //
 // If m-k-l < 0,
 //
-//                 k m-k k+l-m
-//      D1 =   k [ I  0    0  ]
-//           m-k [ 0  C    0  ]
+//	               k m-k k+l-m
+//	    D1 =   k [ I  0    0  ]
+//	         m-k [ 0  C    0  ]
 //
-//                   k m-k k+l-m
-//      D2 =   m-k [ 0  S    0  ]
-//           k+l-m [ 0  0    I  ]
-//             p-l [ 0  0    0  ]
+//	                 k m-k k+l-m
+//	    D2 =   m-k [ 0  S    0  ]
+//	         k+l-m [ 0  0    I  ]
+//	           p-l [ 0  0    0  ]
 //
-//                 n-k-l  k   m-k  k+l-m
-//  [ 0 R ] =    k [ 0    R11  R12  R13 ]
-//             m-k [ 0     0   R22  R23 ]
-//           k+l-m [ 0     0    0   R33 ]
+//	               n-k-l  k   m-k  k+l-m
+//	[ 0 R ] =    k [ 0    R11  R12  R13 ]
+//	           m-k [ 0     0   R22  R23 ]
+//	         k+l-m [ 0     0    0   R33 ]
 //
 // where
-//  C = diag( alpha_k, ... , alpha_m ),
-//  S = diag( beta_k,  ... , beta_m ),
-//  C^2 + S^2 = I.
 //
-//  R = [ R11 R12 R13 ] is stored in A[1:m, n-k-l+1:n]
-//      [  0  R22 R23 ]
+//	C = diag( alpha_k, ... , alpha_m ),
+//	S = diag( beta_k,  ... , beta_m ),
+//	C^2 + S^2 = I.
+//
+//	R = [ R11 R12 R13 ] is stored in A[1:m, n-k-l+1:n]
+//	    [  0  R22 R23 ]
+//
 // and R33 is stored in
-//  B[m-k:l, n+m-k-l:n] on exit.
+//
+//	B[m-k:l, n+m-k-l:n] on exit.
 //
 // The computation of the orthogonal transformation matrices U, V or Q
 // is optional. These matrices may either be formed explicitly, or they
@@ -3860,51 +4043,64 @@ func (impl Implementation) Dgeev(jobvl lapack.LeftEVJob, jobvr lapack.RightEVJob
 // min(l,m-k)×l triangular or trapezoidal matrix A23 and l×l
 // matrix B13 to the form:
 //
-//  U1^T*A13*Q1 = C1*R1; V1^T*B13*Q1 = S1*R1,
+//	U1^T*A13*Q1 = C1*R1; V1^T*B13*Q1 = S1*R1,
 //
 // where U1, V1 and Q1 are orthogonal matrices. C1 and S1 are diagonal
 // matrices satisfying
 //
-//  C1^2 + S1^2 = I,
+//	C1^2 + S1^2 = I,
 //
 // and R1 is an l×l non-singular upper triangular matrix.
 //
 // jobU, jobV and jobQ are options for computing the orthogonal matrices. The behavior
 // is as follows
-//  jobU == lapack.GSVDU        Compute orthogonal matrix U
-//  jobU == lapack.GSVDUnit     Use unit-initialized matrix
-//  jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
+//	jobU == lapack.GSVDU        Compute orthogonal matrix U
+//	jobU == lapack.GSVDUnit     Use unit-initialized matrix
+//	jobU == lapack.GSVDNone     Do not compute orthogonal matrix.
+//
 // The behavior is the same for jobV and jobQ with the exception that instead of
 // lapack.GSVDU these accept lapack.GSVDV and lapack.GSVDQ respectively.
 // The matrices U, V and Q must be m×m, p×p and n×n respectively unless the
 // relevant job parameter is lapack.GSVDNone.
 //
 // k and l specify the sub-blocks in the input matrices A and B:
-//  A23 = A[k:min(k+l,m), n-l:n) and B13 = B[0:l, n-l:n]
+//
+//	A23 = A[k:min(k+l,m), n-l:n) and B13 = B[0:l, n-l:n]
+//
 // of A and B, whose GSVD is going to be computed by Dtgsja.
 //
 // tola and tolb are the convergence criteria for the Jacobi-Kogbetliantz
 // iteration procedure. Generally, they are the same as used in the preprocessing
 // step, for example,
-//  tola = max(m, n)*norm(A)*eps,
-//  tolb = max(p, n)*norm(B)*eps,
+//
+//	tola = max(m, n)*norm(A)*eps,
+//	tolb = max(p, n)*norm(B)*eps,
+//
 // where eps is the machine epsilon.
 //
 // work must have length at least 2*n, otherwise Dtgsja will panic.
 //
 // alpha and beta must have length n or Dtgsja will panic. On exit, alpha and
 // beta contain the generalized singular value pairs of A and B
-//   alpha[0:k] = 1,
-//   beta[0:k]  = 0,
+//
+//	alpha[0:k] = 1,
+//	beta[0:k]  = 0,
+//
 // if m-k-l >= 0,
-//   alpha[k:k+l] = diag(C),
-//   beta[k:k+l]  = diag(S),
+//
+//	alpha[k:k+l] = diag(C),
+//	beta[k:k+l]  = diag(S),
+//
 // if m-k-l < 0,
-//   alpha[k:m]= C, alpha[m:k+l]= 0
-//   beta[k:m] = S, beta[m:k+l] = 1.
+//
+//	alpha[k:m]= C, alpha[m:k+l]= 0
+//	beta[k:m] = S, beta[m:k+l] = 1.
+//
 // if k+l < n,
-//   alpha[k+l:n] = 0 and
-//   beta[k+l:n]  = 0.
+//
+//	alpha[k+l:n] = 0 and
+//	beta[k+l:n]  = 0.
 //
 // On exit, A[n-k:n, 0:min(k+l,m)] contains the triangular matrix R or part of R
 // and if necessary, B[m-k:l, n+m-k-l:n] contains a part of R.
