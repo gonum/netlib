@@ -251,6 +251,60 @@ func (impl Implementation) Dlacpy(uplo blas.Uplo, m, n int, a []float64, lda int
 	lapacke.Dlacpy(byte(uplo), m, n, a, lda, b, ldb)
 }
 
+// Dlapmr rearranges the rows of the m×n matrix X as specified by the permutation
+// k[0],k[1],...,k[m-1] of the integers 0,...,m-1.
+//
+// If forward is true, a forward permutation is applied:
+//
+//	X[k[i],0:n] is moved to X[i,0:n] for i=0,1,...,m-1.
+//
+// If forward is false, a backward permutation is applied:
+//
+//	X[i,0:n] is moved to X[k[i],0:n] for i=0,1,...,m-1.
+//
+// k must have length m, otherwise Dlapmr will panic.
+func (impl Implementation) Dlapmr(forward bool, m, n int, x []float64, ldx int, k []int) {
+	switch {
+	case m < 0:
+		panic(mLT0)
+	case n < 0:
+		panic(nLT0)
+	case ldx < max(1, n):
+		panic(badLdX)
+	}
+
+	// Quick return if possible.
+	if m == 0 || n == 0 {
+		return
+	}
+
+	switch {
+	case len(x) < (m-1)*ldx+n:
+		panic(shortX)
+	case len(k) != m:
+		panic(badLenK)
+	}
+
+	// Quick return if possible.
+	if m == 1 {
+		return
+	}
+
+	var forwrd int32
+	if forward {
+		forwrd = 1
+	}
+	k32 := make([]int32, m)
+	for i, v := range k {
+		v++ // Convert to 1-based indexing.
+		if v != int(int32(v)) {
+			panic("lapack: k element out of range")
+		}
+		k32[i] = int32(v)
+	}
+	lapacke.Dlapmr(forwrd, m, n, x, ldx, k32)
+}
+
 // Dlapmt rearranges the columns of the m×n matrix X as specified by the
 // permutation k_0, k_1, ..., k_n-1 of the integers 0, ..., n-1.
 //
@@ -1075,6 +1129,66 @@ func (Implementation) Dpotrs(uplo blas.Uplo, n, nrhs int, a []float64, lda int, 
 	}
 
 	lapacke.Dpotrs(byte(uplo), n, nrhs, a, lda, b, ldb)
+}
+
+// Dpstrf computes the Cholesky factorization with complete pivoting of an n×n
+// symmetric positive semidefinite matrix A.
+//
+// The factorization has the form
+//
+//	Pᵀ * A * P = Uᵀ * U ,  if uplo = blas.Upper,
+//	Pᵀ * A * P = L  * Lᵀ,  if uplo = blas.Lower,
+//
+// where U is an upper triangular matrix, L is lower triangular, and P is a
+// permutation matrix.
+//
+// tol is a user-defined tolerance. The algorithm terminates if the pivot is
+// less than or equal to tol. If tol is negative, then n*eps*max(A[k,k]) will be
+// used instead.
+//
+// On return, A contains the factor U or L from the Cholesky factorization and
+// piv contains P stored such that P[piv[k],k] = 1.
+//
+// Dpstrf returns the computed rank of A and whether the factorization can be
+// used to solve a system. Dpstrf does not attempt to check that A is positive
+// semi-definite, so if ok is false, the matrix A is either rank deficient or is
+// not positive semidefinite.
+//
+// The length of piv must be n and the length of work must be at least 2*n,
+// otherwise Dpstrf will panic.
+//
+// Dpstrf is an internal routine. It is exported for testing purposes.
+func (impl Implementation) Dpstrf(uplo blas.Uplo, n int, a []float64, lda int, piv []int, tol float64, work []float64) (rank int, ok bool) {
+	switch {
+	case uplo != blas.Upper && uplo != blas.Lower:
+		panic(badUplo)
+	case n < 0:
+		panic(nLT0)
+	case lda < max(1, n):
+		panic(badLdA)
+	}
+
+	// Quick return if possible.
+	if n == 0 {
+		return 0, true
+	}
+
+	switch {
+	case len(a) < (n-1)*lda+n:
+		panic(shortA)
+	case len(piv) != n:
+		panic(badLenPiv)
+	case len(work) < 2*n:
+		panic(shortWork)
+	}
+
+	piv32 := make([]int32, n)
+	rank32 := make([]int32, 1)
+	ok = lapacke.Dpstrf(byte(uplo), n, a, lda, piv32, rank32, tol, work)
+	for i, v := range piv32 {
+		piv[i] = int(v) - 1 // Transform to zero-based indices.
+	}
+	return int(rank32[0]), ok
 }
 
 // Dgebal balances an n×n matrix A. Balancing consists of two stages, permuting
